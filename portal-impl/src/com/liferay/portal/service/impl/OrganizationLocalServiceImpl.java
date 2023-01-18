@@ -821,14 +821,29 @@ public class OrganizationLocalServiceImpl
 		long companyId, String name, int start, int end,
 		OrderByComparator<Organization> orderByComparator) {
 
+		List<Organization> organizations;
+
 		if (Validator.isNull(name)) {
-			return organizationPersistence.findByCompanyId(
-				companyId, start, end, orderByComparator);
+			organizations = organizationPersistence.findByCompanyId(companyId);
+		}
+		else {
+			organizations = organizationPersistence.findByC_LikeN(
+				companyId, StringUtil.quote(name, StringPool.PERCENT));
 		}
 
-		return organizationPersistence.findByC_LikeN(
-			companyId, StringUtil.quote(name, StringPool.PERCENT), start, end,
-			orderByComparator);
+		if (organizations.isEmpty()) {
+			return organizations;
+		}
+
+		if (orderByComparator == null) {
+			orderByComparator = new OrganizationNameComparator(true);
+		}
+
+		organizations = new ArrayList<>(organizations);
+
+		Collections.sort(organizations, orderByComparator);
+
+		return ListUtil.subList(organizations, start, end);
 	}
 
 	/**

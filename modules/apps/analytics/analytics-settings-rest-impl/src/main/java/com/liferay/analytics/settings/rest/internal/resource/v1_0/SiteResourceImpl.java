@@ -22,6 +22,7 @@ import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.SiteDTOCo
 import com.liferay.analytics.settings.rest.internal.util.SortUtil;
 import com.liferay.analytics.settings.rest.resource.v1_0.SiteResource;
 import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.GroupTable;
 import com.liferay.portal.kernel.model.Organization;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.GroupService;
@@ -75,7 +76,8 @@ public class SiteResourceImpl extends BaseSiteResourceImpl {
 					contextCompany.getCompanyId(), _classNameIds, keywords,
 					_getParams(), pagination.getStartPosition(),
 					pagination.getEndPosition(),
-					SortUtil.getIgnoreCaseOrderByComparator(sorts)),
+					SortUtil.getIgnoreCaseOrderByComparator(
+						GroupTable.INSTANCE.getTableName(), sorts)),
 				group -> _siteDTOConverter.toDTO(
 					new SiteDTOConverterContext(
 						group.getGroupId(),

@@ -20,10 +20,10 @@ import com.liferay.analytics.settings.configuration.AnalyticsConfiguration;
 import com.liferay.analytics.settings.rest.dto.v1_0.ContactAccountGroup;
 import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactAccountGroupDTOConverter;
 import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactAccountGroupDTOConverterContext;
+import com.liferay.analytics.settings.rest.internal.util.SortUtil;
 import com.liferay.analytics.settings.rest.manager.AnalyticsSettingsManager;
 import com.liferay.analytics.settings.rest.resource.v1_0.ContactAccountGroupResource;
 import com.liferay.portal.kernel.search.Sort;
-import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 
@@ -61,9 +61,8 @@ public class ContactAccountGroupResourceImpl
 				_accountGroupLocalService.getAccountGroups(
 					contextCompany.getCompanyId(), keywords,
 					pagination.getStartPosition(), pagination.getEndPosition(),
-					OrderByComparatorFactoryUtil.create(
-						AccountGroupTable.INSTANCE.getTableName(),
-						sort.getFieldName(), !sort.isReverse())),
+					SortUtil.getIgnoreCaseOrderByComparator(
+						AccountGroupTable.INSTANCE.getTableName(), sort)),
 				accountGroup -> _contactAccountGroupDTOConverter.toDTO(
 					new ContactAccountGroupDTOConverterContext(
 						accountGroup.getAccountGroupId(),

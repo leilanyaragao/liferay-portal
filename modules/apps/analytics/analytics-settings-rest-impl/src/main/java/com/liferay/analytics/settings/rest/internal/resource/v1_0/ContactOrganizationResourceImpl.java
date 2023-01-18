@@ -18,12 +18,12 @@ import com.liferay.analytics.settings.configuration.AnalyticsConfiguration;
 import com.liferay.analytics.settings.rest.dto.v1_0.ContactOrganization;
 import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactOrganizationDTOConverter;
 import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactOrganizationDTOConverterContext;
+import com.liferay.analytics.settings.rest.internal.util.SortUtil;
 import com.liferay.analytics.settings.rest.manager.AnalyticsSettingsManager;
 import com.liferay.analytics.settings.rest.resource.v1_0.ContactOrganizationResource;
 import com.liferay.portal.kernel.model.OrganizationTable;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.OrganizationLocalService;
-import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 
@@ -61,9 +61,8 @@ public class ContactOrganizationResourceImpl
 				_organizationLocalService.getOrganizations(
 					contextCompany.getCompanyId(), keywords,
 					pagination.getStartPosition(), pagination.getEndPosition(),
-					OrderByComparatorFactoryUtil.create(
-						OrganizationTable.INSTANCE.getTableName(),
-						sort.getFieldName(), !sort.isReverse())),
+					SortUtil.getIgnoreCaseOrderByComparator(
+						OrganizationTable.INSTANCE.getTableName(), sort)),
 				organization -> _contactOrganizationDTOConverter.toDTO(
 					new ContactOrganizationDTOConverterContext(
 						organization.getOrganizationId(),

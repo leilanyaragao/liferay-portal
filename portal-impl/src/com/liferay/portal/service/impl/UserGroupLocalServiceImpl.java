@@ -69,12 +69,14 @@ import com.liferay.portal.kernel.transaction.TransactionCommitCallbackUtil;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LinkedHashMapBuilder;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ServiceProxyFactory;
 import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.comparator.UserGroupNameComparator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.service.base.UserGroupLocalServiceBaseImpl;
 import com.liferay.portal.service.persistence.constants.UserGroupFinderConstants;
@@ -497,14 +499,29 @@ public class UserGroupLocalServiceImpl extends UserGroupLocalServiceBaseImpl {
 		long companyId, String name, int start, int end,
 		OrderByComparator<UserGroup> orderByComparator) {
 
+		List<UserGroup> userGroups;
+
 		if (Validator.isNull(name)) {
-			return userGroupPersistence.findByCompanyId(
-				companyId, start, end, orderByComparator);
+			userGroups = userGroupPersistence.findByCompanyId(companyId);
+		}
+		else {
+			userGroups = userGroupPersistence.findByC_LikeN(
+				companyId, StringUtil.quote(name, StringPool.PERCENT));
 		}
 
-		return userGroupPersistence.findByC_LikeN(
-			companyId, StringUtil.quote(name, StringPool.PERCENT), start, end,
-			orderByComparator);
+		if (userGroups.isEmpty()) {
+			return userGroups;
+		}
+
+		if (orderByComparator == null) {
+			orderByComparator = new UserGroupNameComparator(true);
+		}
+
+		userGroups = new ArrayList<>(userGroups);
+
+		Collections.sort(userGroups, orderByComparator);
+
+		return ListUtil.subList(userGroups, start, end);
 	}
 
 	/**

@@ -18,12 +18,12 @@ import com.liferay.analytics.settings.configuration.AnalyticsConfiguration;
 import com.liferay.analytics.settings.rest.dto.v1_0.ContactUserGroup;
 import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactUserGroupDTOConverter;
 import com.liferay.analytics.settings.rest.internal.dto.v1_0.converter.ContactUserGroupDTOConverterContext;
+import com.liferay.analytics.settings.rest.internal.util.SortUtil;
 import com.liferay.analytics.settings.rest.manager.AnalyticsSettingsManager;
 import com.liferay.analytics.settings.rest.resource.v1_0.ContactUserGroupResource;
 import com.liferay.portal.kernel.model.UserGroupTable;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.service.UserGroupLocalService;
-import com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil;
 import com.liferay.portal.vulcan.pagination.Page;
 import com.liferay.portal.vulcan.pagination.Pagination;
 
@@ -61,9 +61,8 @@ public class ContactUserGroupResourceImpl
 				_userGroupLocalService.getUserGroups(
 					contextCompany.getCompanyId(), keywords,
 					pagination.getStartPosition(), pagination.getEndPosition(),
-					OrderByComparatorFactoryUtil.create(
-						UserGroupTable.INSTANCE.getTableName(),
-						sort.getFieldName(), !sort.isReverse())),
+					SortUtil.getIgnoreCaseOrderByComparator(
+						UserGroupTable.INSTANCE.getTableName(), sort)),
 				userGroup -> _contactUserGroupDTOConverter.toDTO(
 					new ContactUserGroupDTOConverterContext(
 						userGroup.getUserGroupId(),

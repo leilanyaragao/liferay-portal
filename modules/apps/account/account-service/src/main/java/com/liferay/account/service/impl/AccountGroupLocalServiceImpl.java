@@ -44,11 +44,14 @@ import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
@@ -178,14 +181,27 @@ public class AccountGroupLocalServiceImpl
 		long companyId, String name, int start, int end,
 		OrderByComparator<AccountGroup> orderByComparator) {
 
+		List<AccountGroup> accountGroups;
+
 		if (Validator.isNull(name)) {
-			return accountGroupPersistence.findByCompanyId(
-				companyId, start, end, orderByComparator);
+			accountGroups = accountGroupPersistence.findByCompanyId(companyId);
+		}
+		else {
+			accountGroups = accountGroupPersistence.findByC_LikeN(
+				companyId, StringUtil.quote(name, StringPool.PERCENT));
 		}
 
-		return accountGroupPersistence.findByC_LikeN(
-			companyId, StringUtil.quote(name, StringPool.PERCENT), start, end,
-			orderByComparator);
+		if (accountGroups.isEmpty()) {
+			return accountGroups;
+		}
+
+		accountGroups = new ArrayList<>(accountGroups);
+
+		if (orderByComparator != null) {
+			Collections.sort(accountGroups, orderByComparator);
+		}
+
+		return ListUtil.subList(accountGroups, start, end);
 	}
 
 	@Override
