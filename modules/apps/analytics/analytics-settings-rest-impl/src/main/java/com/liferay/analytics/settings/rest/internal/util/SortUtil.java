@@ -15,7 +15,7 @@
 package com.liferay.analytics.settings.rest.internal.util;
 
 import com.liferay.analytics.settings.rest.internal.util.comparator.IgnoreCaseOrderByComparator;
-import com.liferay.portal.kernel.model.Group;
+import com.liferay.portal.kernel.model.BaseModel;
 import com.liferay.portal.kernel.search.Sort;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
@@ -27,8 +27,8 @@ import java.util.List;
  */
 public class SortUtil {
 
-	public static OrderByComparator<Group> getIgnoreCaseOrderByComparator(
-		Sort[] sorts) {
+	public static <T extends BaseModel<T>> OrderByComparator<T>
+		getIgnoreCaseOrderByComparator(String tableName, Sort... sorts) {
 
 		if (sorts == null) {
 			return null;
@@ -41,7 +41,7 @@ public class SortUtil {
 			columns.add(!sort.isReverse());
 		}
 
-		return new IgnoreCaseOrderByComparator<>(columns.toArray());
+		return new IgnoreCaseOrderByComparator<>(tableName, columns.toArray());
 	}
 
 }
