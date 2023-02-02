@@ -34,11 +34,7 @@ public class AsahProject {
 			return true;
 		}
 
-		if (obj == null) {
-			return false;
-		}
-
-		if (!(obj instanceof AsahProject)) {
+		if ((obj == null) || !(obj instanceof AsahProject)) {
 			return false;
 		}
 

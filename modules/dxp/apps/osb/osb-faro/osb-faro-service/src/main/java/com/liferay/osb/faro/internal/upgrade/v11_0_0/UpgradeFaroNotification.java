@@ -38,10 +38,10 @@ public class UpgradeFaroNotification extends UpgradeProcess {
 				"subtype VARCHAR(75) null)"));
 		runSQL(
 			"create index IX_A41A962F on OSBFaro_FaroNotification " +
-				"(createTime);");
+				"(createTime)");
 		runSQL(
 			"create index IX_BD2D078E on OSBFaro_FaroNotification (groupId, " +
-				"createTime, ownerId);");
+				"createTime, ownerId)");
 
 		_notifyFaroProjects();
 	}

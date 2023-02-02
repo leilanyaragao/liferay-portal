@@ -40,7 +40,7 @@ public class IndividualSegmentMembershipChangeDisplay {
 		Map<String, Object> embeddedResources =
 			individualSegmentMembershipChange.getEmbeddedResources();
 
-		if (!MapUtil.isEmpty(embeddedResources)) {
+		if (MapUtil.isNotEmpty(embeddedResources)) {
 			_accountNames = JSONUtil.convertValue(
 				embeddedResources.get("account-names"),
 				new TypeReference<List<String>>() {

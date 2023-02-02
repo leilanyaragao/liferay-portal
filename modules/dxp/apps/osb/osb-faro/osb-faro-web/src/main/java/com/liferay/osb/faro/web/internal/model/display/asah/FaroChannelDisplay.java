@@ -46,7 +46,7 @@ public class FaroChannelDisplay {
 
 		Map<String, Object> embeddedResources = channel.getEmbeddedResources();
 
-		if (!MapUtil.isEmpty(embeddedResources)) {
+		if (MapUtil.isNotEmpty(embeddedResources)) {
 			for (Map<String, Object> dataSource :
 					(List<Map<String, Object>>)embeddedResources.get(
 						"data-sources")) {

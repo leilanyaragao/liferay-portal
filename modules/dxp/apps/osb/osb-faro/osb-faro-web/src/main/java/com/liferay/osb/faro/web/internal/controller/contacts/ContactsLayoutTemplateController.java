@@ -185,7 +185,7 @@ public class ContactsLayoutTemplateController extends BaseFaroController {
 				contactsLayoutTemplate, _contactsCardTemplateManagerUtil);
 		}
 		catch (Exception exception) {
-			_log.error(exception, exception);
+			_log.error(exception);
 
 			return null;
 		}

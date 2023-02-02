@@ -617,8 +617,7 @@ public class ProjectController extends BaseFaroController {
 				_groupLocalService.updateFriendlyURL(groupId, friendlyURL);
 			}
 			catch (GroupFriendlyURLException groupFriendlyURLException) {
-				_log.error(
-					groupFriendlyURLException, groupFriendlyURLException);
+				_log.error(groupFriendlyURLException);
 
 				throw new FaroValidationException(
 					"friendlyURL",
@@ -732,7 +731,7 @@ public class ProjectController extends BaseFaroController {
 						getInvalidEmailAddressDomains()));
 		}
 		catch (GroupFriendlyURLException groupFriendlyURLException) {
-			_log.error(groupFriendlyURLException, groupFriendlyURLException);
+			_log.error(groupFriendlyURLException);
 
 			throw new FaroValidationException(
 				"friendlyURL",
@@ -787,7 +786,7 @@ public class ProjectController extends BaseFaroController {
 						getInvalidEmailAddressDomains()));
 		}
 		catch (GroupFriendlyURLException groupFriendlyURLException) {
-			_log.error(groupFriendlyURLException, groupFriendlyURLException);
+			_log.error(groupFriendlyURLException);
 
 			throw new FaroValidationException(
 				"friendlyURL",
@@ -1052,7 +1051,7 @@ public class ProjectController extends BaseFaroController {
 				faroProject, (String)null, false, 1, 0, null);
 		}
 		catch (Exception exception) {
-			_log.error(exception, exception);
+			_log.error(exception);
 
 			return false;
 		}

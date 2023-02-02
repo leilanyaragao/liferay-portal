@@ -1,14 +1,4 @@
 {
-	"name": "osb-faro-theme",
-	"version": "1.0.0",
-	"main": "package.json",
-	"keywords": ["liferay-theme"],
-	"liferayTheme": {
-		"baseTheme": "styled",
-		"fontAwesome": false,
-		"templateLanguage": "ftl",
-		"version": "7.4"
-	},
 	"devDependencies": {
 		"compass-mixins": "0.12.10",
 		"gulp": "4.0.2",
@@ -17,14 +7,26 @@
 		"liferay-frontend-theme-unstyled": "6.0.33",
 		"liferay-theme-tasks": "^11.4.0"
 	},
+	"keywords": [
+		"liferay-theme"
+	],
+	"liferayTheme": {
+		"baseTheme": "styled",
+		"fontAwesome": false,
+		"templateLanguage": "ftl",
+		"version": "7.4"
+	},
+	"main": "package.json",
+	"name": "osb-faro-theme",
 	"scripts": {
-		"init": "gulp init",
 		"build": "gulp build",
 		"deploy": "gulp deploy",
 		"extend": "gulp extend",
+		"init": "gulp init",
 		"kickstart": "gulp kickstart",
 		"status": "gulp status",
 		"upgrade": "gulp upgrade",
 		"watch": "gulp watch"
-	}
+	},
+	"version": "1.0.0"
 }

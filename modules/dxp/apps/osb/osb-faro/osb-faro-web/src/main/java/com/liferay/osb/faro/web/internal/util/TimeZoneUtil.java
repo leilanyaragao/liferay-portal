@@ -65,7 +65,7 @@ public class TimeZoneUtil {
 			return _timeZoneIdCountryMap.containsKey(timeZoneId);
 		}
 		catch (ZoneRulesException zoneRulesException) {
-			_log.error(zoneRulesException, zoneRulesException);
+			_log.error(zoneRulesException);
 
 			return false;
 		}

@@ -162,7 +162,7 @@ public class ReportController extends BaseFaroController {
 					outputStream);
 			}
 			catch (Exception exception) {
-				_log.error(exception, exception);
+				_log.error(exception);
 			}
 
 			outputStream.flush();

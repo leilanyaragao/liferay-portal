@@ -99,7 +99,7 @@ public class CheckFaroProjectsMessageListener extends BaseMessageListener {
 					faroProject, (String)null, true, 0, 0, null);
 			}
 			catch (Exception exception) {
-				_log.error(exception, exception);
+				_log.error(exception);
 
 				projectExceptions.put(faroProject, exception);
 			}
@@ -179,7 +179,7 @@ public class CheckFaroProjectsMessageListener extends BaseMessageListener {
 						user.getEmailAddress(), user.getFullName());
 				}
 				catch (Exception exception) {
-					_log.error(exception, exception);
+					_log.error(exception);
 
 					return null;
 				}

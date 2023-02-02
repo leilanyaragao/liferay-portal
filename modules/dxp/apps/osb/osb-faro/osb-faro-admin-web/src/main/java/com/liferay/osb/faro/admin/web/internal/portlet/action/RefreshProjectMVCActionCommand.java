@@ -127,7 +127,7 @@ public class RefreshProjectMVCActionCommand extends BaseMVCActionCommand {
 			_http.URLtoString(options);
 		}
 		catch (Exception exception) {
-			_log.error(exception, exception);
+			_log.error(exception);
 
 			SessionErrors.add(actionRequest, exception.getClass());
 		}

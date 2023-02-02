@@ -158,7 +158,7 @@ public class SnapshotDemoCreatorService extends DemoCreatorService {
 				return localDateTime.format(dateTimeFormatter);
 			}
 			catch (Exception exception) {
-				_log.error(exception, exception);
+				_log.error(exception);
 			}
 		}
 

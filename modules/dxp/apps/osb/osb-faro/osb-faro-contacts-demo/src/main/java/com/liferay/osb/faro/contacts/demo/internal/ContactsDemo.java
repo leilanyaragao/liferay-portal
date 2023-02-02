@@ -70,7 +70,7 @@ public class ContactsDemo {
 						break;
 					}
 					catch (Exception exception) {
-						_log.error(exception, exception);
+						_log.error(exception);
 
 						Thread.sleep(Time.SECOND * 30);
 					}

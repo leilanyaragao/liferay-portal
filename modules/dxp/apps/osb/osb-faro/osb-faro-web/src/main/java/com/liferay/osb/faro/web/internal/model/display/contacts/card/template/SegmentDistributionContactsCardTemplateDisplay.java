@@ -119,7 +119,7 @@ public class SegmentDistributionContactsCardTemplateDisplay
 						1, _max, contactsEngineClient);
 			}
 			catch (Exception exception) {
-				_log.error(exception, exception);
+				_log.error(exception);
 			}
 		}
 

@@ -44,7 +44,7 @@ public class ActivityGroupDisplay {
 		Map<String, Object> embeddedResources =
 			activityGroup.getEmbeddedResources();
 
-		if (!MapUtil.isEmpty(embeddedResources)) {
+		if (MapUtil.isNotEmpty(embeddedResources)) {
 			List<Activity> activities = JSONUtil.convertValue(
 				embeddedResources.get("activities"),
 				new TypeReference<List<Activity>>() {

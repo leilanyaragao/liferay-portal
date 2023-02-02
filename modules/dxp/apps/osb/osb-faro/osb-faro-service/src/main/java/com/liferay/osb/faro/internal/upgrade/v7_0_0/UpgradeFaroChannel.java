@@ -34,13 +34,13 @@ public class UpgradeFaroChannel extends UpgradeProcess {
 
 		runSQL(
 			"create unique index IX_5960B666 on OSBFaro_FaroChannel " +
-				"(channelId);");
+				"(channelId)");
 		runSQL(
 			"create index IX_28923D9C on OSBFaro_FaroChannel (groupId, " +
-				"userId);");
+				"userId)");
 		runSQL(
 			"create index IX_286BA5A1 on OSBFaro_FaroChannel " +
-				"(workspaceGroupId);");
+				"(workspaceGroupId)");
 	}
 
 }

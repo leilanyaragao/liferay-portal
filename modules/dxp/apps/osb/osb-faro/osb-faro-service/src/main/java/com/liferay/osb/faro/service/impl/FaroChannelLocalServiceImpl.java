@@ -120,7 +120,7 @@ public class FaroChannelLocalServiceImpl
 				_sendEmail(faroChannel, invitedUserId, userId);
 			}
 			catch (Exception exception) {
-				_log.error(exception, exception);
+				_log.error(exception);
 			}
 		}
 	}

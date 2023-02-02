@@ -99,7 +99,7 @@ public class GraphQLAsahServlet extends BaseAsahServlet {
 		}
 		catch (URISyntaxException uriSyntaxException) {
 			if (_log.isDebugEnabled()) {
-				_log.debug(uriSyntaxException, uriSyntaxException);
+				_log.debug(uriSyntaxException);
 			}
 		}
 	}
@@ -149,7 +149,7 @@ public class GraphQLAsahServlet extends BaseAsahServlet {
 		}
 		catch (URISyntaxException uriSyntaxException) {
 			if (_log.isDebugEnabled()) {
-				_log.debug(uriSyntaxException, uriSyntaxException);
+				_log.debug(uriSyntaxException);
 			}
 		}
 	}
@@ -203,11 +203,9 @@ public class GraphQLAsahServlet extends BaseAsahServlet {
 					return false;
 			}
 
-			if (FaroPermissionChecker.isGroupMember(faroProject.getGroupId())) {
-				return true;
-			}
+			if (FaroPermissionChecker.isGroupMember(faroProject.getGroupId()) ||
+				!query.contains("mutation")) {
 
-			if (!query.contains("mutation")) {
 				return true;
 			}
 

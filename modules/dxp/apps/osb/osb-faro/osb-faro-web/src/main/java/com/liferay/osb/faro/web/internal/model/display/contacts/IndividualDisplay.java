@@ -48,7 +48,7 @@ public class IndividualDisplay implements FaroEntityDisplay {
 		Map<String, Object> embeddedResources =
 			individual.getEmbeddedResources();
 
-		if (!MapUtil.isEmpty(embeddedResources)) {
+		if (MapUtil.isNotEmpty(embeddedResources)) {
 			_accountNames = JSONUtil.convertValue(
 				embeddedResources.get("account-names"),
 				new TypeReference<List<String>>() {

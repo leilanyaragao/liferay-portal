@@ -180,7 +180,7 @@ public abstract class BaseEngineClient {
 							typeReference));
 				}
 				catch (Exception exception) {
-					_log.error(exception, exception);
+					_log.error(exception);
 
 					responses.add(null);
 				}
@@ -339,7 +339,7 @@ public abstract class BaseEngineClient {
 			return EngineServiceURLUtil.getBackendExternalURL(faroProject);
 		}
 		catch (URISyntaxException uriSyntaxException) {
-			_log.error(uriSyntaxException, uriSyntaxException);
+			_log.error(uriSyntaxException);
 		}
 
 		return _OSB_ASAH_BACKEND_URL;

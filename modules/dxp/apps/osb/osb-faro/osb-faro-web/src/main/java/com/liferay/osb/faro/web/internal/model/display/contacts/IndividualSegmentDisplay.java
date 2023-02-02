@@ -66,7 +66,7 @@ public class IndividualSegmentDisplay implements FaroEntityDisplay {
 		Map<String, Object> embeddedResources =
 			individualSegment.getEmbeddedResources();
 
-		if (!MapUtil.isEmpty(embeddedResources)) {
+		if (MapUtil.isNotEmpty(embeddedResources)) {
 			IndividualSegmentMembership individualSegmentMembership =
 				JSONUtil.convertValue(
 					embeddedResources.get("active-membership"),
