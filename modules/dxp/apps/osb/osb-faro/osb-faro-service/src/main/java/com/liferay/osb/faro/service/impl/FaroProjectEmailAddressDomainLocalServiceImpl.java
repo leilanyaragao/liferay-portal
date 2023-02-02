@@ -75,11 +75,11 @@ public class FaroProjectEmailAddressDomainLocalServiceImpl
 
 		ClassLoader classLoader = getClassLoader();
 
-		try (InputStream is = classLoader.getResourceAsStream(
+		try (InputStream inputStream = classLoader.getResourceAsStream(
 				"com/liferay/osb/faro/dependencies" +
 					"/email-domains-blacklist.csv")) {
 
-			StringUtil.readLines(is, _emailAddressDomainsBlacklist);
+			StringUtil.readLines(inputStream, _emailAddressDomainsBlacklist);
 		}
 		catch (IOException ioException) {
 			throw new SystemException(

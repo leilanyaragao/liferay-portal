@@ -17,7 +17,6 @@ package com.liferay.osb.faro.web.internal.model.display.contacts.card.template;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.type.TypeReference;
 
-import com.liferay.osb.faro.contacts.model.ContactsCardTemplate;
 import com.liferay.osb.faro.contacts.model.ContactsLayoutTemplate;
 import com.liferay.osb.faro.contacts.service.ContactsCardTemplateLocalServiceUtil;
 import com.liferay.osb.faro.engine.client.ContactsEngineClient;
@@ -68,16 +67,13 @@ public class ContactsLayoutTemplateDisplay extends FaroModelDisplay {
 					contactsLayoutTemplateSettingDisplay :
 						contactsLayoutTemplateSettingDisplays) {
 
-				ContactsCardTemplate contactsCardTemplate =
-					ContactsCardTemplateLocalServiceUtil.
-						getContactsCardTemplate(
-							contactsLayoutTemplateSettingDisplay.
-								getContactsCardTemplateId());
-
 				ContactsCardTemplateDisplay contactsCardTemplateDisplay =
 					contactsCardTemplateManagerHelper.
 						getContactsCardTemplateDisplay(
-							contactsCardTemplate,
+							ContactsCardTemplateLocalServiceUtil.
+								getContactsCardTemplate(
+									contactsLayoutTemplateSettingDisplay.
+										getContactsCardTemplateId()),
 							contactsLayoutTemplateSettingDisplay.getSize());
 
 				if (contactsCardTemplateDisplay != null) {
@@ -94,13 +90,13 @@ public class ContactsLayoutTemplateDisplay extends FaroModelDisplay {
 					contactsLayoutTemplate.
 						getHeaderContactsCardTemplateIds())) {
 
-			ContactsCardTemplate contactsCardTemplate =
-				ContactsCardTemplateLocalServiceUtil.getContactsCardTemplate(
-					GetterUtil.getLong(headerContactsCardTemplateId));
-
 			_headerContactsCardTemplateDisplays.add(
 				contactsCardTemplateManagerHelper.
-					getContactsCardTemplateDisplay(contactsCardTemplate));
+					getContactsCardTemplateDisplay(
+						ContactsCardTemplateLocalServiceUtil.
+							getContactsCardTemplate(
+								GetterUtil.getLong(
+									headerContactsCardTemplateId))));
 		}
 
 		_name = contactsLayoutTemplate.getName();

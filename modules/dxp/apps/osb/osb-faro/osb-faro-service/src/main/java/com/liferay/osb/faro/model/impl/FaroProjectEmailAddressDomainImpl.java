@@ -19,8 +19,4 @@ package com.liferay.osb.faro.model.impl;
  */
 public class FaroProjectEmailAddressDomainImpl
 	extends FaroProjectEmailAddressDomainBaseImpl {
-
-	public FaroProjectEmailAddressDomainImpl() {
-	}
-
 }

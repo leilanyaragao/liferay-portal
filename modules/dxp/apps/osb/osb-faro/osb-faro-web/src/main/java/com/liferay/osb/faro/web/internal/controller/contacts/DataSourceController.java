@@ -761,13 +761,13 @@ public class DataSourceController extends BaseFaroController {
 		Results<FieldMapping> results = contactsEngineClient.getFieldMappings(
 			faroProject, context, id, null);
 
-		List<List<Field>> fieldsList = contactsEngineClient.getFieldsList(
-			faroProject, context,
-			StreamUtil.toList(results.getItems(), FieldMapping::getFieldName),
-			1, 1, null);
-
 		Map<String, List<Field>> fieldsMap = StreamUtil.toMap(
-			fieldsList, ListUtil::isNotNull,
+			contactsEngineClient.getFieldsList(
+				faroProject, context,
+				StreamUtil.toList(
+					results.getItems(), FieldMapping::getFieldName),
+				1, 1, null),
+			ListUtil::isNotNull,
 			fields -> {
 				Field field = fields.get(0);
 

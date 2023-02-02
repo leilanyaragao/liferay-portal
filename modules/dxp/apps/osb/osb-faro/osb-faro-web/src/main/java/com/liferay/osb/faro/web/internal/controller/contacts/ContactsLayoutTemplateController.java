@@ -14,7 +14,6 @@
 
 package com.liferay.osb.faro.web.internal.controller.contacts;
 
-import com.liferay.osb.faro.contacts.model.ContactsCardTemplate;
 import com.liferay.osb.faro.contacts.model.ContactsLayoutTemplate;
 import com.liferay.osb.faro.contacts.model.constants.JSONConstants;
 import com.liferay.osb.faro.contacts.service.ContactsCardTemplateLocalService;
@@ -207,14 +206,13 @@ public class ContactsLayoutTemplateController extends BaseFaroController {
 					contactsLayoutTemplateSettingDisplay :
 						contactsLayoutTemplateSettingDisplays) {
 
-				ContactsCardTemplate contactsCardTemplate =
-					_contactsCardTemplateLocalService.getContactsCardTemplate(
-						contactsLayoutTemplateSettingDisplay.
-							getContactsCardTemplateId());
-
 				ContactsCardTemplateDisplay contactsCardTemplateDisplay =
 					_contactsCardTemplateManagerUtil.
-						getContactsCardTemplateDisplay(contactsCardTemplate);
+						getContactsCardTemplateDisplay(
+							_contactsCardTemplateLocalService.
+								getContactsCardTemplate(
+									contactsLayoutTemplateSettingDisplay.
+										getContactsCardTemplateId()));
 
 				if (!ArrayUtil.contains(
 						contactsCardTemplateDisplay.getSupportedSizes(),

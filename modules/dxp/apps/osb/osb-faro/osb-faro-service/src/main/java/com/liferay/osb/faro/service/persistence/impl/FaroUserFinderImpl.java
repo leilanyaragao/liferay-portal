@@ -91,23 +91,23 @@ public class FaroUserFinderImpl
 					sql, _FARO_USER_SQL, _AVAILABLE_FARO_USER_SQL);
 			}
 
-			SQLQuery q = session.createSynchronizedSQLQuery(sql);
+			SQLQuery sqlQuery = session.createSynchronizedSQLQuery(sql);
 
-			q.addScalar(COUNT_COLUMN_NAME, Type.LONG);
+			sqlQuery.addScalar(COUNT_COLUMN_NAME, Type.LONG);
 
-			QueryPos qPos = QueryPos.getInstance(q);
+			QueryPos queryPos = QueryPos.getInstance(sqlQuery);
 
-			qPos.add(channelGroupId);
-			qPos.add(workspaceGroupId);
-			qPos.add(keywordsArray, 2);
-			qPos.add(keywordsArray, 2);
-			qPos.add(keywordsArray, 2);
-			qPos.add(keywordsArray, 2);
+			queryPos.add(channelGroupId);
+			queryPos.add(workspaceGroupId);
+			queryPos.add(keywordsArray, 2);
+			queryPos.add(keywordsArray, 2);
+			queryPos.add(keywordsArray, 2);
+			queryPos.add(keywordsArray, 2);
 
-			Iterator<Long> itr = q.iterate();
+			Iterator<Long> iterator = sqlQuery.iterate();
 
-			if (itr.hasNext()) {
-				Long count = itr.next();
+			if (iterator.hasNext()) {
+				Long count = iterator.next();
 
 				if (count != null) {
 					return count.intValue();
@@ -155,22 +155,22 @@ public class FaroUserFinderImpl
 
 			sql = _customSQL.replaceAndOperator(sql, Validator.isNull(query));
 
-			SQLQuery q = session.createSynchronizedSQLQuery(sql);
+			SQLQuery sqlQuery = session.createSynchronizedSQLQuery(sql);
 
-			q.addScalar(COUNT_COLUMN_NAME, Type.LONG);
+			sqlQuery.addScalar(COUNT_COLUMN_NAME, Type.LONG);
 
-			QueryPos qPos = QueryPos.getInstance(q);
+			QueryPos queryPos = QueryPos.getInstance(sqlQuery);
 
-			qPos.add(groupId);
-			qPos.add(keywordsArray, 2);
-			qPos.add(keywordsArray, 2);
-			qPos.add(keywordsArray, 2);
-			qPos.add(keywordsArray, 2);
+			queryPos.add(groupId);
+			queryPos.add(keywordsArray, 2);
+			queryPos.add(keywordsArray, 2);
+			queryPos.add(keywordsArray, 2);
+			queryPos.add(keywordsArray, 2);
 
-			Iterator<Long> itr = q.iterate();
+			Iterator<Long> iterator = sqlQuery.iterate();
 
-			if (itr.hasNext()) {
-				Long count = itr.next();
+			if (iterator.hasNext()) {
+				Long count = iterator.next();
 
 				if (count != null) {
 					return count.intValue();
@@ -229,20 +229,21 @@ public class FaroUserFinderImpl
 					sql, _FARO_USER_SQL, _AVAILABLE_FARO_USER_SQL);
 			}
 
-			SQLQuery q = session.createSynchronizedSQLQuery(sql);
+			SQLQuery sqlQuery = session.createSynchronizedSQLQuery(sql);
 
-			q.addEntity("OSBFaro_FaroUser", FaroUserImpl.class);
+			sqlQuery.addEntity("OSBFaro_FaroUser", FaroUserImpl.class);
 
-			QueryPos qPos = QueryPos.getInstance(q);
+			QueryPos queryPos = QueryPos.getInstance(sqlQuery);
 
-			qPos.add(channelGroupId);
-			qPos.add(workspaceGroupId);
-			qPos.add(keywordsArray, 2);
-			qPos.add(keywordsArray, 2);
-			qPos.add(keywordsArray, 2);
-			qPos.add(keywordsArray, 2);
+			queryPos.add(channelGroupId);
+			queryPos.add(workspaceGroupId);
+			queryPos.add(keywordsArray, 2);
+			queryPos.add(keywordsArray, 2);
+			queryPos.add(keywordsArray, 2);
+			queryPos.add(keywordsArray, 2);
 
-			return (List<FaroUser>)QueryUtil.list(q, getDialect(), start, end);
+			return (List<FaroUser>)QueryUtil.list(
+				sqlQuery, getDialect(), start, end);
 		}
 		catch (Exception exception) {
 			throw new SystemException(exception);
@@ -287,19 +288,20 @@ public class FaroUserFinderImpl
 
 			sql = _customSQL.replaceAndOperator(sql, Validator.isNull(query));
 
-			SQLQuery q = session.createSynchronizedSQLQuery(sql);
+			SQLQuery sqlQuery = session.createSynchronizedSQLQuery(sql);
 
-			q.addEntity("OSBFaro_FaroUser", FaroUserImpl.class);
+			sqlQuery.addEntity("OSBFaro_FaroUser", FaroUserImpl.class);
 
-			QueryPos qPos = QueryPos.getInstance(q);
+			QueryPos queryPos = QueryPos.getInstance(sqlQuery);
 
-			qPos.add(groupId);
-			qPos.add(keywordsArray, 2);
-			qPos.add(keywordsArray, 2);
-			qPos.add(keywordsArray, 2);
-			qPos.add(keywordsArray, 2);
+			queryPos.add(groupId);
+			queryPos.add(keywordsArray, 2);
+			queryPos.add(keywordsArray, 2);
+			queryPos.add(keywordsArray, 2);
+			queryPos.add(keywordsArray, 2);
 
-			return (List<FaroUser>)QueryUtil.list(q, getDialect(), start, end);
+			return (List<FaroUser>)QueryUtil.list(
+				sqlQuery, getDialect(), start, end);
 		}
 		catch (Exception exception) {
 			throw new SystemException(exception);

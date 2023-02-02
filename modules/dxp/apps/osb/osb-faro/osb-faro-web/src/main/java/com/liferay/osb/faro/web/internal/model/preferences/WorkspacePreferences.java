@@ -25,9 +25,6 @@ import java.util.Map;
 @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
 public class WorkspacePreferences {
 
-	public WorkspacePreferences() {
-	}
-
 	public void addDistributionCardTabPreferences(
 		String id, String individualSegmentId,
 		DistributionCardTabPreferences distributionCardTabPreferences) {

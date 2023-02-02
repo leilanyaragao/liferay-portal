@@ -30,9 +30,6 @@ import java.net.InetAddress;
  */
 public class FaroProjectImpl extends FaroProjectBaseImpl {
 
-	public FaroProjectImpl() {
-	}
-
 	@Override
 	public String getProjectId() {
 		return StringUtil.removeSubstring(getWeDeployKey(), ".lfr.cloud");

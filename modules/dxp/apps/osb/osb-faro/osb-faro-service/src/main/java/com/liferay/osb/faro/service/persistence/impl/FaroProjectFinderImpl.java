@@ -47,16 +47,16 @@ public class FaroProjectFinderImpl
 
 			String sql = _customSQL.get(getClass(), FIND_BY_ED);
 
-			SQLQuery q = session.createSynchronizedSQLQuery(sql);
+			SQLQuery sqlQuery = session.createSynchronizedSQLQuery(sql);
 
-			q.addEntity("OSBFaro_FaroProject", FaroProjectImpl.class);
+			sqlQuery.addEntity("OSBFaro_FaroProject", FaroProjectImpl.class);
 
-			QueryPos qPos = QueryPos.getInstance(q);
+			QueryPos queryPos = QueryPos.getInstance(sqlQuery);
 
-			qPos.add(emailAddressDomain);
+			queryPos.add(emailAddressDomain);
 
 			return (List<FaroProject>)QueryUtil.list(
-				q, getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+				sqlQuery, getDialect(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 		}
 		catch (Exception exception) {
 			throw new SystemException(exception);
