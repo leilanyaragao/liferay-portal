@@ -15,18 +15,26 @@
 package com.liferay.osb.faro.web.internal.controller.api;
 
 import com.liferay.portal.kernel.test.AssertUtils;
+import com.liferay.portal.test.rule.LiferayUnitTestRule;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 
 /**
  * @author Alejo Ceballos
  */
 public class ReportControllerResponseFactoryTest {
+
+	@ClassRule
+	@Rule
+	public static final LiferayUnitTestRule liferayUnitTestRule =
+		LiferayUnitTestRule.INSTANCE;
 
 	@Test
 	public void testBuildLastExportResultedAnError() {
