@@ -42,12 +42,12 @@ public class UpgradeFaroProject extends UpgradeProcess {
 		String roleName = StringUtil.quote(
 			RoleConstants.SITE_OWNER, StringPool.APOSTROPHE);
 
-		try (PreparedStatement ps = connection.prepareStatement(
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
 				"select roleId from Role_ where name = " + roleName);
-			ResultSet rs = ps.executeQuery()) {
+			ResultSet resultSet = preparedStatement.executeQuery()) {
 
-			if (rs.next()) {
-				return rs.getLong(1);
+			if (resultSet.next()) {
+				return resultSet.getLong(1);
 			}
 
 			throw new Exception("Could not find site owner role ID");
@@ -64,17 +64,19 @@ public class UpgradeFaroProject extends UpgradeProcess {
 		sb.append("where OSBFaro_FaroUser.roleId = ");
 		sb.append(_getSiteOwnerRoleId());
 
-		try (PreparedStatement ps = connection.prepareStatement(sb.toString());
-			ResultSet rs = ps.executeQuery()) {
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				sb.toString());
+			ResultSet resultSet = preparedStatement.executeQuery()) {
 
-			while (rs.next()) {
+			while (resultSet.next()) {
 				try (PreparedStatement psUpdate = connection.prepareStatement(
 						"update OSBFaro_FaroProject set " +
 							"incidentReportEmailAddresses = ? where " +
 								"faroProjectId = ?")) {
 
-					psUpdate.setString(1, "[\"" + rs.getString(1) + "\"]");
-					psUpdate.setLong(2, rs.getLong(2));
+					psUpdate.setString(
+						1, "[\"" + resultSet.getString(1) + "\"]");
+					psUpdate.setLong(2, resultSet.getLong(2));
 
 					psUpdate.executeUpdate();
 				}

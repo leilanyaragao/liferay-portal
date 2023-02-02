@@ -52,32 +52,37 @@ public class UpgradeFaroNotification extends UpgradeProcess {
 			"groupId, createTime, modifiedTime, ownerId, scope, read_, type_, ",
 			"subtype) values(?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-		try (PreparedStatement ps = connection.prepareStatement(sql)) {
-			ps.setLong(1, increment());
-			ps.setLong(2, groupId);
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+				sql)) {
+
+			preparedStatement.setLong(1, increment());
+			preparedStatement.setLong(2, groupId);
 
 			long now = System.currentTimeMillis();
 
-			ps.setLong(3, now);
-			ps.setLong(4, now);
+			preparedStatement.setLong(3, now);
+			preparedStatement.setLong(4, now);
 
-			ps.setLong(5, groupId);
-			ps.setString(6, FaroNotificationConstants.SCOPE_WORKSPACE);
-			ps.setBoolean(7, false);
-			ps.setString(8, FaroNotificationConstants.TYPE_MODAL);
-			ps.setString(9, FaroNotificationConstants.SUBTYPE_TIME_ZONE_ADMIN);
+			preparedStatement.setLong(5, groupId);
+			preparedStatement.setString(
+				6, FaroNotificationConstants.SCOPE_WORKSPACE);
+			preparedStatement.setBoolean(7, false);
+			preparedStatement.setString(
+				8, FaroNotificationConstants.TYPE_MODAL);
+			preparedStatement.setString(
+				9, FaroNotificationConstants.SUBTYPE_TIME_ZONE_ADMIN);
 
-			ps.executeUpdate();
+			preparedStatement.executeUpdate();
 		}
 	}
 
 	private void _notifyFaroProjects() throws Exception {
-		try (PreparedStatement ps = connection.prepareStatement(
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
 				"select groupId from OSBFaro_FaroProject");
-			ResultSet rs = ps.executeQuery()) {
+			ResultSet resultSet = preparedStatement.executeQuery()) {
 
-			while (rs.next()) {
-				_addFaroNotification(rs.getLong(1));
+			while (resultSet.next()) {
+				_addFaroNotification(resultSet.getLong(1));
 			}
 		}
 	}
