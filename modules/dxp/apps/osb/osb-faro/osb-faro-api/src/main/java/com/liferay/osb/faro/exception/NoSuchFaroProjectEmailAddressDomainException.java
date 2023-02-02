@@ -30,13 +30,13 @@ public class NoSuchFaroProjectEmailAddressDomainException
 	}
 
 	public NoSuchFaroProjectEmailAddressDomainException(
-		String msg, Throwable cause) {
+		String msg, Throwable throwable) {
 
-		super(msg, cause);
+		super(msg, throwable);
 	}
 
-	public NoSuchFaroProjectEmailAddressDomainException(Throwable cause) {
-		super(cause);
+	public NoSuchFaroProjectEmailAddressDomainException(Throwable throwable) {
+		super(throwable);
 	}
 
 }

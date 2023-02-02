@@ -22,9 +22,6 @@ import java.util.Objects;
  */
 public class Field {
 
-	public Field() {
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

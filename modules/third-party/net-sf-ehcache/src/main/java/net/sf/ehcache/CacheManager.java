@@ -2049,11 +2049,11 @@ public class CacheManager {
             } catch (NoSuchMethodException e) {
                 throw new CacheException("Cannot find Enterprise features manager");
             } catch (InvocationTargetException e) {
-                Throwable cause = e.getCause();
-                if (cause instanceof CacheException) {
-                    throw (CacheException) cause;
+                Throwable throwable = e.getCause();
+                if (throwable instanceof CacheException) {
+                    throw (CacheException) throwable;
                 } else {
-                    throw new CacheException("Cannot instantiate enterprise features manager", cause);
+                    throw new CacheException("Cannot instantiate enterprise features manager", throwable);
                 }
             } catch (IllegalAccessException e) {
                 throw new CacheException("Cannot instantiate enterprise features manager", e);
