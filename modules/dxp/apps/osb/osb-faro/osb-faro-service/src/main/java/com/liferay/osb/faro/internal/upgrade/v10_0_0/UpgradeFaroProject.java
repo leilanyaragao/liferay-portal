@@ -44,10 +44,10 @@ public class UpgradeFaroProject extends UpgradeProcess {
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
 				"select roleId from Role_ where name = " + roleName);
-			ResultSet rs = preparedStatement.executeQuery()) {
+			ResultSet resultSet = preparedStatement.executeQuery()) {
 
-			if (rs.next()) {
-				return rs.getLong(1);
+			if (resultSet.next()) {
+				return resultSet.getLong(1);
 			}
 
 			throw new Exception("Could not find site owner role ID");

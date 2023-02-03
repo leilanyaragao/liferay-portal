@@ -125,11 +125,9 @@ public class ContactsEngineClientImpl
 
 		Map<String, Object> response = post(
 			faroProject, Rels.BLOCKED_KEYWORDS,
-			new HashMap<String, Object>() {
-				{
-					put("keywords", keywords);
-				}
-			},
+			new HashMapBuilder<>().<String, Object>put(
+				"keywords", keywords
+			),
 			Map.class);
 
 		List<Object> blockedKeywords = (List<Object>)response.get(
@@ -1635,9 +1633,9 @@ public class ContactsEngineClientImpl
 
 			Stream<Object> stream = curValues.stream();
 
-			Optional<Object> optionalFieldValue = stream.findFirst();
+			Optional<Object> fieldValueOptional = stream.findFirst();
 
-			values.add(optionalFieldValue.get());
+			values.add(fieldValueOptional.get());
 		}
 
 		return new Results<>(values, results.getTotal());
@@ -2408,13 +2406,14 @@ public class ContactsEngineClientImpl
 		FaroProject faroProject, String id, String dataSourceId,
 		List<Map<String, String>> groups) {
 
-		Map<String, Object> channelPatch = new HashMap<>();
-
-		channelPatch.put("dataSourceId", dataSourceId);
-		channelPatch.put("groups", groups);
-
 		Map<String, Object> patchChannelObject = patch(
-			faroProject, Rels.CHANNEL, id, channelPatch, Map.class);
+			faroProject, Rels.CHANNEL, id,
+			new HashMapBuilder<>().<String, Object>put(
+				"dataSourceId", dataSourceId
+			).put(
+				"groups", groups
+			).build(),
+			Map.class);
 
 		return objectMapper.convertValue(
 			patchChannelObject.get("channel"), Channel.class);
@@ -2468,13 +2467,13 @@ public class ContactsEngineClientImpl
 		FaroProject faroProject, String id, String dataSourceId,
 		String fieldName) {
 
-		Map<String, Object> fieldMappingPatch = new HashMap<>();
-
-		fieldMappingPatch.put("dataSourceId", dataSourceId);
-		fieldMappingPatch.put("fieldName", fieldName);
-
 		return patch(
-			faroProject, Rels.FIELD_MAPPING, id, fieldMappingPatch,
+			faroProject, Rels.FIELD_MAPPING, id,
+			new HashMapBuilder<>().<String, Object>put(
+				"dataSourceId", dataSourceId
+			).put(
+				"fieldName", fieldName
+			).build(),
 			FieldMapping.class);
 	}
 

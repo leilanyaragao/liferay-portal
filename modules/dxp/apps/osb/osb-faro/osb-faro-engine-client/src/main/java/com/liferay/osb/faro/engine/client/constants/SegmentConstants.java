@@ -45,6 +45,6 @@ public class SegmentConstants {
 			"dynamic", IndividualSegment.Type.DYNAMIC.name()
 		).put(
 			"static", IndividualSegment.Type.STATIC.name()
-		).build()
+		).build();
 
 }
