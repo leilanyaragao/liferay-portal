@@ -17,10 +17,10 @@ package com.liferay.osb.faro.web.internal.util.comparator;
 import com.liferay.osb.faro.engine.client.util.OrderByField;
 import com.liferay.osb.faro.model.FaroChannel;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringUtil;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,12 +67,11 @@ public class FaroChannelComparator extends OrderByComparator<FaroChannel> {
 	}
 
 	private static final Map<String, String> _fieldNames =
-		new HashMap<String, String>() {
-			{
-				put("createTime", "OSBFaro_FaroChannel.createTime");
-				put("name", "OSBFaro_FaroChannel.name");
-			}
-		};
+		new HashMapBuilder<>().<String, String>put(
+			"createTime", "OSBFaro_FaroChannel.createTime"
+		).put(
+			"name", "OSBFaro_FaroChannel.name"
+		).build();
 
 	private final List<OrderByField> _orderByFields;
 

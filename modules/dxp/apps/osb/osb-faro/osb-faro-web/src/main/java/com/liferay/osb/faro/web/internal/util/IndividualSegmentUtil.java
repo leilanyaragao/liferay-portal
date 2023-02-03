@@ -31,11 +31,11 @@ import com.liferay.osb.faro.web.internal.constants.FaroPaginationConstants;
 import com.liferay.osb.faro.web.internal.exception.FaroException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -194,12 +194,12 @@ public class IndividualSegmentUtil {
 					curFilterBuilder,
 					individualSegment.isIncludeAnonymousUsers(), 1, 1, null);
 
-			Map<String, Object> fieldValueMap = new HashMap<>();
-
-			fieldValueMap.put("count", curResults.getTotal());
-			fieldValueMap.put("values", binRange);
-
-			individualFieldDistribution.add(fieldValueMap);
+			individualFieldDistribution.add(
+				new HashMapBuilder<>().<String, Object>put(
+					"count", curResults.getTotal()
+				).put(
+					"values", binRange
+				).build());
 		}
 
 		return individualFieldDistribution;
@@ -252,10 +252,10 @@ public class IndividualSegmentUtil {
 		for (IndividualTransformation individualTransformation :
 				individualTransformations.getItems()) {
 
-			Map<String, Object> fieldValueMap = new HashMap<>();
-
-			fieldValueMap.put(
-				"count", individualTransformation.getTotalElements());
+			Map<String, Object> fieldValueMap =
+				new HashMapBuilder<>().<String, Object>put(
+					"count", individualTransformation.getTotalElements()
+				).build();
 
 			Map<String, Object> terms = individualTransformation.getTerms();
 

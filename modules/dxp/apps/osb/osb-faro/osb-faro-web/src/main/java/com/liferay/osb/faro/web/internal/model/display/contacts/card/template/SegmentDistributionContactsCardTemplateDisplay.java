@@ -31,11 +31,11 @@ import com.liferay.osb.faro.web.internal.util.SchemaOrgUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Validator;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -79,8 +79,6 @@ public class SegmentDistributionContactsCardTemplateDisplay
 		FaroProject faroProject, FaroEntityDisplay faroEntityDisplay,
 		ContactsEngineClient contactsEngineClient) {
 
-		Map<String, Object> contactsCardData = new HashMap<>();
-
 		List<Map<String, Object>> individualFieldDistribution =
 			new ArrayList<>();
 
@@ -123,10 +121,9 @@ public class SegmentDistributionContactsCardTemplateDisplay
 			}
 		}
 
-		contactsCardData.put(
-			"individualFieldDistribution", individualFieldDistribution);
-
-		return contactsCardData;
+		return new HashMapBuilder<>().<String, Object>put(
+			"individualFieldDistribution", individualFieldDistribution
+		).build();
 	}
 
 	protected static int[] getSupportedSizes(

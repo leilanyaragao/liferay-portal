@@ -125,11 +125,10 @@ public class OAuth2AuthorizationExpandoPortalInstanceLifecycleListener
 	public void portalInstanceUnregistered(Company company) {
 		_deleteSAPEntries(company.getCompanyId());
 
-		long classNameId = _classNameLocalService.getClassNameId(
-			OAuth2Authorization.class.getName());
-
 		ExpandoTable expandoTable = _expandoTableLocalService.fetchTable(
-			company.getCompanyId(), classNameId,
+			company.getCompanyId(),
+			_classNameLocalService.getClassNameId(
+				OAuth2Authorization.class.getName()),
 			ExpandoTableConstants.DEFAULT_TABLE_NAME);
 
 		_expandoColumnLocalService.deleteColumn(

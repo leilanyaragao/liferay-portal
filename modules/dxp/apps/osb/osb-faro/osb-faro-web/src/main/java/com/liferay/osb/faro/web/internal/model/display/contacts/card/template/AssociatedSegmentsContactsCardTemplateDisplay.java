@@ -25,9 +25,9 @@ import com.liferay.osb.faro.web.internal.model.display.FaroResultsDisplay;
 import com.liferay.osb.faro.web.internal.model.display.contacts.IndividualSegmentDisplay;
 import com.liferay.osb.faro.web.internal.model.display.main.FaroEntityDisplay;
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -55,8 +55,6 @@ public class AssociatedSegmentsContactsCardTemplateDisplay
 		FaroProject faroProject, FaroEntityDisplay faroEntityDisplay,
 		ContactsEngineClient contactsEngineClient) {
 
-		Map<String, Object> contactsCardData = new HashMap<>();
-
 		Results<IndividualSegment> results =
 			contactsEngineClient.getIndividualIndividualSegments(
 				faroProject, null, faroEntityDisplay.getId(), StringPool.BLANK,
@@ -71,7 +69,7 @@ public class AssociatedSegmentsContactsCardTemplateDisplay
 
 		Stream<IndividualSegment> stream = individualSegments.stream();
 
-		contactsCardData.put(
+		return new HashMapBuilder<>().<String, Object>put(
 			"contactsEntityResults",
 			new FaroResultsDisplay(
 				stream.map(
@@ -79,9 +77,8 @@ public class AssociatedSegmentsContactsCardTemplateDisplay
 				).collect(
 					Collectors.toList()
 				),
-				results.getTotal()));
-
-		return contactsCardData;
+				results.getTotal())
+		).build();
 	}
 
 	private static final int _ITEMS_PER_COLUMN = 6;

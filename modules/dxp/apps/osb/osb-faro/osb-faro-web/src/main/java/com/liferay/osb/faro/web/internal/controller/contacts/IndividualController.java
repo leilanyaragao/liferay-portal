@@ -37,9 +37,9 @@ import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.RoleConstants;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -125,8 +125,6 @@ public class IndividualController extends BaseFaroController {
 			@PathParam("groupId") long groupId, @PathParam("id") String id)
 		throws Exception {
 
-		Map<String, Map<String, List<Field>>> details = new HashMap<>();
-
 		FaroProject faroProject =
 			faroProjectLocalService.getFaroProjectByGroupId(groupId);
 
@@ -146,10 +144,11 @@ public class IndividualController extends BaseFaroController {
 				FieldMappingConstants.OWNER_TYPE_INDIVIDUAL, null, 1, 10000,
 				null));
 
-		details.put("custom", individual.getCustom());
-		details.put("demographics", individual.getDemographics());
-
-		return details;
+		return new HashMapBuilder<>().<String, Map<String, List<Field>>>put(
+			"custom", individual.getCustom()
+		).put(
+			"demographics", individual.getDemographics()
+		).build();
 	}
 
 	@GET

@@ -86,6 +86,7 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.portletfilerepository.PortletFileRepositoryUtil;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.util.Base64;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
@@ -188,20 +189,23 @@ public class DataSourceController extends BaseFaroController {
 			_tokenManager.clearToken(token);
 		}
 
-		Map<String, Object> properties = new HashMap<>();
-
-		properties.put("liferayAnalyticsDataSourceId", dataSource.getId());
-		properties.put(
-			"liferayAnalyticsEndpointURL",
-			EngineServiceURLUtil.getPublisherExternalURL(faroProject));
-		properties.put(
-			"liferayAnalyticsFaroBackendSecuritySignature",
-			dataSource.getFaroBackendSecuritySignature());
-		properties.put(
-			"liferayAnalyticsFaroBackendURL",
-			EngineServiceURLUtil.getBackendExternalURL(faroProject));
-		properties.put("liferayAnalyticsProjectId", faroProject.getProjectId());
-		properties.put("liferayAnalyticsURL", dataSource.getWorkspaceURL());
+		Map<String, Object> properties =
+			new HashMapBuilder<>().<String, Object>put(
+				"liferayAnalyticsDataSourceId", dataSource.getId()
+			).put(
+				"liferayAnalyticsEndpointURL",
+				EngineServiceURLUtil.getPublisherExternalURL(faroProject)
+			).put(
+				"liferayAnalyticsFaroBackendSecuritySignature",
+				dataSource.getFaroBackendSecuritySignature()
+			).put(
+				"liferayAnalyticsFaroBackendURL",
+				EngineServiceURLUtil.getBackendExternalURL(faroProject)
+			).put(
+				"liferayAnalyticsProjectId", faroProject.getProjectId()
+			).put(
+				"liferayAnalyticsURL", dataSource.getWorkspaceURL()
+			);
 
 		TokenCredentials tokenCredentials =
 			(TokenCredentials)dataSource.getCredentials();
@@ -433,16 +437,16 @@ public class DataSourceController extends BaseFaroController {
 			@PathParam("groupId") long groupId, @PathParam("id") String id)
 		throws Exception {
 
-		Map<Integer, Integer> deletePreview = new HashMap<>();
-
 		FaroProject faroProject =
 			faroProjectLocalService.getFaroProjectByGroupId(groupId);
 
 		Results<Account> accountResults = contactsEngineClient.getAccounts(
 			faroProject, id, null, null, null, null, null, 1, 0, null);
 
-		deletePreview.put(
-			FaroConstants.TYPE_ACCOUNT, accountResults.getTotal());
+		Map<Integer, Integer> deletePreview =
+			new HashMapBuilder<>().<Integer, Integer>put(
+				FaroConstants.TYPE_ACCOUNT, accountResults.getTotal()
+			);
 
 		Results<Asset> assetResults = contactsEngineClient.getAssets(
 			faroProject, id, null, ActivityConstants.ACTION_ANY,
@@ -1339,11 +1343,6 @@ public class DataSourceController extends BaseFaroController {
 			UriInfo uriInfo, String dataSourceId, long faroProjectId)
 		throws Exception {
 
-		Map<String, Object> properties = new HashMap<>();
-
-		properties.put(
-			"token", _tokenManager.getToken(dataSourceId, faroProjectId));
-
 		String url = StringUtil.replaceFirst(
 			String.valueOf(uriInfo.getRequestUri()), "/token", "/connect");
 
@@ -1352,9 +1351,12 @@ public class DataSourceController extends BaseFaroController {
 				url, StringPool.SLASH + dataSourceId, StringPool.BLANK);
 		}
 
-		properties.put("url", url);
-
-		String json = JSONUtil.writeValueAsString(properties);
+		String json = JSONUtil.writeValueAsString(
+			new HashMapBuilder<>().<String, Object>put(
+				"token", _tokenManager.getToken(dataSourceId, faroProjectId)
+			).put(
+				"url", url
+			));
 
 		return Base64.encode(json.getBytes(StandardCharsets.UTF_8));
 	}

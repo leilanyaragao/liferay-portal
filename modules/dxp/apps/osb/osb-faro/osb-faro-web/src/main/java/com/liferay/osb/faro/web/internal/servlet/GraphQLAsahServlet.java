@@ -186,9 +186,9 @@ public class GraphQLAsahServlet extends BaseAsahServlet {
 			if (variablesMap != null) {
 				String channelId = MapUtil.getString(variablesMap, "channelId");
 
-				if (!_hasChannelPermission(faroProject, channelId))
-
+				if (!_hasChannelPermission(faroProject, channelId)) {
 					return false;
+				}
 			}
 
 			String query = MapUtil.getString(map, "query");
@@ -198,9 +198,9 @@ public class GraphQLAsahServlet extends BaseAsahServlet {
 			if (matcher.find()) {
 				String channelId = matcher.group(_CHANNEL_ID_INDEX);
 
-				if (!_hasChannelPermission(faroProject, channelId))
-
+				if (!_hasChannelPermission(faroProject, channelId)) {
 					return false;
+				}
 			}
 
 			if (FaroPermissionChecker.isGroupMember(faroProject.getGroupId()) ||

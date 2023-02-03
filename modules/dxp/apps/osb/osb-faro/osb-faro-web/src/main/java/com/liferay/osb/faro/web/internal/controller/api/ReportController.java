@@ -20,6 +20,7 @@ import com.liferay.osb.faro.web.internal.context.GroupInfo;
 import com.liferay.osb.faro.web.internal.controller.BaseFaroController;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.Validator;
 
@@ -32,7 +33,6 @@ import java.time.format.DateTimeFormatter;
 
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -121,12 +121,11 @@ public class ReportController extends BaseFaroController {
 		Map<String, Object> responseMap;
 
 		Map<String, List<String>> queryParameters =
-			new HashMap<String, List<String>>() {
-				{
-					put("fromDate", Collections.singletonList(fromDateString));
-					put("toDate", Collections.singletonList(toDateString));
-				}
-			};
+			new HashMapBuilder<>().<String, List<String>>put(
+				"fromDate", Collections.singletonList(fromDateString)
+			).put(
+				"toDate", Collections.singletonList(toDateString)
+			).build();
 
 		try {
 			responseMap = contactsEngineClient.get(
@@ -153,11 +152,9 @@ public class ReportController extends BaseFaroController {
 
 				contactsEngineClient.getToOutputStream(
 					faroProject,
-					new HashMap<String, String>() {
-						{
-							put("Accept", "application/octet-stream, */*");
-						}
-					},
+					new HashMapBuilder<>().<String, String>put(
+						"Accept", "application/octet-stream, */*"
+					),
 					String.format("%s/file", path), queryParameters,
 					outputStream);
 			}
@@ -174,13 +171,13 @@ public class ReportController extends BaseFaroController {
 	}
 
 	private Map<String, String> _createHeaders(URI baseURI) {
-		return new HashMap<String, String>() {
-			{
-				put("X-Forwarded-Host", baseURI.getHost());
-				put("X-Forwarded-Port", String.valueOf(baseURI.getPort()));
-				put("X-Forwarded-Proto", baseURI.getScheme());
-			}
-		};
+		return new HashMapBuilder<>().<String, String>put(
+			"X-Forwarded-Host", baseURI.getHost()
+		).put(
+			"X-Forwarded-Port", String.valueOf(baseURI.getPort())
+		).put(
+			"X-Forwarded-Proto", baseURI.getScheme()
+		).build();
 	}
 
 	private Date _toUTCDate(String dateString) {
