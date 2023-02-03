@@ -263,9 +263,9 @@ public class IndividualSegmentUtil {
 
 			Stream<Object> stream = values.stream();
 
-			Optional<Object> optionalValue = stream.findFirst();
+			Optional<Object> valueOptional = stream.findFirst();
 
-			fieldValueMap.put("values", new Object[] {optionalValue.get()});
+			fieldValueMap.put("values", new Object[] {valueOptional.get()});
 
 			individualFieldDistribution.add(fieldValueMap);
 		}

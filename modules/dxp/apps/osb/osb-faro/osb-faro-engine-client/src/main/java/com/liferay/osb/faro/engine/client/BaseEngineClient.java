@@ -38,6 +38,7 @@ import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -443,14 +444,14 @@ public abstract class BaseEngineClient {
 			return null;
 		}
 
-		Optional<Link> link = resource.getLink(type);
+		Optional<Link> linkOptional = resource.getLink(type);
 
-		if (!link.isPresent()) {
+		if (!linkOptional.isPresent()) {
 			throw new IllegalStateException(
 				"URL does not exist for type: " + type);
 		}
 
-		String href = link.map(
+		String href = linkOptional.map(
 			Link::getHref
 		).get();
 
@@ -486,11 +487,9 @@ public abstract class BaseEngineClient {
 	}
 
 	protected Map<String, Object> getUriVariables(FaroProject faroProject) {
-		Map<String, Object> uriVariables = new HashMap<>();
-
-		uriVariables.put("weDeployKey", faroProject.getWeDeployKey());
-
-		return uriVariables;
+		return new HashMapBuilder<>().<String, String>put(
+			"weDeployKey", faroProject.getWeDeployKey()
+		);
 	}
 
 	protected Map<String, Object> getUriVariables(

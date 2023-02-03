@@ -44,10 +44,10 @@ public class UpgradeFaroProject extends UpgradeProcess {
 
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
 				"select roleId from Role_ where name = " + roleName);
-			ResultSet resultSet = preparedStatement.executeQuery()) {
+			ResultSet rs = preparedStatement.executeQuery()) {
 
-			if (resultSet.next()) {
-				return resultSet.getLong(1);
+			if (rs.next()) {
+				return rs.getLong(1);
 			}
 
 			throw new Exception("Could not find site owner role ID");
@@ -69,16 +69,17 @@ public class UpgradeFaroProject extends UpgradeProcess {
 			ResultSet resultSet = preparedStatement.executeQuery()) {
 
 			while (resultSet.next()) {
-				try (PreparedStatement psUpdate = connection.prepareStatement(
-						"update OSBFaro_FaroProject set " +
-							"incidentReportEmailAddresses = ? where " +
-								"faroProjectId = ?")) {
+				try (PreparedStatement updatePreparedStatement =
+						connection.prepareStatement(
+							"update OSBFaro_FaroProject set " +
+								"incidentReportEmailAddresses = ? where " +
+									"faroProjectId = ?")) {
 
-					psUpdate.setString(
+					updatePreparedStatement.setString(
 						1, "[\"" + resultSet.getString(1) + "\"]");
-					psUpdate.setLong(2, resultSet.getLong(2));
+					updatePreparedStatement.setLong(2, resultSet.getLong(2));
 
-					psUpdate.executeUpdate();
+					updatePreparedStatement.executeUpdate();
 				}
 			}
 		}

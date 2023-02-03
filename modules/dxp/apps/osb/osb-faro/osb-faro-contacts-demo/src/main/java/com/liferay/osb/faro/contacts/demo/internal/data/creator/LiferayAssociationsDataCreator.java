@@ -20,6 +20,7 @@ import com.liferay.osb.faro.model.FaroProject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.HttpUtil;
 
@@ -75,10 +76,6 @@ public class LiferayAssociationsDataCreator extends DataCreator {
 
 	@Override
 	protected Map<String, Object> doCreate(Object[] params) {
-		Map<String, Object> association = new HashMap<>();
-
-		association.put("action", "addAssociation");
-
 		Map<String, Object> objectMap = new HashMap<>();
 
 		DataCreator dataCreator = _dataCreators.get(
@@ -104,11 +101,13 @@ public class LiferayAssociationsDataCreator extends DataCreator {
 		objectMap.put("emailAddress", liferayUser.get("emailAddress"));
 		objectMap.put("userId", liferayUser.get("userId"));
 
-		association.put("objectJSONObject", objectMap);
-
-		association.put("type", dataCreator.getClassName());
-
-		return association;
+		return new HashMapBuilder<>().<String, Object>put(
+			"action", "addAssociation"
+		).put(
+			"objectJSONObject", objectMap
+		).put(
+			"type", dataCreator.getClassName()
+		).build();
 	}
 
 	protected String dataSourceId;

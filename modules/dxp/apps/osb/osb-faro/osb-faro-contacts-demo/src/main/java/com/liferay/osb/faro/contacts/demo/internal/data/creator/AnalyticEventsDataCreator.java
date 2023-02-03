@@ -21,6 +21,7 @@ import com.liferay.osb.faro.model.FaroProject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.HttpUtil;
 
@@ -58,12 +59,12 @@ public class AnalyticEventsDataCreator extends DataCreator {
 	protected void addData(List<Map<String, Object>> objects) {
 		Http.Options options = new Http.Options();
 
-		Map<String, String> headers = new HashMap<>();
-
-		headers.put("Content-Type", ContentTypes.APPLICATION_JSON);
-		headers.put("X-Forwarded-For", internet.publicIpV4Address());
-
-		options.setHeaders(headers);
+		options.setHeaders(
+			new HashMapBuilder<>().<String, String>put(
+				"Content-Type", ContentTypes.APPLICATION_JSON
+			).put(
+				"X-Forwarded-For", internet.publicIpV4Address()
+			));
 
 		options.setLocation(_OSB_ASAH_PUBLISHER_URL);
 		options.setPost(true);
@@ -85,8 +86,6 @@ public class AnalyticEventsDataCreator extends DataCreator {
 
 	@Override
 	protected Map<String, Object> doCreate(Object[] params) {
-		Map<String, Object> analyticEvent = new HashMap<>();
-
 		Map<String, Object> context = new HashMap<>(
 			_pageContextsDataCreator.getRandom());
 
@@ -97,9 +96,12 @@ public class AnalyticEventsDataCreator extends DataCreator {
 			context.put("url", context.get("url") + "?q=" + encodePath);
 		}
 
-		analyticEvent.put("context", context);
-
-		analyticEvent.put("dataSourceId", params[0]);
+		Map<String, Object> analyticEvent =
+			new HashMapBuilder<>().<String, Object>put(
+				"context", context
+			).put(
+				"dataSourceId", params[0]
+			).build();
 
 		List<Map<String, Object>> events = new ArrayList<>();
 
@@ -141,29 +143,33 @@ public class AnalyticEventsDataCreator extends DataCreator {
 	private Map<String, Object> _createEvent(
 		String applicationId, String eventId, Map<String, Object> properties) {
 
-		Map<String, Object> event = new HashMap<>();
-
-		event.put("applicationId", applicationId);
-		event.put("eventId", eventId);
-		event.put("properties", properties);
-
-		return event;
+		return new HashMapBuilder<>().<String, Object>put(
+			"applicationId", applicationId
+		).put(
+			"eventId", eventId
+		).put(
+			"properties", properties
+		).build();
 	}
 
 	private void _createEvents() {
 		for (String blogTitle : _BLOG_TITLES) {
 			long blogEntryId = number.randomNumber(8, false);
 
-			Map<String, Object> blogAssetEvent = new HashMap<String, Object>() {
-				{
-					put("classPK", blogEntryId);
-					put("depth", number.randomNumber(2, false));
-					put("entryId", blogEntryId);
-					put("numberOfWords", number.randomNumber());
-					put("score", number.randomDouble(1, 0, 1));
-					put("title", blogTitle);
-				}
-			};
+			Map<String, Object> blogAssetEvent =
+				new HashMapBuilder<>().<String, Object>put(
+					"classPK", blogEntryId
+				).put(
+					"depth", number.randomNumber(2, false)
+				).put(
+					"entryId", blogEntryId
+				).put(
+					"numberOfWords", number.randomNumber()
+				).put(
+					"score", number.randomDouble(1, 0, 1)
+				).put(
+					"title", blogTitle
+				).build();
 
 			_assetEvents.add(
 				_createEvent("Blog", "blogDepthReached", blogAssetEvent));
@@ -175,14 +181,15 @@ public class AnalyticEventsDataCreator extends DataCreator {
 
 		for (int i = 0; i < 10; i++) {
 			Map<String, Object> documentAssetEvent =
-				new HashMap<String, Object>() {
-					{
-						put("fileEntryId", number.randomNumber(8, false));
-						put("fileEntryUUID", internet.uuid());
-						put("title", company.bs());
-						put("version", "1.0");
-					}
-				};
+				new HashMapBuilder<>().<String, Object>put(
+					"fileEntryId", number.randomNumber(8, false)
+				).put(
+					"fileEntryUUID", internet.uuid()
+				).put(
+					"title", company.bs()
+				).put(
+					"version", "1.0"
+				).build();
 
 			_assetEvents.add(
 				_createEvent(
@@ -193,12 +200,11 @@ public class AnalyticEventsDataCreator extends DataCreator {
 		}
 
 		for (String formTitle : _FORM_TITLES) {
-			Map<String, Object> formAssetEvent = new HashMap<String, Object>() {
-				{
-					put("formId", number.randomNumber(8, false));
-					put("title", formTitle);
-				}
-			};
+			new HashMapBuilder<>().<String, Object>put(
+				"formId", number.randomNumber(8, false)
+			).put(
+				"title", formTitle
+			).build();
 
 			_assetEvents.add(
 				_createEvent("Form", "formSubmitted", formAssetEvent));

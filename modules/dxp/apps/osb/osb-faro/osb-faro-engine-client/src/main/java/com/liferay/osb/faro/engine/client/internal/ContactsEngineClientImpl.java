@@ -72,6 +72,7 @@ import com.liferay.portal.kernel.dao.search.SearchPaginationUtil;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.CompanyLocalService;
 import com.liferay.portal.kernel.service.UserLocalService;
+import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -163,13 +164,18 @@ public class ContactsEngineClientImpl
 		int byteSize = 0;
 
 		for (Map<String, Object> fieldsMap : fieldsMaps) {
-			Map<String, Object> individualMap = new HashMap<>();
-
-			individualMap.put("dataSourceId", dataSourceId);
-			individualMap.put("dataSourceIndividualPK", UUID.randomUUID());
-			individualMap.put("faroProject", faroProject.getWeDeployKey());
-			individualMap.put("fields", fieldsMap);
-			individualMap.put("individualSegmentIds", individualSegmentIds);
+			Map<String, Object> individualMap =
+				new HashMapBuilder<>().<String, Object>put(
+					"dataSourceId", dataSourceId
+				).put(
+					"dataSourceIndividualPK", UUID.randomUUID()
+				).put(
+					"faroProject", faroProject.getWeDeployKey()
+				).put(
+					"fields", fieldsMap
+				).put(
+					"individualSegmentIds", individualSegmentIds
+				).build();
 
 			byte[] bytes = objectMapper.writeValueAsBytes(individualMap);
 

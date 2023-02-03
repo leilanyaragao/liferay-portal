@@ -130,7 +130,7 @@ public class FaroUserLocalServiceImpl extends FaroUserLocalServiceBaseImpl {
 
 		if (sendEmail) {
 			try {
-				sendEmail(faroUser, groupId, roleId, userId);
+				_sendEmail(faroUser, groupId, roleId, userId);
 			}
 			catch (Exception exception) {
 				throw new SystemException(exception);
@@ -230,7 +230,7 @@ public class FaroUserLocalServiceImpl extends FaroUserLocalServiceBaseImpl {
 		return faroUserFinder.countByKeywords(groupId, query, statuses);
 	}
 
-	protected String getNotificationMessage(
+	private String _getNotificationMessage(
 			long roleId, long groupId, ResourceBundle resourceBundle)
 		throws PortalException {
 
@@ -257,20 +257,19 @@ public class FaroUserLocalServiceImpl extends FaroUserLocalServiceBaseImpl {
 			});
 	}
 
-	protected void sendEmail(
+	private void _sendEmail(
 			FaroUser faroUser, long groupId, long roleId, long userId)
 		throws Exception {
 
 		if (faroUser.getStatus() == FaroUserConstants.STATUS_REQUESTED) {
-			sendEmailRequest(userId, groupId);
+			_sendEmailRequest(userId, groupId);
 		}
 		else {
-			sendEmailNewUser(faroUser, groupId, roleId);
+			_sendEmailNewUser(faroUser, groupId, roleId);
 		}
 	}
 
-	protected void sendEmailNewUser(
-			FaroUser faroUser, long groupId, long roleId)
+	private void _sendEmailNewUser(FaroUser faroUser, long groupId, long roleId)
 		throws Exception {
 
 		User user = userLocalService.getUser(faroUser.getUserId());
@@ -341,7 +340,7 @@ public class FaroUserLocalServiceImpl extends FaroUserLocalServiceBaseImpl {
 							faroUser.getEmailAddress() + "</strong>"
 					}),
 				EmailUtil.getLogoIconURL(),
-				getNotificationMessage(roleId, groupId, resourceBundle),
+				_getNotificationMessage(roleId, groupId, resourceBundle),
 				EmailUtil.getTitleIconURL(),
 				_language.get(resourceBundle, "welcome-to-analytics-cloud")
 			});
@@ -355,9 +354,7 @@ public class FaroUserLocalServiceImpl extends FaroUserLocalServiceBaseImpl {
 		}
 	}
 
-	protected void sendEmailRequest(long userId, long groupId)
-		throws Exception {
-
+	private void _sendEmailRequest(long userId, long groupId) throws Exception {
 		User senderUser = userLocalService.getUser(userId);
 
 		InternetAddress from = new InternetAddress(

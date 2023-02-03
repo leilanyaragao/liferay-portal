@@ -140,12 +140,12 @@ public class KoroneikiHttpUtil {
 			int pageSize)
 		throws Exception {
 
-		Page<Account> accounts =
+		Page<Account> accountsPage =
 			_accountResource.getAccountByExternalLinkDomainEntityNameEntityPage(
 				domain, entityName, entityId, Pagination.of(page, pageSize));
 
-		if ((accounts != null) && (accounts.getItems() != null)) {
-			return new ArrayList<>(accounts.getItems());
+		if ((accountsPage != null) && (accountsPage.getItems() != null)) {
+			return new ArrayList<>(accountsPage.getItems());
 		}
 
 		return Collections.emptyList();
@@ -175,11 +175,11 @@ public class KoroneikiHttpUtil {
 			String filter, int page, int size)
 		throws Exception {
 
-		Page<Account> accounts = _accountResource.getAccountsPage(
+		Page<Account> accountsPage = _accountResource.getAccountsPage(
 			null, filter, Pagination.of(page, size), null);
 
-		if ((accounts != null) && (accounts.getItems() != null)) {
-			return new ArrayList<>(accounts.getItems());
+		if ((accountsPage != null) && (accountsPage.getItems() != null)) {
+			return new ArrayList<>(accountsPage.getItems());
 		}
 
 		return Collections.emptyList();
