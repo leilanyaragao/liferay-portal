@@ -87,14 +87,12 @@ import java.time.ZoneOffset;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -1629,13 +1627,11 @@ public class ContactsEngineClientImpl
 
 			Map<String, Object> terms = individualTransformation.getTerms();
 
-			Collection<Object> curValues = terms.values();
+			ArrayList<Object> objects = new ArrayList<>(terms.values());
 
-			Stream<Object> stream = curValues.stream();
+			objects.get(0);
 
-			Optional<Object> fieldValueOptional = stream.findFirst();
-
-			values.add(fieldValueOptional.get());
+			values.add(objects.get(0));
 		}
 
 		return new Results<>(values, results.getTotal());
@@ -1895,11 +1891,11 @@ public class ContactsEngineClientImpl
 			getTemplatedURL(faroProject, Rels.INDIVIDUALS_COUNT),
 			HttpMethod.GET, HttpEntity.EMPTY, Long.class, uriVariables);
 
-		return Optional.ofNullable(
-			responseEntity.getBody()
-		).orElse(
-			0L
-		);
+		if (responseEntity.getBody() == null) {
+			return 0L;
+		}
+
+		return responseEntity.getBody();
 	}
 
 	@Override

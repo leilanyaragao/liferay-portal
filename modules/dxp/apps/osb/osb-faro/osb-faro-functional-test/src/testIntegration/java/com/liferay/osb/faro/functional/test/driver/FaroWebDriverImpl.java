@@ -38,7 +38,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -501,18 +500,15 @@ public class FaroWebDriverImpl
 
 		windowHandles.remove(_mainWindowHandle);
 
-		Stream<String> stream = windowHandles.stream();
+		Object[] objects = windowHandles.toArray();
 
-		Optional<String> handleOptional = stream.reduce(
-			(first, second) -> second);
-
-		if (!handleOptional.isPresent()) {
+		if (windowHandles.isEmpty()) {
 			throw new Exception("There is no other window to switch to");
 		}
 
 		TargetLocator targetLocator = switchTo();
 
-		targetLocator.window(handleOptional.get());
+		targetLocator.window(objects[objects.length - 1]);
 	}
 
 	@Override

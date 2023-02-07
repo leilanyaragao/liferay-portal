@@ -76,7 +76,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
@@ -1035,17 +1034,13 @@ public class ProjectController extends BaseFaroController {
 		List<FaroProject> faroProjects =
 			_faroProjectLocalService.getFaroProjectsByUserId(getUserId());
 
-		Stream<FaroProject> stream = faroProjects.stream();
-
-		Optional<FaroProject> faroProjectOptional = stream.filter(
-			FaroProject::isTrial
-		).findAny();
-
-		if (faroProjectOptional.isPresent()) {
-			return false;
+		for (FaroProject faroProject : faroProjects) {
+			if (faroProject.isTrial()) {
+				return true;
+			}
 		}
 
-		return true;
+		return false;
 	}
 
 	private boolean _isWorkspaceHealthy(FaroProject faroProject) {
