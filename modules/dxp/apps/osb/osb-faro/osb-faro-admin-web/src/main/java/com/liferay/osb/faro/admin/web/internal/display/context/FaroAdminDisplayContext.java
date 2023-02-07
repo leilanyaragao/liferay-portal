@@ -15,7 +15,7 @@
 package com.liferay.osb.faro.admin.web.internal.display.context;
 
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItem;
-import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemList;
+import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemListBuilder;
 import com.liferay.osb.faro.admin.web.internal.model.FaroProjectAdminDisplay;
 import com.liferay.osb.faro.model.FaroProject;
 import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
@@ -77,40 +77,35 @@ public class FaroAdminDisplayContext {
 				_httpServletRequest, "redirect", _themeDisplay.getURLCurrent())
 		).buildPortletURL();
 
-		return new DropdownItemList() {
-			{
-				add(
-					dropdownItem -> {
-						dropdownItem.setHref(
-							portletURL, ActionRequest.ACTION_NAME,
-							"/faro_admin/deactivate_project", "faroProjectId",
-							faroProjectAdminDisplay.getFaroProjectId());
-						dropdownItem.setLabel(
-							LanguageUtil.get(
-								_httpServletRequest, "deactivate-project"));
-					});
-				add(
-					dropdownItem -> {
-						dropdownItem.setHref(
-							portletURL, ActionRequest.ACTION_NAME,
-							"/faro_admin/refresh_liferay", "faroProjectId",
-							faroProjectAdminDisplay.getFaroProjectId());
-						dropdownItem.setLabel(
-							LanguageUtil.get(
-								_httpServletRequest, "refresh-liferay"));
-					});
-				add(
-					dropdownItem -> {
-						dropdownItem.setHref(
-							portletURL, ActionRequest.ACTION_NAME,
-							"/faro_admin/refresh_project", "groupId",
-							faroProjectAdminDisplay.getGroupId());
-						dropdownItem.setLabel(
-							LanguageUtil.get(
-								_httpServletRequest, "refresh-project"));
-					});
+		return DropdownItemListBuilder.add(
+			dropdownItem -> {
+				dropdownItem.setHref(
+					portletURL, ActionRequest.ACTION_NAME,
+					"/faro_admin/deactivate_project", "faroProjectId",
+					faroProjectAdminDisplay.getFaroProjectId());
+				dropdownItem.setLabel(
+					LanguageUtil.get(
+						_httpServletRequest, "deactivate-project"));
 			}
-		};
+		).add(
+			dropdownItem -> {
+				dropdownItem.setHref(
+					portletURL, ActionRequest.ACTION_NAME,
+					"/faro_admin/refresh_liferay", "faroProjectId",
+					faroProjectAdminDisplay.getFaroProjectId());
+				dropdownItem.setLabel(
+					LanguageUtil.get(_httpServletRequest, "refresh-liferay"));
+			}
+		).add(
+			dropdownItem -> {
+				dropdownItem.setHref(
+					portletURL, ActionRequest.ACTION_NAME,
+					"/faro_admin/refresh_project", "groupId",
+					faroProjectAdminDisplay.getGroupId());
+				dropdownItem.setLabel(
+					LanguageUtil.get(_httpServletRequest, "refresh-project"));
+			}
+		).build();
 	}
 
 	public PortletURL getPortletURL() {

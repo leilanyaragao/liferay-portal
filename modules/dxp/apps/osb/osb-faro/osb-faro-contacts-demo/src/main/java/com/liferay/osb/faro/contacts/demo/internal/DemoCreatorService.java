@@ -25,6 +25,7 @@ import com.liferay.osb.faro.model.FaroProject;
 import com.liferay.osb.faro.service.FaroChannelLocalService;
 import com.liferay.osb.faro.service.FaroProjectLocalService;
 import com.liferay.osb.faro.service.FaroUserLocalService;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -87,11 +88,8 @@ public abstract class DemoCreatorService {
 	protected static String encodeAuthorizationFields(
 		String userName, String password) {
 
-		String authorizationString = userName.concat(
-			StringPool.COLON
-		).concat(
-			password
-		);
+		String authorizationString = StringBundler.concat(
+			userName, StringPool.COLON, password);
 
 		return new String(
 			Base64.encodeBase64(

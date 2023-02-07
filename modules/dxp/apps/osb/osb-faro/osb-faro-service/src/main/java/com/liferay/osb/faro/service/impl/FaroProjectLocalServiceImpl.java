@@ -34,6 +34,8 @@ import com.liferay.portal.kernel.model.GroupConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -49,6 +51,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.mail.internet.InternetAddress;
+
+import jdk.nashorn.internal.ir.annotations.Reference;
 
 /**
  * @author Matthew Kong
@@ -69,7 +73,7 @@ public class FaroProjectLocalServiceImpl
 
 		long faroProjectId = counterLocalService.increment();
 
-		Group group = groupLocalService.addGroup(
+		Group group = _groupLocalService.addGroup(
 			userId, 0, FaroProject.class.getName(), faroProjectId, 0,
 			Collections.singletonMap(LocaleUtil.getDefault(), name), null,
 			GroupConstants.TYPE_SITE_PRIVATE, true,
@@ -82,7 +86,7 @@ public class FaroProjectLocalServiceImpl
 		if ((friendlyURL == null) || Validator.isBlank(friendlyURL.trim())) {
 			group.setFriendlyURL(null);
 
-			groupLocalService.updateGroup(group);
+			_groupLocalService.updateGroup(group);
 		}
 
 		long groupId = group.getGroupId();
@@ -123,11 +127,11 @@ public class FaroProjectLocalServiceImpl
 	public FaroProject deleteFaroProjectByGroupId(long groupId)
 		throws PortalException {
 
-		faroChannelLocalService.deleteFaroChannels(groupId);
-		faroPreferencesLocalService.deleteFaroPreferencesByGroupId(groupId);
-		faroUserLocalService.deleteFaroUsers(groupId);
+		_faroChannelLocalService.deleteFaroChannels(groupId);
+		_faroPreferencesLocalService.deleteFaroPreferencesByGroupId(groupId);
+		_faroUserLocalService.deleteFaroUsers(groupId);
 
-		groupLocalService.deleteGroup(groupId);
+		_groupLocalService.deleteGroup(groupId);
 
 		return faroProjectPersistence.removeByGroupId(groupId);
 	}
@@ -188,7 +192,7 @@ public class FaroProjectLocalServiceImpl
 			faroProjectLocalService.getFaroProjectsByEmailAddressDomain(
 				StringUtil.extractLast(user.getEmailAddress(), CharPool.AT));
 
-		List<Group> groups = groupLocalService.getUserGroups(
+		List<Group> groups = _groupLocalService.getUserGroups(
 			user.getUserId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS,
 			new GroupNameComparator(true));
 
@@ -216,7 +220,7 @@ public class FaroProjectLocalServiceImpl
 	public void sendCreatedWorkspaceEmail(String weDeployKey) throws Exception {
 		FaroProject faroProject = fetchFaroProjectByWeDeployKey(weDeployKey);
 
-		FaroUser faroUser = faroUserLocalService.fetchOwnerFaroUser(
+		FaroUser faroUser = _faroUserLocalService.fetchOwnerFaroUser(
 			faroProject.getGroupId());
 
 		if (faroUser == null) {
@@ -227,13 +231,13 @@ public class FaroProjectLocalServiceImpl
 			getClassLoader(),
 			"com/liferay/osb/faro/dependencies/created-workspace.html");
 
-		User user = userLocalService.getUser(faroProject.getUserId());
+		User user = _userLocalService.getUser(faroProject.getUserId());
 
 		ResourceBundle resourceBundle = ResourceBundleUtil.getBundle(
 			"content.Language", user.getLocale(), getClass());
 
 		String workspaceURL = EmailUtil.getWorkspaceURL(
-			groupLocalService.fetchGroup(faroProject.getGroupId()));
+			_groupLocalService.fetchGroup(faroProject.getGroupId()));
 
 		body = StringUtil.replace(
 			body,
@@ -337,10 +341,25 @@ public class FaroProjectLocalServiceImpl
 	private static final Log _log = LogFactoryUtil.getLog(
 		FaroProjectLocalServiceImpl.class);
 
+	@Reference
+	private FaroChannelLocalService _faroChannelLocalService;
+
+	@Reference
+	private FaroPreferencesLocalService _faroPreferencesLocalService;
+
+	@Reference
+	private FaroUserLocalService _faroUserLocalService;
+
+	@Reference
+	private GroupLocalService _groupLocalService;
+
 	@ServiceReference(type = Language.class)
 	private Language _language;
 
 	@ServiceReference(type = MailService.class)
 	private MailService _mailService;
+
+	@Reference
+	private UserLocalService _userLocalService;
 
 }

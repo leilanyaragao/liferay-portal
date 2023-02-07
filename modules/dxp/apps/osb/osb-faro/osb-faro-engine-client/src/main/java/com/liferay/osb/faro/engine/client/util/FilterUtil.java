@@ -31,11 +31,8 @@ import java.util.stream.Stream;
 public class FilterUtil {
 
 	public static String getBlankFilter(String fieldName, String operator) {
-		return fieldName.concat(
-			operator
-		).concat(
-			StringPool.DOUBLE_APOSTROPHE
-		);
+		return StringBundler.concat(
+			fieldName, operator, StringPool.DOUBLE_APOSTROPHE);
 	}
 
 	public static String getFieldName(
@@ -66,15 +63,14 @@ public class FilterUtil {
 
 			Stream<?> stream = values.stream();
 
-			value = StringPool.OPEN_BRACKET.concat(
+			value = StringBundler.concat(
+				StringPool.OPEN_BRACKET,
 				stream.map(
 					String::valueOf
 				).collect(
 					Collectors.joining(StringPool.COMMA)
-				)
-			).concat(
-				StringPool.CLOSE_BRACKET
-			);
+				),
+				StringPool.CLOSE_BRACKET);
 		}
 		else {
 			String valueString = String.valueOf(value);
@@ -142,19 +138,11 @@ public class FilterUtil {
 	}
 
 	public static String getNullFilter(String fieldName, String operator) {
-		return fieldName.concat(
-			operator
-		).concat(
-			StringPool.NULL
-		);
+		return operator + StringPool.NULL;
 	}
 
 	public static String negate(String filterString) {
-		return "not".concat(
-			StringPool.SPACE
-		).concat(
-			filterString
-		);
+		return StringBundler.concat("not", StringPool.SPACE, filterString);
 	}
 
 }

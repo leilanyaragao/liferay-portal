@@ -34,12 +34,9 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  * @author Matthew Kong
@@ -259,13 +256,9 @@ public class IndividualSegmentUtil {
 
 			Map<String, Object> terms = individualTransformation.getTerms();
 
-			Collection<Object> values = terms.values();
+			ArrayList<Object> values = new ArrayList<>(terms.values());
 
-			Stream<Object> stream = values.stream();
-
-			Optional<Object> valueOptional = stream.findFirst();
-
-			fieldValueMap.put("values", new Object[] {valueOptional.get()});
+			fieldValueMap.put("values", new Object[] {values.get(0)});
 
 			individualFieldDistribution.add(fieldValueMap);
 		}
