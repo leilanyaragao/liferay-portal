@@ -18,6 +18,7 @@ import com.liferay.osb.faro.engine.client.ContactsEngineClient;
 import com.liferay.osb.faro.model.FaroProject;
 import com.liferay.osb.faro.service.FaroProjectLocalService;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.test.rule.LiferayUnitTestRule;
 import com.liferay.portal.util.PropsImpl;
 
 import javax.portlet.ActionRequest;
@@ -25,6 +26,8 @@ import javax.portlet.ActionResponse;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
 
 import org.mockito.Mockito;
@@ -35,6 +38,11 @@ import org.springframework.test.util.ReflectionTestUtils;
  * @author Inácio Nery Kong
  */
 public class DeactivateProjectMVCActionCommandTest {
+
+	@ClassRule
+	@Rule
+	public static final LiferayUnitTestRule liferayUnitTestRule =
+		LiferayUnitTestRule.INSTANCE;
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {

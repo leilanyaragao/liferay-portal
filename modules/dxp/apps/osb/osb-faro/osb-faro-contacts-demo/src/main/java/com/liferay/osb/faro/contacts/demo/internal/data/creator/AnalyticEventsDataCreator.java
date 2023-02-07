@@ -109,17 +109,19 @@ public class AnalyticEventsDataCreator extends DataCreator {
 			dateAndTime.past(30, TimeUnit.DAYS));
 
 		if (bool.bool()) {
-			Map<String, Object> assetEvent = new HashMap<>(
-				_assetEvents.get(random.nextInt(_assetEvents.size())));
-
-			assetEvent.put("eventDate", eventDateString);
-
-			events.add(assetEvent);
+			events.add(
+				new HashMapBuilder.HashMapWrapper<>(
+					_assetEvents.get(random.nextInt(_assetEvents.size()))
+				).put(
+					"eventDate", eventDateString
+				).build());
 		}
 
-		Map<String, Object> pageEvent = new HashMap<>(_pageEvent);
-
-		pageEvent.put("eventDate", eventDateString);
+		Map<String, Object> pageEvent = new HashMapBuilder.HashMapWrapper<>(
+			_pageEvent
+		).put(
+			"eventDate", eventDateString
+		).build();
 
 		events.add(pageEvent);
 
@@ -216,22 +218,20 @@ public class AnalyticEventsDataCreator extends DataCreator {
 			_assetEvents.add(
 				_createEvent(
 					"WebContent", "webContentViewed",
-					new HashMap<String, Object>() {
-						{
-							put("articleId", number.randomNumber(8, false));
-							put("numberOfWords", number.randomNumber());
-							put("title", company.bs());
-						}
-					}));
+					new HashMapBuilder<>().<String, Object>put(
+						"articleId", number.randomNumber(8, false)
+					).put(
+						"numberOfWords", number.randomNumber()
+					).put(
+						"title", company.bs()
+					).build()));
 		}
 
 		_pageEvent = _createEvent(
 			"Page", "pageViewed",
-			new HashMap<String, Object>() {
-				{
-					put("page", "/web/guest/home");
-				}
-			});
+			new HashMapBuilder<>().<String, Object>put(
+				"page", "/web/guest/home"
+			).build());
 	}
 
 	private static final String[] _BLOG_TITLES = {

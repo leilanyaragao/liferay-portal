@@ -52,12 +52,12 @@ public class LiferayAssociationsDataCreator extends DataCreator {
 	protected void addData(List<Map<String, Object>> objects) {
 		Http.Options options = new Http.Options();
 
-		Map<String, String> headers = new HashMap<>();
-
-		headers.put("Content-Type", ContentTypes.APPLICATION_JSON);
-		headers.put("OSB-Asah-Data-Source-ID", dataSourceId);
-
-		options.setHeaders(headers);
+		options.setHeaders(
+			new HashMapBuilder<>().<String, String>put(
+				"Content-Type", ContentTypes.APPLICATION_JSON
+			).put(
+				"OSB-Asah-Data-Source-ID", dataSourceId
+			).build());
 
 		options.setLocation(_OSB_ASAH_PUBLISHER_URL + "/dxp-entities");
 		options.setPost(true);

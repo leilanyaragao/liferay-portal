@@ -20,8 +20,10 @@
 	"name": "osb-faro-theme",
 	"scripts": {
 		"build": "gulp build",
+		"checkFormat": "liferay-npm-scripts check",
 		"deploy": "gulp deploy",
 		"extend": "gulp extend",
+		"format": "liferay-npm-scripts fix",
 		"init": "gulp init",
 		"kickstart": "gulp kickstart",
 		"status": "gulp status",

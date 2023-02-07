@@ -21,6 +21,7 @@ import com.liferay.osb.faro.model.FaroProject;
 import com.liferay.portal.kernel.dao.search.EmptyOnClickRowChecker;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
 import com.liferay.portal.kernel.search.Document;
 import com.liferay.portal.kernel.search.Hits;
 import com.liferay.portal.kernel.search.Indexer;
@@ -69,13 +70,12 @@ public class FaroAdminDisplayContext {
 			return Collections.emptyList();
 		}
 
-		PortletURL portletURL = _renderResponse.createActionURL();
-
-		portletURL.setParameter(
-			"redirect",
+		PortletURL portletURL = PortletURLBuilder.createRenderURL(
+			_renderResponse
+		).setRedirect(
 			ParamUtil.getString(
-				_httpServletRequest, "redirect",
-				_themeDisplay.getURLCurrent()));
+				_httpServletRequest, "redirect", _themeDisplay.getURLCurrent())
+		).buildPortletURL();
 
 		return new DropdownItemList() {
 			{
