@@ -29,8 +29,6 @@ import com.liferay.portal.kernel.util.ListUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -155,18 +153,17 @@ public class MockContactsEngineClientImpl
 
 		List<Individual> individuals = results.getItems();
 
-		Stream<Individual> stream = individuals.stream();
+		ArrayList<Individual> individualFiltered = new ArrayList<>();
 
-		stream = stream.filter(
-			curIndividual -> {
-				String id = curIndividual.getId();
+		for (Individual curIndividual : individuals) {
+			String id = curIndividual.getId();
 
-				return !id.equals(individual.getId());
-			});
+			if (!id.equals(individual.getId())) {
+				individualFiltered.add(curIndividual);
+			}
+		}
 
-		individuals = stream.collect(Collectors.toList());
-
-		return new Results<>(individuals, individuals.size());
+		return new Results<>(individualFiltered, individualFiltered.size());
 	}
 
 	protected Results<Individual> getIndividuals(

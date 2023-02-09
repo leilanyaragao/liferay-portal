@@ -167,15 +167,13 @@ public class Table {
 		List<WebElement> rowWebElements = _faroSelenium.findElements(
 			sb.toString());
 
-		Stream<WebElement> stream = rowWebElements.stream();
+		ArrayList<String> webElementText = new ArrayList<>();
 
-		Assert.assertEquals(
-			dataTable.asList(String.class),
-			stream.map(
-				WebElement::getText
-			).collect(
-				Collectors.toList()
-			));
+		for (WebElement webElement : rowWebElements) {
+			webElementText.add(webElement.getText());
+		}
+
+		Assert.assertEquals(dataTable.asList(String.class), webElementText);
 	}
 
 	@Then("^I should see \"(.*)\" in the card list \"(.*)\"$")

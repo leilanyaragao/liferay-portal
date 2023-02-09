@@ -26,10 +26,9 @@ import com.liferay.osb.faro.web.internal.model.display.main.FaroEntityDisplay;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Matthew Kong
@@ -63,15 +62,14 @@ public class CoworkersContactsCardTemplateDisplay
 
 			List<Individual> individuals = results.getItems();
 
-			Stream<Individual> stream = individuals.stream();
+			ArrayList<IndividualDisplay> individualDisplay = new ArrayList<>();
+
+			for (Individual individual : individuals) {
+				individualDisplay.add(new IndividualDisplay(individual));
+			}
 
 			faroResultsDisplay = new FaroResultsDisplay(
-				stream.map(
-					IndividualDisplay::new
-				).collect(
-					Collectors.toList()
-				),
-				results.getTotal());
+				individualDisplay, results.getTotal());
 		}
 
 		return new HashMapBuilder<>().<String, Object>put(

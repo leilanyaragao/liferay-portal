@@ -493,17 +493,19 @@ public class ProjectController extends BaseFaroController {
 		List<FaroProject> faroProjects =
 			_faroProjectLocalService.getJoinableFaroProjects(getUser());
 
-		Stream<FaroProject> faroProjectsStream = faroProjects.stream();
+		ArrayList<JoinableProjectDisplay> joinableProjectDisplay =
+			new ArrayList<>();
 
-		return faroProjectsStream.map(
-			faroProject -> new JoinableProjectDisplay(
-				faroProject.getGroupId(), faroProject.getName(),
-				Objects.nonNull(
-					_faroUserLocalService.fetchFaroUser(
-						faroProject.getGroupId(), getUserId())))
-		).collect(
-			Collectors.toList()
-		);
+		for (FaroProject faroProject : faroProjects) {
+			joinableProjectDisplay.add(
+				new JoinableProjectDisplay(
+					faroProject.getGroupId(), faroProject.getName(),
+					Objects.nonNull(
+						_faroUserLocalService.fetchFaroUser(
+							faroProject.getGroupId(), getUserId()))));
+		}
+
+		return joinableProjectDisplay;
 	}
 
 	@GET

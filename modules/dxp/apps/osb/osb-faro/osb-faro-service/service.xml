@@ -185,10 +185,6 @@
 		<finder name="WeDeployKey" return-type="FaroProject" unique="true">
 			<finder-column name="weDeployKey" />
 		</finder>
-
-		<!-- References -->
-
-		<reference entity="FaroProjectEmailAddressDomain" package-path="com.liferay.osb.faro" />
 	</entity>
 	<entity local-service="true" name="FaroProjectEmailAddressDomain" remote-service="false">
 

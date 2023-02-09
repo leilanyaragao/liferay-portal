@@ -27,11 +27,10 @@ import com.liferay.osb.faro.web.internal.model.display.main.FaroEntityDisplay;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Shinn Lok
@@ -67,17 +66,17 @@ public class AssociatedSegmentsContactsCardTemplateDisplay
 
 		List<IndividualSegment> individualSegments = results.getItems();
 
-		Stream<IndividualSegment> stream = individualSegments.stream();
+		ArrayList<IndividualSegmentDisplay> individualSegmentDisplay =
+			new ArrayList<>();
+
+		for (IndividualSegment individualSegment : individualSegments) {
+			individualSegmentDisplay.add(
+				new IndividualSegmentDisplay(individualSegment));
+		}
 
 		return new HashMapBuilder<>().<String, Object>put(
 			"contactsEntityResults",
-			new FaroResultsDisplay(
-				stream.map(
-					IndividualSegmentDisplay::new
-				).collect(
-					Collectors.toList()
-				),
-				results.getTotal())
+			new FaroResultsDisplay(individualSegmentDisplay, results.getTotal())
 		).build();
 	}
 

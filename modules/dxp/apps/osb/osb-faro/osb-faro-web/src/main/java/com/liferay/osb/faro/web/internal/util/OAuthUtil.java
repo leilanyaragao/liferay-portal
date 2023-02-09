@@ -74,6 +74,8 @@ public class OAuthUtil {
 		catch (ExecutionException | InterruptedException | IOException
 					exception) {
 
+			_log.error(exception);
+
 			return getOAuth2Credentials(
 				serviceBuilder, new LiferayApi20(baseURL), oAuthConsumerKey,
 				oAuthConsumerSecret);

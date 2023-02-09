@@ -205,7 +205,7 @@ public class DataSourceController extends BaseFaroController {
 				"liferayAnalyticsProjectId", faroProject.getProjectId()
 			).put(
 				"liferayAnalyticsURL", dataSource.getWorkspaceURL()
-			);
+			).build();
 
 		TokenCredentials tokenCredentials =
 			(TokenCredentials)dataSource.getCredentials();
@@ -446,7 +446,7 @@ public class DataSourceController extends BaseFaroController {
 		Map<Integer, Integer> deletePreview =
 			new HashMapBuilder<>().<Integer, Integer>put(
 				FaroConstants.TYPE_ACCOUNT, accountResults.getTotal()
-			);
+			).build();
 
 		Results<Asset> assetResults = contactsEngineClient.getAssets(
 			faroProject, id, null, ActivityConstants.ACTION_ANY,
