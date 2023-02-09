@@ -96,7 +96,8 @@ public class IndividualController extends BaseFaroController {
 				if (_log.isInfoEnabled()) {
 					_log.info(
 						"The individual already belongs to the segment: " +
-							individualSegmentId);
+							individualSegmentId,
+						duplicateEntryException);
 				}
 			}
 		}

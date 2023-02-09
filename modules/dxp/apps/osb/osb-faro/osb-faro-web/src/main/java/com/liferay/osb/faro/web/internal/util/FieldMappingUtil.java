@@ -36,19 +36,14 @@ public class FieldMappingUtil {
 		ContactsEngineClient contactsEngineClient, FaroProject faroProject,
 		String context, List<FieldMappingMap> fieldMappingMaps) {
 
-		List<FieldMappingMap> newFieldMappingMaps = new ArrayList<>();
+		ArrayList<String> fieldMappingMapsName = new ArrayList<>();
 
-		Stream<FieldMappingMap> fieldMappingMapsStream =
-			fieldMappingMaps.stream();
+		for (FieldMappingMap fieldMappingMap : fieldMappingMaps) {
+			fieldMappingMapsName.add(fieldMappingMap.getName());
+		}
 
 		Results<FieldMapping> results = contactsEngineClient.getFieldMappings(
-			faroProject, context,
-			fieldMappingMapsStream.map(
-				FieldMappingMap::getName
-			).collect(
-				Collectors.toList()
-			),
-			1, 10000, null);
+			faroProject, context, fieldMappingMapsName, 1, 10000, null);
 
 		List<FieldMapping> fieldMappings = results.getItems();
 
@@ -59,6 +54,8 @@ public class FieldMappingUtil {
 		).collect(
 			Collectors.toSet()
 		);
+
+		List<FieldMappingMap> newFieldMappingMaps = new ArrayList<>();
 
 		Set<String> newFieldMappingNames = new HashSet<>();
 

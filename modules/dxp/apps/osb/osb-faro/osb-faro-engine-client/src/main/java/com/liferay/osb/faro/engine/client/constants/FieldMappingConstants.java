@@ -21,8 +21,6 @@ import com.liferay.portal.kernel.util.MapUtil;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Shinn Lok
@@ -79,12 +77,11 @@ public class FieldMappingConstants {
 			return _liferayFieldNames;
 		}
 
-		Stream<FieldMappingMap> stream = _liferayFieldMappingMaps.stream();
-
-		_liferayFieldNames = stream.collect(
-			Collectors.toMap(
-				FieldMappingMap::getDataSourceFieldName,
-				FieldMappingMap::getName));
+		for (FieldMappingMap fieldMappingMap : _liferayFieldMappingMaps) {
+			_liferayFieldNames.put(
+				fieldMappingMap.getDataSourceFieldName(),
+				fieldMappingMap.getName())
+		}
 
 		return _liferayFieldNames;
 	}

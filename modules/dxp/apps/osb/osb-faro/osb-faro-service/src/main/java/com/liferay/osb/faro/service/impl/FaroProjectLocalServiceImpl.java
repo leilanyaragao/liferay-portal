@@ -20,6 +20,9 @@ import com.liferay.osb.faro.constants.DocumentationConstants;
 import com.liferay.osb.faro.constants.FaroProjectConstants;
 import com.liferay.osb.faro.model.FaroProject;
 import com.liferay.osb.faro.model.FaroUser;
+import com.liferay.osb.faro.service.FaroChannelLocalService;
+import com.liferay.osb.faro.service.FaroPreferencesLocalService;
+import com.liferay.osb.faro.service.FaroUserLocalService;
 import com.liferay.osb.faro.service.base.FaroProjectLocalServiceBaseImpl;
 import com.liferay.osb.faro.util.EmailUtil;
 import com.liferay.petra.string.CharPool;
@@ -43,12 +46,10 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.comparator.GroupNameComparator;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.mail.internet.InternetAddress;
 
@@ -196,24 +197,24 @@ public class FaroProjectLocalServiceImpl
 			user.getUserId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS,
 			new GroupNameComparator(true));
 
-		Stream<Group> groupsStream = groups.stream();
+		ArrayList<Long> groupIds = new ArrayList<>();
 
-		Set<Long> groupIds = groupsStream.map(
-			Group::getGroupId
-		).collect(
-			Collectors.toSet()
-		);
+		for (Group group : groups) {
+			groupIds.add(group.getGroupId());
+		}
 
-		Stream<FaroProject> faroProjectsStream = faroProjects.stream();
+		ArrayList<FaroProject> faroProjectFiltered = new ArrayList<>();
 
-		return faroProjectsStream.filter(
-			faroProject ->
-				!groupIds.contains(faroProject.getGroupId()) &&
+		for (FaroProject faroProject : faroProjects) {
+			if (!groupIds.contains(faroProject.getGroupId()) &&
 				StringUtil.equals(
-					faroProject.getState(), FaroProjectConstants.STATE_READY)
-		).collect(
-			Collectors.toList()
-		);
+					faroProject.getState(), FaroProjectConstants.STATE_READY)) {
+
+				faroProjectFiltered.add(faroProject);
+			}
+		}
+
+		return faroProjectFiltered;
 	}
 
 	@Override

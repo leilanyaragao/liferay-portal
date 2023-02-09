@@ -221,7 +221,7 @@ public class GraphQLAsahServlet extends BaseAsahServlet {
 		}
 		catch (Exception exception) {
 			if (_log.isDebugEnabled()) {
-				_log.debug("Invalid request: " + body);
+				_log.debug("Invalid request: " + body, exception);
 			}
 
 			return false;

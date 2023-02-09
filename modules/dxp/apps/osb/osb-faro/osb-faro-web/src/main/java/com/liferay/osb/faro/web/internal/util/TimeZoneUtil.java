@@ -25,11 +25,10 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.zone.ZoneRulesException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Geyson Silva
@@ -50,14 +49,15 @@ public class TimeZoneUtil {
 		Set<Map.Entry<String, String>> timeZoneIds =
 			_timeZoneIdCountryMap.entrySet();
 
-		Stream<Map.Entry<String, String>> stream = timeZoneIds.stream();
+		ArrayList<TimeZoneDisplay> timeZoneDisplayList = new ArrayList<>();
 
-		return stream.map(
-			entry -> new TimeZoneDisplay(
-				ZoneId.of(entry.getKey()), entry.getValue())
-		).collect(
-			Collectors.toList()
-		);
+		for (Map.Entry<String, String> timeZoneId : timeZoneIds) {
+			timeZoneDisplayList.add(
+				new TimeZoneDisplay(
+					ZoneId.of(entry.getKey()), entry.getValue()));
+		}
+
+		return timeZoneDisplayList;
 	}
 
 	public static boolean validate(String timeZoneId) {
