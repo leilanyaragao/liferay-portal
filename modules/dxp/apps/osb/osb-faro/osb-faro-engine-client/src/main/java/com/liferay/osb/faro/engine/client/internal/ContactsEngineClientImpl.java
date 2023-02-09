@@ -94,8 +94,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -131,13 +129,13 @@ public class ContactsEngineClientImpl
 		List<Object> blockedKeywords = (List<Object>)response.get(
 			"blocked-keywords");
 
-		Stream<Object> stream = blockedKeywords.stream();
+		List<BlockedKeyword> items = new ArrayList<>();
 
-		List<BlockedKeyword> items = stream.map(
-			map -> objectMapper.convertValue(map, BlockedKeyword.class)
-		).collect(
-			Collectors.toList()
-		);
+		for (Object blockedKeywordObject : blockedKeywords) {
+			items.add(
+				objectMapper.convertValue(
+					blockedKeywordObject, BlockedKeyword.class));
+		}
 
 		return new Results<>(items, items.size());
 	}

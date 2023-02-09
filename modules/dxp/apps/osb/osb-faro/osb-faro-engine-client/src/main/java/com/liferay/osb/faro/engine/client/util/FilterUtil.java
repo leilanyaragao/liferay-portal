@@ -142,7 +142,7 @@ public class FilterUtil {
 	}
 
 	public static String negate(String filterString) {
-		return StringBundler.concat("not", StringPool.SPACE, filterString);
+		return "not" + StringPool.SPACE + filterString;
 	}
 
 }

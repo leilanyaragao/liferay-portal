@@ -76,6 +76,8 @@ public class FaroProjectImpl extends FaroProjectBaseImpl {
 			return false;
 		}
 		catch (Exception exception) {
+			_log.error(exception);
+
 			return true;
 		}
 	}

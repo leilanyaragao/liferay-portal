@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Matthew Kong
@@ -47,13 +45,11 @@ public class FieldMappingUtil {
 
 		List<FieldMapping> fieldMappings = results.getItems();
 
-		Stream<FieldMapping> fieldMappingsStream = fieldMappings.stream();
+		HashSet<String> fieldMappingsDisplayName = new HashSet<>();
 
-		Set<String> currentFieldNames = fieldMappingsStream.map(
-			FieldMapping::getFieldName
-		).collect(
-			Collectors.toSet()
-		);
+		for (FieldMapping fieldMapping : fieldMappings) {
+			fieldMappingsDisplayName.add(fieldMapping.getDisplayName());
+		}
 
 		List<FieldMappingMap> newFieldMappingMaps = new ArrayList<>();
 
@@ -62,7 +58,7 @@ public class FieldMappingUtil {
 		for (FieldMappingMap fieldMappingMap : fieldMappingMaps) {
 			String name = fieldMappingMap.getName();
 
-			if (currentFieldNames.contains(name) ||
+			if (fieldMappingsDisplayName.contains(name) ||
 				newFieldMappingNames.contains(name)) {
 
 				continue;

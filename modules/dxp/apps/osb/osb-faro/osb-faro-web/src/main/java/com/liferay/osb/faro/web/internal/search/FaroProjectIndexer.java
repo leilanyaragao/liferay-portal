@@ -194,6 +194,8 @@ public class FaroProjectIndexer extends BaseIndexer<FaroProject> {
 		}
 		catch (Exception exception) {
 			document.addKeyword("offline", StringPool.TRUE);
+
+			_log.error(exception);
 		}
 
 		document.addNumber(

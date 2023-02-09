@@ -100,6 +100,8 @@ public class ReportController extends BaseFaroController {
 			toDate = _toUTCDate(toDateString);
 		}
 		catch (Exception exception) {
+			_log.error(exception);
+
 			return _reportControllerResponseFactory.create(
 				"Both dates in range must be ISO 8601 compliant " +
 					_ISO_8601_FORMAT,
@@ -133,6 +135,8 @@ public class ReportController extends BaseFaroController {
 				Map.class);
 		}
 		catch (Exception exception) {
+			_log.error(exception);
+
 			return _reportControllerResponseFactory.create(
 				"An internal problem happened when trying to reach our " +
 					"services",
