@@ -69,6 +69,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -445,14 +446,16 @@ public class ProjectController extends BaseFaroController {
 			_faroProjectEmailAddressDomainLocalService.
 				getFaroProjectEmailAddressDomainsByGroupId(groupId);
 
-		Stream<FaroProjectEmailAddressDomain> emailAddressDomainStream =
-			faroProjectEmailAddressDomains.stream();
+		ArrayList<String> emailAddressDomain = new ArrayList<>();
 
-		return emailAddressDomainStream.map(
-			FaroProjectEmailAddressDomain::getEmailAddressDomain
-		).collect(
-			Collectors.toList()
-		);
+		for (FaroProjectEmailAddressDomain faroProjectEmailAddressDomain :
+				faroProjectEmailAddressDomains) {
+
+			emailAddressDomain.add(
+				faroProjectEmailAddressDomain.getEmailAddressDomain());
+		}
+
+		return emailAddressDomain;
 	}
 
 	@GET

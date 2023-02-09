@@ -35,6 +35,10 @@ import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
+import com.liferay.portal.kernel.service.GroupLocalService;
+import com.liferay.portal.kernel.service.RoleLocalService;
+import com.liferay.portal.kernel.service.UserGroupRoleLocalService;
+import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ResourceBundleUtil;
@@ -47,10 +51,17 @@ import java.util.ResourceBundle;
 
 import javax.mail.internet.InternetAddress;
 
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+
 /**
  * @author Matthew Kong
  * @see FaroChannelLocalServiceBaseImpl
  */
+@Component(
+	property = "model.class.name=com.liferay.osb.faro.model.FaroChannel",
+	service = FaroChannel.class
+)
 public class FaroChannelLocalServiceImpl
 	extends FaroChannelLocalServiceBaseImpl {
 
@@ -61,7 +72,7 @@ public class FaroChannelLocalServiceImpl
 
 		long faroChannelId = counterLocalService.increment();
 
-		Group group = groupLocalService.addGroup(
+		Group group = _groupLocalService.addGroup(
 			userId, workspaceGroupId, FaroChannel.class.getName(),
 			faroChannelId, 0,
 			Collections.singletonMap(LocaleUtil.getDefault(), name), null,
@@ -74,7 +85,7 @@ public class FaroChannelLocalServiceImpl
 
 		group.setFriendlyURL(null);
 
-		groupLocalService.updateGroup(group);
+		_groupLocalService.updateGroup(group);
 
 		FaroChannel faroChannel = faroChannelPersistence.create(faroChannelId);
 
@@ -102,17 +113,17 @@ public class FaroChannelLocalServiceImpl
 		FaroChannel faroChannel = faroChannelPersistence.findByChannelId(
 			channelId, workspaceGroupId);
 
-		Role role = roleLocalService.getRole(
+		Role role = _roleLocalService.getRole(
 			companyId, RoleConstants.SITE_MEMBER);
 
 		for (long invitedUserId : invitedUserIds) {
-			groupLocalService.addUserGroup(
+			_groupLocalService.addUserGroup(
 				invitedUserId, faroChannel.getGroupId());
 
-			userGroupRoleLocalService.deleteUserGroupRoles(
+			_userGroupRoleLocalService.deleteUserGroupRoles(
 				invitedUserId, new long[] {faroChannel.getGroupId()});
 
-			userGroupRoleLocalService.addUserGroupRoles(
+			_userGroupRoleLocalService.addUserGroupRoles(
 				invitedUserId, faroChannel.getGroupId(),
 				new long[] {role.getRoleId()});
 
@@ -143,7 +154,7 @@ public class FaroChannelLocalServiceImpl
 	public FaroChannel deleteFaroChannel(FaroChannel faroChannel)
 		throws PortalException {
 
-		groupLocalService.deleteGroup(faroChannel.getGroupId());
+		_groupLocalService.deleteGroup(faroChannel.getGroupId());
 
 		return faroChannelPersistence.remove(faroChannel);
 	}
@@ -202,10 +213,11 @@ public class FaroChannelLocalServiceImpl
 			channelId, workspaceGroupId);
 
 		for (long userId : userIds) {
-			userGroupRoleLocalService.deleteUserGroupRoles(
+			_userGroupRoleLocalService.deleteUserGroupRoles(
 				userId, new long[] {faroChannel.getGroupId()});
 
-			groupLocalService.deleteUserGroup(userId, faroChannel.getGroupId());
+			_groupLocalService.deleteUserGroup(
+				userId, faroChannel.getGroupId());
 		}
 	}
 
@@ -236,12 +248,12 @@ public class FaroChannelLocalServiceImpl
 			FaroChannel faroChannel, long invitedUserId, long userId)
 		throws Exception {
 
-		User user = userLocalService.getUser(userId);
+		User user = _userLocalService.getUser(userId);
 
 		InternetAddress from = new InternetAddress(
 			"ac@liferay.com", user.getFullName() + " (Analytics Cloud)");
 
-		User invitedUser = userLocalService.getUser(invitedUserId);
+		User invitedUser = _userLocalService.getUser(invitedUserId);
 
 		InternetAddress to = new InternetAddress(
 			invitedUser.getEmailAddress(), invitedUser.getFullName());
@@ -265,7 +277,7 @@ public class FaroChannelLocalServiceImpl
 			new String[] {
 				_language.get(resourceBundle, "go-to-workspace"),
 				EmailUtil.getWorkspaceURL(
-					groupLocalService.fetchGroup(faroChannel.getGroupId())),
+					_groupLocalService.fetchGroup(faroChannel.getGroupId())),
 				subject,
 				_language.format(
 					resourceBundle, "email-need-more-help",
@@ -294,10 +306,22 @@ public class FaroChannelLocalServiceImpl
 	@BeanReference(type = FaroUserFinder.class)
 	private FaroUserFinder _faroUserFinder;
 
+	@Reference
+	private GroupLocalService _groupLocalService;
+
 	@ServiceReference(type = Language.class)
 	private Language _language;
 
 	@ServiceReference(type = MailService.class)
 	private MailService _mailService;
+
+	@Reference
+	private RoleLocalService _roleLocalService;
+
+	@Reference
+	private UserGroupRoleLocalService _userGroupRoleLocalService;
+
+	@Reference
+	private UserLocalService _userLocalService;
 
 }

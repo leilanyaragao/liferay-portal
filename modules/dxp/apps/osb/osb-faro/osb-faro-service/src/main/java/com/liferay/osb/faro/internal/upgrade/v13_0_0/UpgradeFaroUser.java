@@ -23,8 +23,6 @@ public class UpgradeFaroUser extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		runSQL(
-			"create index IX_1B6F355D on OSBFaro_FaroUser (groupId, roleId)");
 	}
 
 }

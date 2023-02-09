@@ -45,13 +45,6 @@
 			<finder-column name="channelId" />
 			<finder-column name="workspaceGroupId" />
 		</finder>
-
-		<!-- References -->
-
-		<reference entity="Group" package-path="com.liferay.portal" />
-		<reference entity="Role" package-path="com.liferay.portal" />
-		<reference entity="User" package-path="com.liferay.portal" />
-		<reference entity="UserGroupRole" package-path="com.liferay.portal" />
 	</entity>
 	<entity local-service="true" name="FaroEmail" persistence-class="false" remote-service="false" />
 	<entity local-service="true" name="FaroNotification" remote-service="false">
@@ -138,10 +131,6 @@
 			<finder-column name="groupId" />
 			<finder-column name="ownerId" />
 		</finder>
-
-		<!-- References -->
-
-		<reference entity="User" package-path="com.liferay.portal" />
 	</entity>
 	<entity local-service="true" name="FaroProject" remote-service="false">
 
@@ -287,14 +276,5 @@
 			<finder-column name="emailAddress" />
 			<finder-column name="status" />
 		</finder>
-
-		<!-- References -->
-
-		<reference entity="FaroPreferences" package-path="com.liferay.osb.faro" />
-		<reference entity="FaroProject" package-path="com.liferay.osb.faro" />
-		<reference entity="Group" package-path="com.liferay.portal" />
-		<reference entity="Role" package-path="com.liferay.portal" />
-		<reference entity="User" package-path="com.liferay.portal" />
-		<reference entity="UserGroupRole" package-path="com.liferay.portal" />
 	</entity>
 </service-builder>

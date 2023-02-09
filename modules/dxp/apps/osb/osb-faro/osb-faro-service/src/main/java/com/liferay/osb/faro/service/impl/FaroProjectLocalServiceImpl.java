@@ -22,6 +22,7 @@ import com.liferay.osb.faro.model.FaroProject;
 import com.liferay.osb.faro.model.FaroUser;
 import com.liferay.osb.faro.service.FaroChannelLocalService;
 import com.liferay.osb.faro.service.FaroPreferencesLocalService;
+import com.liferay.osb.faro.service.FaroProjectEmailAddressDomainLocalService;
 import com.liferay.osb.faro.service.FaroUserLocalService;
 import com.liferay.osb.faro.service.base.FaroProjectLocalServiceBaseImpl;
 import com.liferay.osb.faro.util.EmailUtil;
@@ -53,11 +54,16 @@ import java.util.ResourceBundle;
 
 import javax.mail.internet.InternetAddress;
 
-import jdk.nashorn.internal.ir.annotations.Reference;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Matthew Kong
  */
+@Component(
+	property = "model.class.name=com.liferay.osb.faro.model.FaroProject",
+	service = FaroProject.class
+)
 public class FaroProjectLocalServiceImpl
 	extends FaroProjectLocalServiceBaseImpl {
 
@@ -116,7 +122,7 @@ public class FaroProjectLocalServiceImpl
 		faroProject.setTimeZoneId(timeZoneId);
 		faroProject.setWeDeployKey(weDeployKey);
 
-		faroProjectEmailAddressDomainLocalService.
+		_faroProjectEmailAddressDomainLocalService.
 			addFaroProjectEmailAddressDomains(
 				groupId, faroProjectId, emailAddressDomains);
 
@@ -347,6 +353,10 @@ public class FaroProjectLocalServiceImpl
 
 	@Reference
 	private FaroPreferencesLocalService _faroPreferencesLocalService;
+
+	@Reference
+	private FaroProjectEmailAddressDomainLocalService
+		_faroProjectEmailAddressDomainLocalService;
 
 	@Reference
 	private FaroUserLocalService _faroUserLocalService;

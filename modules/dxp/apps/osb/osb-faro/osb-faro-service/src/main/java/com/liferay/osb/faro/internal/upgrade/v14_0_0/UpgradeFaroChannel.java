@@ -24,11 +24,6 @@ public class UpgradeFaroChannel extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		runSQL("drop index IX_5960B666 on OSBFaro_FaroChannel");
-
-		runSQL(
-			"create unique index IX_5960B666 on OSBFaro_FaroChannel " +
-				"(channelId, workspaceGroupId)");
 	}
 
 }

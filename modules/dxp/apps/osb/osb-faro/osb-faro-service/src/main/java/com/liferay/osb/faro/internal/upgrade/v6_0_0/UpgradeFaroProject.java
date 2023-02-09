@@ -23,7 +23,6 @@ public class UpgradeFaroProject extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		runSQL("create index IX_DC26D918 on OSBFaro_FaroProject (userId)");
 	}
 
 }

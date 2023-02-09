@@ -18,10 +18,18 @@ import com.liferay.osb.faro.model.FaroPreferences;
 import com.liferay.osb.faro.service.base.FaroPreferencesLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.service.UserLocalService;
+
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Matthew Kong
  */
+@Component(
+	property = "model.class.name=com.liferay.osb.faro.model.FaroPreferences",
+	service = FaroPreferences.class
+)
 public class FaroPreferencesLocalServiceImpl
 	extends FaroPreferencesLocalServiceBaseImpl {
 
@@ -52,7 +60,7 @@ public class FaroPreferencesLocalServiceImpl
 			long userId, long groupId, long ownerId, String preferences)
 		throws PortalException {
 
-		User user = userLocalService.getUser(userId);
+		User user = _userLocalService.getUser(userId);
 
 		FaroPreferences faroPreferences = faroPreferencesPersistence.fetchByG_O(
 			groupId, ownerId);
@@ -75,5 +83,8 @@ public class FaroPreferencesLocalServiceImpl
 
 		return updateFaroPreferences(faroPreferences);
 	}
+
+	@Reference
+	private UserLocalService _userLocalService;
 
 }
