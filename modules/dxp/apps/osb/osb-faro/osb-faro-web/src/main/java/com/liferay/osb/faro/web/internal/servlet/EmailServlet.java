@@ -20,7 +20,7 @@ import com.liferay.osb.faro.model.FaroUser;
 import com.liferay.osb.faro.service.FaroEmailLocalService;
 import com.liferay.osb.faro.service.FaroUserLocalService;
 import com.liferay.osb.faro.util.EmailUtil;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.model.User;
@@ -65,7 +65,7 @@ public class EmailServlet extends BaseAsahServlet {
 
 		try {
 			_sendEmail(
-				JSONFactoryUtil.createJSONObject(
+				_jsonFactory.createJSONObject(
 					StringUtil.read(httpServletRequest.getInputStream())));
 		}
 		catch (Exception exception) {
@@ -137,6 +137,9 @@ public class EmailServlet extends BaseAsahServlet {
 
 	@Reference
 	private Http _http;
+
+	@Reference
+	private JSONFactory _jsonFactory;
 
 	@Reference
 	private Language _language;

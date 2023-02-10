@@ -74,7 +74,7 @@ import com.liferay.osb.faro.web.internal.util.OAuthUtil;
 import com.liferay.osb.faro.web.internal.util.TokenManager;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.log.Log;
@@ -414,7 +414,7 @@ public class DataSourceController extends BaseFaroController {
 			@FormParam("token") String token)
 		throws Exception {
 
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
+		JSONObject jsonObject = _jsonFactory.createJSONObject(
 			new String(Base64.decode(token), StandardCharsets.UTF_8));
 
 		String dataSourceId = _tokenManager.getDataSourceId(
@@ -1656,6 +1656,9 @@ public class DataSourceController extends BaseFaroController {
 
 	@Reference
 	private FieldMappingController _fieldMappingController;
+
+	@Reference
+	private JSONFactory _jsonFactory;
 
 	@Reference
 	private Language _language;

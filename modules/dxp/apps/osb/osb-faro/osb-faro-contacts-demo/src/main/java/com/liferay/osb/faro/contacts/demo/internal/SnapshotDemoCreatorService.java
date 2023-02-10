@@ -47,8 +47,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -202,14 +200,13 @@ public class SnapshotDemoCreatorService extends DemoCreatorService {
 					if (dateField && (entry.getValue() instanceof List)) {
 						List<String> values = (List<String>)entry.getValue();
 
-						Stream<String> stream = values.stream();
+						List<Object> valuesList = new ArrayList<>();
 
-						entry.setValue(
-							stream.map(
-								value -> _addOffset(value, timeOffset)
-							).collect(
-								Collectors.toList()
-							));
+						for (String value : values) {
+							valuesList.add(_addOffset(value, timeOffset));
+						}
+
+						entry.setValue(valuesList);
 					}
 					else {
 						_adjustTime(entry.getValue(), timeOffset);
