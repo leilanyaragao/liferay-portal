@@ -153,17 +153,17 @@ public class MockContactsEngineClientImpl
 
 		List<Individual> individuals = results.getItems();
 
-		List<Individual> individualFiltered = new ArrayList<>();
+		List<Individual> individualsFiltered = new ArrayList<>();
 
 		for (Individual curIndividual : individuals) {
 			String id = curIndividual.getId();
 
 			if (!id.equals(individual.getId())) {
-				individualFiltered.add(curIndividual);
+				individualsFiltered.add(curIndividual);
 			}
 		}
 
-		return new Results<>(individualFiltered, individualFiltered.size());
+		return new Results<>(individualsFiltered, individualsFiltered.size());
 	}
 
 	protected Results<Individual> getIndividuals(

@@ -209,18 +209,18 @@ public class FaroProjectLocalServiceImpl
 			groupIds.add(group.getGroupId());
 		}
 
-		List<FaroProject> faroProjectFiltered = new ArrayList<>();
+		List<FaroProject> faroProjectsFiltered = new ArrayList<>();
 
 		for (FaroProject faroProject : faroProjects) {
 			if (!groupIds.contains(faroProject.getGroupId()) &&
 				StringUtil.equals(
 					faroProject.getState(), FaroProjectConstants.STATE_READY)) {
 
-				faroProjectFiltered.add(faroProject);
+				faroProjectsFiltered.add(faroProject);
 			}
 		}
 
-		return faroProjectFiltered;
+		return faroProjectsFiltered;
 	}
 
 	@Override

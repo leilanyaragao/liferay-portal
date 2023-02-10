@@ -48,8 +48,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -91,13 +89,15 @@ public class OAuth2Controller extends BaseFaroController {
 		List<OAuth2Authorization> userOAuth2Authorizations =
 			_getUserOAuth2AuthorizationsByGroupId(groupId);
 
-		Stream<OAuth2Authorization> stream = userOAuth2Authorizations.stream();
+		List<TokenDisplay> tokenDisplays = new ArrayList<>();
 
-		return stream.map(
-			this::_mapTokenDisplay
-		).collect(
-			Collectors.toList()
-		);
+		for (OAuth2Authorization userOAuth2Authorization :
+				userOAuth2Authorizations) {
+
+			tokenDisplays.add(_mapTokenDisplay(userOAuth2Authorization));
+		}
+
+		return tokenDisplays;
 	}
 
 	@Path("/tokens/new")

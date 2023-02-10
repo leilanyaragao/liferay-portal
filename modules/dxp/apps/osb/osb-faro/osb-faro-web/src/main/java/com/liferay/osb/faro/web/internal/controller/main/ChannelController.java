@@ -45,8 +45,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -295,14 +293,14 @@ public class ChannelController extends BaseFaroController {
 			groupId, query, startAndEnd[0], startAndEnd[1],
 			new FaroChannelComparator(orderByFields));
 
-		Stream<FaroChannel> stream = faroChannels.stream();
+		List<FaroChannelDisplay> faroChannelDisplays = new ArrayList<>();
+
+		for (FaroChannel faroChannel : faroChannels) {
+			faroChannelDisplays.add(new FaroChannelDisplay(faroChannel));
+		}
 
 		return new FaroResultsDisplay<>(
-			stream.map(
-				FaroChannelDisplay::new
-			).collect(
-				Collectors.toList()
-			),
+			faroChannelDisplays,
 			_faroChannelLocalService.searchCount(groupId, query));
 	}
 

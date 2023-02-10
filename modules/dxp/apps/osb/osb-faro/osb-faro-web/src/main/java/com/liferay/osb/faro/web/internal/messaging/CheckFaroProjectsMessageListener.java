@@ -46,7 +46,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import javax.mail.internet.InternetAddress;
 
@@ -166,8 +165,6 @@ public class CheckFaroProjectsMessageListener extends BaseMessageListener {
 			_portal.getDefaultCompanyId(), RoleConstants.ADMINISTRATOR);
 
 		List<User> users = _userLocalService.getRoleUsers(role.getRoleId());
-
-		Stream<User> stream = users.stream();
 
 		List<InternetAddress> bcc = new ArrayList<>();
 

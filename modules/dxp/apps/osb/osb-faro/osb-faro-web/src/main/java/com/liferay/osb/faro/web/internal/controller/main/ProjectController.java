@@ -79,8 +79,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -514,37 +512,30 @@ public class ProjectController extends BaseFaroController {
 			_faroUserLocalService.getFaroUsersByLiveUserId(
 				getUserId(), FaroUserConstants.STATUS_APPROVED);
 
-		Stream<FaroUser> faroUsersStream = faroUsers.stream();
+		List<ProjectDisplay> projectDisplays = new ArrayList<>();
 
-		return faroUsersStream.map(
-			FaroUser::getGroupId
-		).map(
-			_faroProjectLocalService::fetchFaroProjectByGroupId
-		).map(
-			faroProject -> {
-				try {
-					return _getProjectDisplay(faroProject);
-				}
-				catch (Exception exception) {
-					if (_log.isWarnEnabled()) {
-						String project = "";
+		for (FaroUser faroUser : faroUsers) {
+			FaroProject faroProject =
+				_faroProjectLocalService.fetchFaroProjectByGroupId(
+					faroUser.getGroupId());
 
-						if (faroProject != null) {
-							project = faroProject.getName();
-						}
+			try {
+				projectDisplays.add(_getProjectDisplay(faroProject));
+			}
+			catch (Exception exception) {
+				if (_log.isWarnEnabled()) {
+					String project = "";
 
-						_log.warn(
-							"Could not load project " + project, exception);
+					if (faroProject != null) {
+						project = faroProject.getName();
 					}
 
-					return null;
+					_log.warn("Could not load project " + project, exception);
 				}
 			}
-		).filter(
-			Objects::nonNull
-		).collect(
-			Collectors.toList()
-		);
+		}
+
+		return projectDisplays;
 	}
 
 	@GET

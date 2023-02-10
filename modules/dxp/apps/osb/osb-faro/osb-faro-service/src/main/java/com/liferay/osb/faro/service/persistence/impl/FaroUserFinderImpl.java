@@ -30,10 +30,9 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.spring.extender.service.ServiceReference;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Matthew Kong
@@ -324,13 +323,13 @@ public class FaroUserFinderImpl
 			return StringPool.BLANK;
 		}
 
-		Stream<Integer> stream = statuses.stream();
+		ArrayList<String> statusesString = new ArrayList<>();
 
-		return stream.map(
-			Object::toString
-		).collect(
-			Collectors.joining(StringPool.COMMA)
-		);
+		for (Integer status : statuses) {
+			String.valueOf(status);
+		}
+
+		return String.join(", ", statusesString);
 	}
 
 	private static final String _AVAILABLE_FARO_USER_SQL =

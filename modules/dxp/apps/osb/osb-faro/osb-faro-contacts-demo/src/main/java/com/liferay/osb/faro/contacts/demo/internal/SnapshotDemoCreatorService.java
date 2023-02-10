@@ -169,14 +169,13 @@ public class SnapshotDemoCreatorService extends DemoCreatorService {
 		String collectionName, List<Map<String, Object>> objects) {
 
 		if (Objects.equals(collectionName, "OSBAsahMarkers")) {
-			Stream<Map<String, Object>> stream = objects.stream();
+			for (Map<String, Object> object : objects) {
+				if (Objects.equals(object.get("id"), "Upgrade")) {
+					objects.remove(object);
 
-			stream.filter(
-				object -> Objects.equals(object.get("id"), "Upgrade")
-			).findFirst(
-			).ifPresent(
-				objects::remove
-			);
+					break;
+				}
+			}
 		}
 	}
 
