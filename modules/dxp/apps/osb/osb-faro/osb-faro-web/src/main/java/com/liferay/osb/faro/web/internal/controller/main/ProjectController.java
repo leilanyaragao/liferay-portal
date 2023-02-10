@@ -491,8 +491,7 @@ public class ProjectController extends BaseFaroController {
 		List<FaroProject> faroProjects =
 			_faroProjectLocalService.getJoinableFaroProjects(getUser());
 
-		ArrayList<JoinableProjectDisplay> joinableProjectDisplay =
-			new ArrayList<>();
+		List<JoinableProjectDisplay> joinableProjectDisplay = new ArrayList<>();
 
 		for (FaroProject faroProject : faroProjects) {
 			joinableProjectDisplay.add(

@@ -44,14 +44,12 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.security.service.access.policy.model.SAPEntry;
 import com.liferay.portal.security.service.access.policy.service.SAPEntryLocalService;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -144,14 +142,15 @@ public class OAuth2AuthorizationExpandoPortalInstanceLifecycleListener
 
 	@Activate
 	protected void activate() {
-		Stream<String[]> stream = Arrays.stream(_SAP_ENTRY_OBJECT_ARRAYS);
+		List<String> sapEntriesObjects = new ArrayList<>();
 
-		_scopeAliasesList = stream.map(
-			sapEntryObjectArray -> StringUtil.replaceFirst(
-				sapEntryObjectArray[0], "OAUTH2_", StringPool.BLANK)
-		).collect(
-			Collectors.toList()
-		);
+		for (String[] sapEntryObject : _SAP_ENTRY_OBJECT_ARRAYS) {
+			sapEntriesObjects.add(
+				StringUtil.replaceFirst(
+					sapEntryObject[0], "OAUTH2_", StringPool.BLANK));
+		}
+
+		_scopeAliasesList = sapEntriesObjects;
 	}
 
 	protected void addExpandoColumn(

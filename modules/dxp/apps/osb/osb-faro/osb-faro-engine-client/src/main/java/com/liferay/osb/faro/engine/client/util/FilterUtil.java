@@ -142,7 +142,7 @@ public class FilterUtil {
 	}
 
 	public static String negate(String filterString) {
-		return "not" + StringPool.SPACE + filterString;
+		return "not " + filterString;
 	}
 
 }

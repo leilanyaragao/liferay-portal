@@ -40,7 +40,7 @@ public class FaroChannelComparator extends OrderByComparator<FaroChannel> {
 
 	@Override
 	public String getOrderBy() {
-		ArListrayList<String> formatFieldNames = new ArrayList<>();
+		List<String> formatFieldNames = new ArrayList<>();
 
 		for (OrderByField orderByField : _orderByFields) {
 			String format = null;

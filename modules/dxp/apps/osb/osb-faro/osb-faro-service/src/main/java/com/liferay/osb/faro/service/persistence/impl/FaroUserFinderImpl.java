@@ -323,13 +323,13 @@ public class FaroUserFinderImpl
 			return StringPool.BLANK;
 		}
 
-		ArrayList<String> statusesString = new ArrayList<>();
+		List<String> statusesString = new ArrayList<>();
 
 		for (Integer status : statuses) {
 			String.valueOf(status);
 		}
 
-		return String.join(", ", statusesString);
+		return StringUtil.merge(statusesString, ", ");
 	}
 
 	private static final String _AVAILABLE_FARO_USER_SQL =

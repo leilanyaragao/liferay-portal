@@ -2689,14 +2689,13 @@ public class ContactsEngineClientImpl
 	}
 
 	protected String getGroupBy(FieldMapping fieldMapping) {
-		StringBundler sb = new StringBundler(6);
+		StringBundler sb = new StringBundler(5);
 
 		sb.append("groupby((");
 		sb.append(fieldMapping.getContext());
 		sb.append(StringPool.SLASH);
 		sb.append(fieldMapping.getFieldName());
-		sb.append(StringPool.SLASH);
-		sb.append("value))");
+		sb.append("/value))");
 
 		return sb.toString();
 	}

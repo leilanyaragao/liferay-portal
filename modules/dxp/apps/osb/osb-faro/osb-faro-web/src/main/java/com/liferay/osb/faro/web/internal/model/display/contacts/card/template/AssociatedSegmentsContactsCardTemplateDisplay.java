@@ -66,7 +66,7 @@ public class AssociatedSegmentsContactsCardTemplateDisplay
 
 		List<IndividualSegment> individualSegments = results.getItems();
 
-		ArrayList<IndividualSegmentDisplay> individualSegmentDisplay =
+		List<IndividualSegmentDisplay> individualSegmentDisplay =
 			new ArrayList<>();
 
 		for (IndividualSegment individualSegment : individualSegments) {

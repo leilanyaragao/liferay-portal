@@ -22,6 +22,7 @@ import com.liferay.osb.faro.functional.test.util.FaroTestConstants;
 import com.liferay.osb.faro.functional.test.util.FaroTestDataUtil;
 import com.liferay.osb.faro.functional.test.util.FaroTransformer;
 import com.liferay.petra.string.StringPool;
+import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 
@@ -33,8 +34,6 @@ import cucumber.api.java.en.When;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.Assert;
 import org.junit.Assume;
@@ -155,21 +154,19 @@ public class DataSourcePage {
 	public void assertDataPreviewCSV(DataTable dataTable) throws Exception {
 		List<List<String>> dataTableRows = dataTable.raw();
 
-		List<String> dataTableRowStrings = new ArrayList<>();
+		List<String> dataTableRowList = new ArrayList<>();
 
 		for (List<String> dataTableRow : dataTableRows) {
-			Stream<String> dataTableRowStream = dataTableRow.stream();
-
-			String dataTableRowString = dataTableRowStream.collect(
-				Collectors.joining(StringPool.SPACE));
-
-			dataTableRowStrings.add(dataTableRowString);
+			dataTableRowList.add(
+				StringUtil.merge(dataTableRow, StringPool.SPACE));
 		}
 
-		Stream<String> dataTableStringListStream = dataTableRowStrings.stream();
+		String dataTableString = StringPool.BLANK;
 
-		String dataTableString = dataTableStringListStream.collect(
-			Collectors.joining(StringPool.NEW_LINE));
+		for (String dataTableRowString : dataTableRowList) {
+			dataTableString.concat(
+				String.join(StringPool.NEW_LINE, dataTableRowString));
+		}
 
 		WebElement webElement = _faroSelenium.findElement(
 			"//div[@class='modal-content']/table");

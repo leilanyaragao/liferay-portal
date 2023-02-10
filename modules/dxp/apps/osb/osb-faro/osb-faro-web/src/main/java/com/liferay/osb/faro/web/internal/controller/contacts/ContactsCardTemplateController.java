@@ -97,7 +97,7 @@ public class ContactsCardTemplateController extends BaseFaroController {
 		Collection<ContactsCardTemplateType> contactsCardTemplateTypes =
 			_contactsCardTemplateManagerUtil.getContactsCardTemplateTypes();
 
-		ArrayList<ContactsCardTemplateType> contactsCardTemplateTypeFiltered =
+		List<ContactsCardTemplateType> contactsCardTemplateTypeFiltered =
 			new ArrayList<>();
 
 		for (ContactsCardTemplateType contactsCardTemplateType :
