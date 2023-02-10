@@ -203,13 +203,13 @@ public class FaroProjectLocalServiceImpl
 			user.getUserId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS,
 			new GroupNameComparator(true));
 
-		ArrayList<Long> groupIds = new ArrayList<>();
+		List<Long> groupIds = new ArrayList<>();
 
 		for (Group group : groups) {
 			groupIds.add(group.getGroupId());
 		}
 
-		ArrayList<FaroProject> faroProjectFiltered = new ArrayList<>();
+		List<FaroProject> faroProjectFiltered = new ArrayList<>();
 
 		for (FaroProject faroProject : faroProjects) {
 			if (!groupIds.contains(faroProject.getGroupId()) &&

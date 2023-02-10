@@ -415,7 +415,7 @@ public class NaniteDemoCreatorService extends DemoCreatorService {
 
 			contactsEngineClient.addNanite(
 				faroProject, "UpdateDynamicMembershipsNanite",
-				new HashMapBuilder<>().<String, String>put(
+				new HashMapBuilder<>().<String, Object>put(
 					"dateModified",
 					dateFormat.format(
 						new Date(System.currentTimeMillis() - Time.MONTH))

@@ -58,7 +58,7 @@ public class DefinitionsController extends BaseFaroController {
 			contactsEngineClient.getIndividualAttributes(
 				faroProjectLocalService.getFaroProjectByGroupId(groupId), name);
 
-		ArrayList<AttributesDisplay> attributesDisplay = new ArrayList<>();
+		List<AttributesDisplay> attributesDisplay = new ArrayList<>();
 
 		for (FieldMapping individualAttribute : individualAttributes) {
 			attributesDisplay.add(new AttributesDisplay(individualAttribute));

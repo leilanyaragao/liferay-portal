@@ -57,6 +57,6 @@ public class ProfileContactsCardTemplateType
 			"layoutType",
 			ContactsCardTemplateConstants.
 				SETTINGS_PROFILE_CARD_LAYOUT_TYPE_HORIZONTAL
-		);
+		).build();
 
 }

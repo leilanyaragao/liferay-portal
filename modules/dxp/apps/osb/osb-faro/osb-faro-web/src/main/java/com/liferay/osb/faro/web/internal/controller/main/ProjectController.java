@@ -446,7 +446,7 @@ public class ProjectController extends BaseFaroController {
 			_faroProjectEmailAddressDomainLocalService.
 				getFaroProjectEmailAddressDomainsByGroupId(groupId);
 
-		ArrayList<String> emailAddressDomain = new ArrayList<>();
+		List<String> emailAddressDomain = new ArrayList<>();
 
 		for (FaroProjectEmailAddressDomain faroProjectEmailAddressDomain :
 				faroProjectEmailAddressDomains) {

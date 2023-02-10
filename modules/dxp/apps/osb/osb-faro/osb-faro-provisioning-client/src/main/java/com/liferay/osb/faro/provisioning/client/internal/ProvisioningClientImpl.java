@@ -178,7 +178,7 @@ public class ProvisioningClientImpl implements ProvisioningClient {
 			List<Account> accounts = KoroneikiHttpUtil.searchAccounts(
 				sb.toString(), page, 500);
 
-			ArrayList<OSBAccountEntry> osbAccountEntry = new ArrayList<>();
+			List<OSBAccountEntry> osbAccountEntry = new ArrayList<>();
 
 			for (Account account : accounts) {
 				osbAccountEntry.add(new OSBAccountEntry(account));

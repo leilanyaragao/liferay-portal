@@ -195,7 +195,7 @@ public class ChannelController extends BaseFaroController {
 			id, available, query, statuses, groupId, startAndEnd[0],
 			startAndEnd[1], orderByComparator);
 
-		ArrayList<FaroUserDisplay> faroUserDisplay = new ArrayList<>();
+		List<FaroUserDisplay> faroUserDisplay = new ArrayList<>();
 
 		for (FaroUser faroUser : faroUsers) {
 			faroUserDisplay.add(new FaroUserDisplay(faroUser));

@@ -167,7 +167,7 @@ public class Table {
 		List<WebElement> rowWebElements = _faroSelenium.findElements(
 			sb.toString());
 
-		ArrayList<String> webElementText = new ArrayList<>();
+		List<String> webElementText = new ArrayList<>();
 
 		for (WebElement webElement : rowWebElements) {
 			webElementText.add(webElement.getText());

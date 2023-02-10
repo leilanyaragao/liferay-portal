@@ -158,7 +158,7 @@ public class ReportController extends BaseFaroController {
 					faroProject,
 					new HashMapBuilder<>().<String, String>put(
 						"Accept", "application/octet-stream, */*"
-					),
+					).build(),
 					String.format("%s/file", path), queryParameters,
 					outputStream);
 			}

@@ -68,7 +68,7 @@ public class MockContactsEngineClientImpl
 
 		List<Individual> individuals = results.getItems();
 
-		ArrayList<Individual> individualsFiltered = new ArrayList<>();
+		List<Individual> individualsFiltered = new ArrayList<>();
 
 		for (Individual curIndividual : individuals) {
 			String id = curIndividual.getId();
@@ -153,7 +153,7 @@ public class MockContactsEngineClientImpl
 
 		List<Individual> individuals = results.getItems();
 
-		ArrayList<Individual> individualFiltered = new ArrayList<>();
+		List<Individual> individualFiltered = new ArrayList<>();
 
 		for (Individual curIndividual : individuals) {
 			String id = curIndividual.getId();

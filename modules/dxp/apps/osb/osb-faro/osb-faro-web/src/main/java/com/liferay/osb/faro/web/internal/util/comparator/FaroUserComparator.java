@@ -40,7 +40,7 @@ public class FaroUserComparator extends OrderByComparator<FaroUser> {
 
 	@Override
 	public String getOrderBy() {
-		ArrayList<String> formatFieldNames = new ArrayList<>();
+		List<String> formatFieldNames = new ArrayList<>();
 
 		for (OrderByField orderByField : _orderByFields) {
 			String format = null;

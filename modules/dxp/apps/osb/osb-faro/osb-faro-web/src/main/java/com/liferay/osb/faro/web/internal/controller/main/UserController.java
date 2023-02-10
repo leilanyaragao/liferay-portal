@@ -210,7 +210,7 @@ public class UserController extends BaseFaroController {
 			groupId, query, statuses, startAndEnd[0], startAndEnd[1],
 			orderByComparator);
 
-		ArrayList<FaroUserDisplay> faroUserDisplay = new ArrayList<>();
+		List<FaroUserDisplay> faroUserDisplay = new ArrayList<>();
 
 		for (FaroUser faroUser : faroUsers) {
 			faroUserDisplay.add(new FaroUserDisplay());

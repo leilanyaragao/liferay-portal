@@ -62,7 +62,7 @@ public class CoworkersContactsCardTemplateDisplay
 
 			List<Individual> individuals = results.getItems();
 
-			ArrayList<IndividualDisplay> individualDisplay = new ArrayList<>();
+			List<IndividualDisplay> individualDisplay = new ArrayList<>();
 
 			for (Individual individual : individuals) {
 				individualDisplay.add(new IndividualDisplay(individual));

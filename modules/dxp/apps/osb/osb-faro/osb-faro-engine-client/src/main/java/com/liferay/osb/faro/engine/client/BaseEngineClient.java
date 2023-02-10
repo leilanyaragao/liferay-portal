@@ -487,9 +487,9 @@ public abstract class BaseEngineClient {
 	}
 
 	protected Map<String, Object> getUriVariables(FaroProject faroProject) {
-		return new HashMapBuilder<>().<String, String>put(
+		return new HashMapBuilder<>().<String, Object>put(
 			"weDeployKey", faroProject.getWeDeployKey()
-		);
+		).build();
 	}
 
 	protected Map<String, Object> getUriVariables(

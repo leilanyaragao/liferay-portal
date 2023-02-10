@@ -103,7 +103,7 @@ public class NotificationController extends BaseFaroController {
 			_faroNotificationLocalService.findFaroNotificationsLast30Days(
 				groupId, type, getUserId());
 
-		ArrayList<NotificationDisplay> notificationDisplay = new ArrayList<>();
+		List<NotificationDisplay> notificationDisplay = new ArrayList<>();
 
 		for (FaroNotification faroNotification : faroNotifications) {
 			notificationDisplay.add(new NotificationDisplay(faroNotification));
