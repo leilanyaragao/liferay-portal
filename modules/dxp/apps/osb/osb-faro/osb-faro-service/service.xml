@@ -41,7 +41,7 @@
 			<finder-column name="groupId" />
 			<finder-column name="userId" />
 		</finder>
-		<finder name="ChannelId" return-type="FaroChannel" unique="true">
+		<finder name="C_W" return-type="FaroChannel" unique="true">
 			<finder-column name="channelId" />
 			<finder-column name="workspaceGroupId" />
 		</finder>

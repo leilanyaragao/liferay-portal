@@ -19,6 +19,7 @@ import com.liferay.osb.faro.functional.test.util.FaroRestUtil;
 import com.liferay.osb.faro.functional.test.util.FaroSeleniumUtil;
 import com.liferay.petra.string.CharPool;
 import com.liferay.petra.string.StringPool;
+import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.poshi.runner.selenium.BaseWebDriverImpl;
@@ -43,8 +44,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 
@@ -141,13 +140,19 @@ public class FaroWebDriverImpl
 				Paths.get(
 					"src/testIntegration/resources/drag_and_drop_helper.js"))) {
 
-			Stream<String> stream = bufferedReader.lines();
+			String line = null;
+
+			StringBuilder lines = new StringBuilder();
+
+			while ((line = bufferedReader.readLine()) != null) {
+				lines.append(line);
+				lines.append(" ");
+			}
 
 			jse.executeScript(
 				StringBundler.concat(
-					stream.collect(Collectors.joining(" ")),
-					"DndSimulator.simulate('", fromElement, "', '", toElement,
-					"');"));
+					lines, "DndSimulator.simulate('", fromElement, "', '",
+					toElement, "');"));
 		}
 	}
 
