@@ -54,7 +54,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
@@ -444,16 +443,14 @@ public abstract class BaseEngineClient {
 			return null;
 		}
 
-		Optional<Link> linkOptional = resource.getLink(type);
+		Link link = resource.getRequiredLink(type);
 
-		if (!linkOptional.isPresent()) {
-			throw new IllegalStateException(
+		if (!link.isPresent()) {
+			throw new IllegalArgumentException(
 				"URL does not exist for type: " + type);
 		}
 
-		String href = linkOptional.map(
-			Link::getHref
-		).get();
+		String href = Link.getHref(link);
 
 		_urlPaths.put(
 			type,

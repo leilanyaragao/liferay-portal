@@ -135,7 +135,7 @@ public class FaroUserLocalServiceImpl extends FaroUserLocalServiceBaseImpl {
 
 			faroUser.setRoleId(roleId);
 			faroUser.setEmailAddress(emailAddress);
-			faroUser.setKey(PortalUUIDUtil.generate());
+			faroUser.setKey(_portalUUIDUtil.generate());
 			faroUser.setStatus(status);
 
 			faroUser = faroUserPersistence.update(faroUser);
@@ -459,6 +459,9 @@ public class FaroUserLocalServiceImpl extends FaroUserLocalServiceBaseImpl {
 
 	@ServiceReference(type = Portal.class)
 	private Portal _portal;
+
+	@Reference
+	private PortalUUIDUtil _portalUUIDUtil;
 
 	@Reference
 	private RoleLocalService _roleLocalService;
