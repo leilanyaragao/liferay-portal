@@ -460,16 +460,14 @@ public class Table {
 		List<WebElement> rowWebElements = _faroSelenium.findElements(
 			sb.toString());
 
-		Stream<WebElement> stream = rowWebElements.stream();
+		List<String> webElementText = new ArrayList<>();
 
-		List<String> rowNames = stream.map(
-			WebElement::getText
-		).collect(
-			Collectors.toList()
-		);
+		for (WebElement webElement : rowWebElements) {
+			webElementText.add(webElement.getText());
+		}
 
 		try {
-			Assert.assertEquals(dataTableNames, rowNames);
+			Assert.assertEquals(dataTableNames, webElementText);
 		}
 		catch (AssertionError ae) {
 			if (!colNum.equals("1")) {

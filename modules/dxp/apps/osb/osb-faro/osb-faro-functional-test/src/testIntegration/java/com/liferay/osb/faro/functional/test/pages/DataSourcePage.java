@@ -154,19 +154,15 @@ public class DataSourcePage {
 	public void assertDataPreviewCSV(DataTable dataTable) throws Exception {
 		List<List<String>> dataTableRows = dataTable.raw();
 
-		List<String> dataTableRowList = new ArrayList<>();
+		List<String> dataTableRowStrings = new ArrayList<>();
 
 		for (List<String> dataTableRow : dataTableRows) {
-			dataTableRowList.add(
+			dataTableRowStrings.add(
 				StringUtil.merge(dataTableRow, StringPool.SPACE));
 		}
 
-		String dataTableString = StringPool.BLANK;
-
-		for (String dataTableRowString : dataTableRowList) {
-			dataTableString.concat(
-				String.join(StringPool.NEW_LINE, dataTableRowString));
-		}
+		String dataTableString = StringUtil.merge(
+			dataTableRowStrings, StringPool.NEW_LINE);
 
 		WebElement webElement = _faroSelenium.findElement(
 			"//div[@class='modal-content']/table");

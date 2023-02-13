@@ -20,10 +20,9 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Matthew Kong
@@ -61,15 +60,15 @@ public class FilterUtil {
 		else if (value instanceof List) {
 			List<?> values = (List<?>)value;
 
-			Stream<?> stream = values.stream();
+			List<String> valuesListString = new ArrayList<>();
+
+			for (Object valueObject : values) {
+				valuesListString.add(String.valueOf(valueObject));
+			}
 
 			value = StringBundler.concat(
 				StringPool.OPEN_BRACKET,
-				stream.map(
-					String::valueOf
-				).collect(
-					Collectors.joining(StringPool.COMMA)
-				),
+				StringUtil.merge(valuesListString, StringPool.COMMA),
 				StringPool.CLOSE_BRACKET);
 		}
 		else {
