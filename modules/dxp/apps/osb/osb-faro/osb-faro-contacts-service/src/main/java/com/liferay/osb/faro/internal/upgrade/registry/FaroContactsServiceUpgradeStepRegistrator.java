@@ -12,7 +12,7 @@
  *
  */
 
-package com.liferay.osb.faro.internal.upgrade;
+package com.liferay.osb.faro.internal.upgrade.registry;
 
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 
@@ -22,7 +22,8 @@ import org.osgi.service.component.annotations.Component;
  * @author Matthew Kong
  */
 @Component(immediate = true, service = UpgradeStepRegistrator.class)
-public class FaroContactsServiceUpgradeStepRegistrator implements UpgradeStepRegistrator {
+public class FaroContactsServiceUpgradeStepRegistrator
+	implements UpgradeStepRegistrator {
 
 	@Override
 	public void register(Registry registry) {

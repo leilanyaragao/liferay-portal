@@ -12,7 +12,7 @@
  *
  */
 
-package com.liferay.osb.faro.internal.upgrade;
+package com.liferay.osb.faro.internal.upgrade.registry;
 
 import com.liferay.portal.upgrade.registry.UpgradeStepRegistrator;
 
