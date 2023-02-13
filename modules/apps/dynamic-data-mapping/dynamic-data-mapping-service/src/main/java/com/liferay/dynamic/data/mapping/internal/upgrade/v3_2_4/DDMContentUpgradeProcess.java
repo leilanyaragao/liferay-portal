@@ -33,6 +33,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -98,7 +99,7 @@ public class DDMContentUpgradeProcess extends UpgradeProcess {
 	private HashMap<String, JSONObject> _mapDataFieldValues(
 		JSONArray fieldValuesJSONArray) {
 
-		HashMap<String, JSONObject> dataFieldValuesMap = new HashMap<>();
+		Map<String, JSONObject> dataFieldValuesMap = new HashMap<>();
 
 		fieldValuesJSONArray.forEach(
 			object -> {

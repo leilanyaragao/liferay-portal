@@ -32,7 +32,6 @@ import com.liferay.osb.faro.web.internal.model.display.FaroResultsDisplay;
 import com.liferay.osb.faro.web.internal.model.display.contacts.IndividualDisplay;
 import com.liferay.osb.faro.web.internal.param.FaroParam;
 import com.liferay.osb.faro.web.internal.search.FaroSearchContext;
-import com.liferay.osb.faro.web.internal.util.StreamUtil;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -40,6 +39,7 @@ import com.liferay.portal.kernel.model.RoleConstants;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -324,9 +324,11 @@ public class IndividualController extends BaseFaroController {
 			return;
 		}
 
-		Map<String, FieldMapping> fieldMappingMap = StreamUtil.toMap(
-			results.getItems(), FieldMapping::getFieldName,
-			Function.identity());
+		Map<String, FieldMapping> fieldMappingMap = new HashMap<>();
+
+		for (FieldMapping fieldMapping : results.getItems()) {
+			fieldMappingMap.put(fieldMapping.getFieldName(), fieldMapping);
+		}
 
 		for (Map.Entry<String, List<Field>> entry : fieldsMap.entrySet()) {
 			List<Field> fields = entry.getValue();
