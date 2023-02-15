@@ -70,14 +70,14 @@ public class FaroAdminDisplayContext {
 			return Collections.emptyList();
 		}
 
-		PortletURL portletURL = PortletURLBuilder.createRenderURL(
+		PortletURL portletURL = PortletURLBuilder.createActionURL(
 			_renderResponse
 		).setRedirect(
 			ParamUtil.getString(
 				_httpServletRequest, "redirect", _themeDisplay.getURLCurrent())
-		).buildPortletURL();
+		).buildActionURL();
 
-		return DropdownItemListBuilder.add(
+		return new DropdownItemListBuilder.add(
 			dropdownItem -> {
 				dropdownItem.setHref(
 					portletURL, ActionRequest.ACTION_NAME,
@@ -214,11 +214,11 @@ public class FaroAdminDisplayContext {
 			faroProjectAdminDisplays.add(new FaroProjectAdminDisplay(document));
 		}
 
-		searchContainer.setResults(faroProjectAdminDisplays);
+		searchContainer._setResults(faroProjectAdminDisplays);
 
 		searchContainer.setRowChecker(
 			new EmptyOnClickRowChecker(_renderResponse));
-		searchContainer.setTotal(hits.getLength());
+		searchContainer._setTotal(hits.getLength());
 
 		_searchContainer = searchContainer;
 

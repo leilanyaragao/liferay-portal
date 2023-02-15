@@ -445,12 +445,12 @@ public abstract class BaseEngineClient {
 
 		Link link = resource.getRequiredLink(type);
 
-		if (!link.isPresent()) {
+		if (link == null) {
 			throw new IllegalArgumentException(
 				"URL does not exist for type: " + type);
 		}
 
-		String href = Link.getHref(link);
+		String href = link.getHref();
 
 		_urlPaths.put(
 			type,

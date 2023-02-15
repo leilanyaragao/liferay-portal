@@ -80,7 +80,7 @@ public class FieldMappingConstants {
 		for (FieldMappingMap fieldMappingMap : _liferayFieldMappingMaps) {
 			_liferayFieldNames.put(
 				fieldMappingMap.getDataSourceFieldName(),
-				fieldMappingMap.getName())
+				fieldMappingMap.getName());
 		}
 
 		return _liferayFieldNames;

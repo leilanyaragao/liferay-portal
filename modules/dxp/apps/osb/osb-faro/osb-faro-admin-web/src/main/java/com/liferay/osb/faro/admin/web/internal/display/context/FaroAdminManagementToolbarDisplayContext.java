@@ -16,7 +16,6 @@ package com.liferay.osb.faro.admin.web.internal.display.context;
 
 import com.liferay.frontend.taglib.clay.servlet.taglib.display.context.SearchContainerManagementToolbarDisplayContext;
 import com.liferay.frontend.taglib.clay.servlet.taglib.util.CreationMenu;
-import com.liferay.frontend.taglib.clay.servlet.taglib.util.DropdownItemListBuilder;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -63,7 +62,7 @@ public class FaroAdminManagementToolbarDisplayContext
 			getPortletURL()
 		).setKeywords(
 			StringPool.BLANK
-		).toString();
+		).buildString();
 	}
 
 	public CreationMenu getCreationMenu() {
@@ -74,23 +73,26 @@ public class FaroAdminManagementToolbarDisplayContext
 			return null;
 		}
 
-		PortletURL portletURL = PortletURLBuilder.createRenderURL(
-			_renderResponse
+		PortletURL portletURL = PortletURLBuilder.create(
+			_renderResponse.createActionURL()
 		).setRedirect(
 			ParamUtil.getString(
 				liferayPortletRequest.getHttpServletRequest(), "redirect",
 				_themeDisplay.getURLCurrent())
-		);
+		).buildPortletURL();
 
-		return DropdownItemListBuilder.add(
-			dropdownItem -> {
-				dropdownItem.setHref(
-					portletURL, ActionRequest.ACTION_NAME,
-					"/faro_admin/refresh_project", "groupId", -1);
-				dropdownItem.setLabel(
-					LanguageUtil.get(request, "refresh-all-projects"));
+		return new CreationMenu() {
+			{
+				addDropdownItem(
+					dropdownItem -> {
+						dropdownItem.setHref(
+							portletURL, ActionRequest.ACTION_NAME,
+							"/faro_admin/refresh_project", "groupId", -1);
+						dropdownItem.setLabel(
+							LanguageUtil.get(request, "refresh-all-projects"));
+					});
 			}
-		).build();
+		};
 	}
 
 	@Override
@@ -106,7 +108,7 @@ public class FaroAdminManagementToolbarDisplayContext
 			"orderByCol", getOrderByCol()
 		).setParameter(
 			"orderByType", getOrderByType()
-		).toString();
+		).buildString();
 	}
 
 	@Override
