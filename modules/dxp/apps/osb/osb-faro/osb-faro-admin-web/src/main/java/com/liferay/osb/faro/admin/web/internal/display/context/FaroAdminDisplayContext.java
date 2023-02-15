@@ -214,11 +214,11 @@ public class FaroAdminDisplayContext {
 			faroProjectAdminDisplays.add(new FaroProjectAdminDisplay(document));
 		}
 
-		searchContainer._setResults(faroProjectAdminDisplays);
+		searchContainer.setResults(faroProjectAdminDisplays);
 
 		searchContainer.setRowChecker(
 			new EmptyOnClickRowChecker(_renderResponse));
-		searchContainer._setTotal(hits.getLength());
+		searchContainer.setTotal(hits.getLength());
 
 		_searchContainer = searchContainer;
 
