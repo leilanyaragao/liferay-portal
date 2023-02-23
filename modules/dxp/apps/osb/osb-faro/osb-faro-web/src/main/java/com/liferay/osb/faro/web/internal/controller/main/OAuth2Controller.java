@@ -254,7 +254,7 @@ public class OAuth2Controller extends BaseFaroController {
 				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 
 		List<OAuth2Authorization> userOAuth2AuthorizationsFiltered =
-			new ArrayList<>(OAuth2Authorization);
+			new ArrayList<>();
 
 		for (OAuth2Authorization oAuth2Authorization :
 				userOAuth2Authorizations) {

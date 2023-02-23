@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.Http;
+import com.liferay.portal.kernel.util.HttpComponentsUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 
 import java.nio.charset.StandardCharsets;
@@ -64,7 +65,7 @@ public class AnalyticEventsDataCreator extends DataCreator {
 				"Content-Type", ContentTypes.APPLICATION_JSON
 			).put(
 				"X-Forwarded-For", internet.publicIpV4Address()
-			));
+			).build());
 
 		options.setLocation(_OSB_ASAH_PUBLISHER_URL);
 		options.setPost(true);
@@ -90,7 +91,7 @@ public class AnalyticEventsDataCreator extends DataCreator {
 			_pageContextsDataCreator.getRandom());
 
 		if (bool.bool()) {
-			String encodePath = HttpUtil.encodePath(
+			String encodePath = HttpComponentsUtil.encodePath(
 				_SEARCH_TERMS[random.nextInt(_SEARCH_TERMS.length)]);
 
 			context.put("url", context.get("url") + "?q=" + encodePath);
@@ -202,11 +203,12 @@ public class AnalyticEventsDataCreator extends DataCreator {
 		}
 
 		for (String formTitle : _FORM_TITLES) {
-			new HashMapBuilder<>().<String, Object>put(
-				"formId", number.randomNumber(8, false)
-			).put(
-				"title", formTitle
-			).build();
+			Map<String, Object> formAssetEvent =
+				new HashMapBuilder<>().<String, Object>put(
+					"formId", number.randomNumber(8, false)
+				).put(
+					"title", formTitle
+				).build();
 
 			_assetEvents.add(
 				_createEvent("Form", "formSubmitted", formAssetEvent));

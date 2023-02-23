@@ -251,8 +251,7 @@ public class FaroProjectIndexer extends BaseIndexer<FaroProject> {
 	@Override
 	protected void doReindex(FaroProject faroProject) throws Exception {
 		_indexWriterHelper.updateDocument(
-			getSearchEngineId(), 0, getDocument(faroProject),
-			isCommitImmediately());
+			faroProject.getFaroProjectId(), getDocument(faroProject));
 	}
 
 	@Override
@@ -285,7 +284,6 @@ public class FaroProjectIndexer extends BaseIndexer<FaroProject> {
 						}
 					}
 				});
-		indexableActionableDynamicQuery.setSearchEngineId(getSearchEngineId());
 
 		indexableActionableDynamicQuery.performActions();
 	}

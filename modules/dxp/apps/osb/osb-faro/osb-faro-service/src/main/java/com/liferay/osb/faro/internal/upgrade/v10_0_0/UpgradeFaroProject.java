@@ -14,7 +14,6 @@
 
 package com.liferay.osb.faro.internal.upgrade.v10_0_0;
 
-import com.liferay.osb.faro.model.impl.FaroProjectModelImpl;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.model.RoleConstants;
@@ -31,9 +30,8 @@ public class UpgradeFaroProject extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		alter(
-			FaroProjectModelImpl.class,
-			new AlterTableAddColumn("incidentReportEmailAddresses STRING"));
+		alterTableAddColumn(
+			"OSBFaro_FaroProject", "incidentReportEmailAddresses", "STRING");
 
 		_updateIncidentReportEmailAddresses();
 	}

@@ -64,8 +64,8 @@ public class SalesforceIndividualsDataCreator extends DataCreator {
 
 		Object accountPKs = salesforceAccount.get("id");
 
-		Map<String, Object> fields =
-			new HashMapBuilder.HashMapWrapper<String, Object>().build();
+		HashMapBuilder.HashMapWrapper<String, Object> fields =
+			new HashMapBuilder.HashMapWrapper<>();
 
 		if (accountPKs != null) {
 			fields.put("accountPKs", Collections.singletonList(accountPKs));
@@ -124,7 +124,7 @@ public class SalesforceIndividualsDataCreator extends DataCreator {
 				"fields", fields
 			).put(
 				"id", internet.uuid()
-			);
+			).build();
 
 		_salesforceAuditEventsDataCreator.create(
 			new Object[] {salesforceIndividual});

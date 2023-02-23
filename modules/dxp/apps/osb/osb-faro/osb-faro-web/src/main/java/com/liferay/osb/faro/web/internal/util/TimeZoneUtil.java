@@ -54,7 +54,7 @@ public class TimeZoneUtil {
 		for (Map.Entry<String, String> timeZoneId : timeZoneIds) {
 			timeZoneDisplayList.add(
 				new TimeZoneDisplay(
-					ZoneId.of(entry.getKey()), entry.getValue()));
+					ZoneId.of(timeZoneId.getKey()), timeZoneId.getValue()));
 		}
 
 		return timeZoneDisplayList;

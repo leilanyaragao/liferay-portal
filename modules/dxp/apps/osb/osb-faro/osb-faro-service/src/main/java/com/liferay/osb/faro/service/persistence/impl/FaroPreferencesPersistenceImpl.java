@@ -1592,47 +1592,36 @@ public class FaroPreferencesPersistenceImpl
 			PropsUtil.get(PropsKeys.VALUE_OBJECT_FINDER_CACHE_LIST_THRESHOLD));
 
 		_finderPathWithPaginationFindAll = new FinderPath(
-			FaroPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			FaroPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			FaroPreferencesImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findAll", new String[0]);
+		 FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findAll", new String[0], new String[0], true);
 
 		_finderPathWithoutPaginationFindAll = new FinderPath(
-			FaroPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			FaroPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			FaroPreferencesImpl.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll",
-			new String[0]);
+			new String[0], 	new String[0], true);
 
 		_finderPathCountAll = new FinderPath(
-			FaroPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			FaroPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll",
-			new String[0]);
+			new String[0], new String[0], false);
 
 		_finderPathWithPaginationFindByGroupId = new FinderPath(
-			FaroPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			FaroPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			FaroPreferencesImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+		FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
 			"findByGroupId",
 			new String[] {
 				Long.class.getName(), Integer.class.getName(),
 				Integer.class.getName(), OrderByComparator.class.getName()
-			});
+			}, new String[] {"groupId"}, true);
 
 		_finderPathWithoutPaginationFindByGroupId = new FinderPath(
-			FaroPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			FaroPreferencesModelImpl.FINDER_CACHE_ENABLED,
-			FaroPreferencesImpl.class,
+
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByGroupId",
 			new String[] {Long.class.getName()},
-			FaroPreferencesModelImpl.GROUPID_COLUMN_BITMASK);
+				new String[] {"groupId"},
+				true);
 
 		_finderPathCountByGroupId = new FinderPath(
-			FaroPreferencesModelImpl.ENTITY_CACHE_ENABLED,
-			FaroPreferencesModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
-			new String[] {Long.class.getName()});
+			new String[] {Long.class.getName()},new String[] {"groupId"},
+				false);
 
 		_finderPathFetchByG_O = new FinderPath(
 			FaroPreferencesModelImpl.ENTITY_CACHE_ENABLED,

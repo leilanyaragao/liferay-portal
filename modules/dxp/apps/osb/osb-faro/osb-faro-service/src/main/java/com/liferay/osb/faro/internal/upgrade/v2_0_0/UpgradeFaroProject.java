@@ -14,7 +14,6 @@
 
 package com.liferay.osb.faro.internal.upgrade.v2_0_0;
 
-import com.liferay.osb.faro.model.impl.FaroProjectModelImpl;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 
 /**
@@ -24,9 +23,7 @@ public class UpgradeFaroProject extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		alter(
-			FaroProjectModelImpl.class,
-			new AlterColumnName("code_", "corpProjectName STRING null"));
+		alterColumnName("OSBFaro_FaroProject", "code_", "corpProjectName");
 	}
 
 }

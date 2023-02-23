@@ -14,7 +14,6 @@
 
 package com.liferay.osb.faro.internal.upgrade.v12_0_0;
 
-import com.liferay.osb.faro.model.impl.FaroProjectModelImpl;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 
 /**
@@ -24,9 +23,7 @@ public class UpgradeFaroProject extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		alter(
-			FaroProjectModelImpl.class,
-			new AlterTableAddColumn("sharedCluster BOOLEAN"));
+		alterTableAddColumn("OSBFaro_FaroProject", "sharedCluster", "BOOLEAN");
 
 		runSQL("update OSBFaro_FaroProject set sharedCluster = 0");
 	}

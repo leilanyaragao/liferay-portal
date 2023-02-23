@@ -69,7 +69,7 @@ public class LiferayOrganizationsDataCreator extends DataCreator {
 
 		Map<String, Object> parentOrganization = (Map<String, Object>)params[1];
 
-		new HashMapBuilder<>().<String, String>put(
+		return new HashMapBuilder<>().<String, Object>put(
 			"id", number.randomNumber(8, false)
 		).put(
 			"modifiedDate", formatDate(new Date())
@@ -90,8 +90,6 @@ public class LiferayOrganizationsDataCreator extends DataCreator {
 		).put(
 			"type", "organization"
 		).build();
-
-		return organization;
 	}
 
 	private String _getNameTreePath(

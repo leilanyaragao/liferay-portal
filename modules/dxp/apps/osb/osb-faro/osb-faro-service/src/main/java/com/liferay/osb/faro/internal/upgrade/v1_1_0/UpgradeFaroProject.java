@@ -14,7 +14,6 @@
 
 package com.liferay.osb.faro.internal.upgrade.v1_1_0;
 
-import com.liferay.osb.faro.model.impl.FaroProjectModelImpl;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 
 /**
@@ -24,18 +23,10 @@ public class UpgradeFaroProject extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		alter(
-			FaroProjectModelImpl.class,
-			new AlterTableAddColumn("accountKey STRING"));
-		alter(
-			FaroProjectModelImpl.class,
-			new AlterTableAddColumn("accountName STRING"));
-		alter(
-			FaroProjectModelImpl.class,
-			new AlterTableAddColumn("code_ STRING"));
-		alter(
-			FaroProjectModelImpl.class,
-			new AlterTableAddColumn("subscription STRING"));
+		alterTableAddColumn("OSBFaro_FaroProject", "accountKey", "STRING");
+		alterTableAddColumn("OSBFaro_FaroProject", "accountName", "STRING");
+		alterTableAddColumn("OSBFaro_FaroProject", "code_", "STRING");
+		alterTableAddColumn("OSBFaro_FaroProject", "subscription", "STRING");
 	}
 
 }

@@ -167,7 +167,7 @@ public abstract class DemoCreatorService {
 
 			user = userLocalService.addUserWithWorkflow(
 				UserConstants.USER_ID_DEFAULT, portal.getDefaultCompanyId(),
-				false, "test", "test", true, screenName, emailAddress, 0, null,
+				false, "test", "test", true, screenName, emailAddress,
 				LocaleUtil.US, firstName, null, lastName, 0, 0, true, 1, 1,
 				1970, null, null, null, null, null, false, null);
 

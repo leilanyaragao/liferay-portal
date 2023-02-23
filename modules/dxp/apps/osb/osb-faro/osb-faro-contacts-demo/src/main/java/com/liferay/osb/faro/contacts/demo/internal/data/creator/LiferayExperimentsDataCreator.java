@@ -71,7 +71,7 @@ public class LiferayExperimentsDataCreator extends DataCreator {
 			).put(
 				"dxpVariants",
 				Arrays.asList(
-					new HashMapBuilder.TYPE_ARGUMENTS<>().put(
+					new HashMapBuilder.HashMapWrapper<>().put(
 						"changes", 0
 					).put(
 						"control", true
@@ -81,8 +81,8 @@ public class LiferayExperimentsDataCreator extends DataCreator {
 						"dxpVariantName", "Control"
 					).put(
 						"trafficSplit", 34
-					).build(),
-					new HashMapBuilder.TYPE_ARGUMENTS<>().put(
+					),
+					new HashMapBuilder.HashMapWrapper<>().put(
 						"changes", 0
 					).put(
 						"control", false
@@ -93,8 +93,8 @@ public class LiferayExperimentsDataCreator extends DataCreator {
 						"dxpVariantName", company.buzzword()
 					).put(
 						"trafficSplit", 33
-					).build(),
-					new HashMapBuilder.TYPE_ARGUMENTS<>().put(
+					),
+					new HashMapBuilder.HashMapWrapper<>().put(
 						"changes", 0
 					).put(
 						"control", false
@@ -105,7 +105,7 @@ public class LiferayExperimentsDataCreator extends DataCreator {
 						"dxpVariantName", company.buzzword()
 					).put(
 						"trafficSplit", 33
-					).build())
+					))
 			).put(
 				"goal",
 				new HashMapBuilder<>().<String, String>put(

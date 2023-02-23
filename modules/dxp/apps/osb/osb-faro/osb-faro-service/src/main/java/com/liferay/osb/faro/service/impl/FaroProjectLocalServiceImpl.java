@@ -54,16 +54,11 @@ import java.util.ResourceBundle;
 
 import javax.mail.internet.InternetAddress;
 
-import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Matthew Kong
  */
-@Component(
-	property = "model.class.name=com.liferay.osb.faro.model.FaroProject",
-	service = FaroProject.class
-)
 public class FaroProjectLocalServiceImpl
 	extends FaroProjectLocalServiceBaseImpl {
 

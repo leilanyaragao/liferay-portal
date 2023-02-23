@@ -16,6 +16,7 @@ package com.liferay.osb.faro.web.internal.util;
 
 import com.liferay.document.library.kernel.model.DLFileEntry;
 import com.liferay.document.library.kernel.model.DLFileVersion;
+import com.liferay.document.library.kernel.model.DLVersionNumberIncrease;
 import com.liferay.document.library.kernel.service.DLFileEntryLocalService;
 import com.liferay.document.library.kernel.service.DLFileVersionLocalService;
 import com.liferay.osb.faro.contacts.model.constants.ContactsConstants;
@@ -312,11 +313,19 @@ public class ContactsCSVHelper {
 			dlFileEntry = _dlFileEntryLocalService.getFileEntry(
 				groupId, 0, dataSourceId);
 
+			DLFileVersion dlFileVersion = dlFileEntry.getLatestFileVersion(
+				true);
+
 			dlFileEntry = _dlFileEntryLocalService.updateFileEntry(
 				userId, dlFileEntry.getFileEntryId(), fileName,
 				dlFileEntry.getMimeType(), dlFileEntry.getTitle(), fileName,
-				null, true, -1, null, file, null, file.length(),
-				serviceContext);
+				dlFileEntry.getDescription(), dlFileVersion.getChangeLog(),
+				DLVersionNumberIncrease.AUTOMATIC,
+				dlFileEntry.getFileEntryTypeId(),
+				dlFileEntry.getDDMFormValuesMap(
+					dlFileVersion.getFileVersionId()),
+				file, null, file.length(), dlFileEntry.getExpirationDate(),
+				dlFileEntry.getReviewDate(), serviceContext);
 		}
 		else {
 			Repository repository =

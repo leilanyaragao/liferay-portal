@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.language.Language;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.Http;
+import com.liferay.portal.kernel.util.HttpComponentsUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.StringUtil;
 
@@ -76,9 +77,9 @@ public class EmailServlet extends BaseAsahServlet {
 	private String _getDownloadURL(String batchId, long groupId) {
 		String url = _FARO_URL + "/o/proxy/download/data-control-tasks";
 
-		url = _http.addParameter(url, "projectGroupId", groupId);
+		url = HttpComponentsUtil.addParameter(url, "projectGroupId", groupId);
 
-		return _http.addParameter(
+		return HttpComponentsUtil.addParameter(
 			url, "filter", "batchId eq '" + batchId + "'");
 	}
 
