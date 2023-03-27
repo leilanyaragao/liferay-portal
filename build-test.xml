@@ -4759,10 +4759,6 @@ tell application "Safari" to quit
 							<gradle-execute dir="${project.dir}/modules/core" task="deploy">
 								<arg value="-Dportal.build=true" />
 							</gradle-execute>
-
-							<gradle-execute dir="${project.dir}/modules/apps/petra" task="deploy">
-								<arg value="-Dportal.build=true" />
-							</gradle-execute>
 						</then>
 						<else>
 							<ant antfile="build-dist.xml" inheritAll="false" target="build-dist-tomcat" />
@@ -14976,7 +14972,7 @@ mail.send.blacklist=</echo>
 		<if>
 			<equals arg1="${cas.enabled}" arg2="true" />
 			<then>
-				<ant antfile="build-test-authentication.xml" target="setup-cas" />
+				<ant antfile="build-test-cas.xml" target="setup-cas" />
 			</then>
 		</if>
 
@@ -14994,9 +14990,9 @@ mail.send.blacklist=</echo>
 		<if>
 			<equals arg1="${openam.enabled}" arg2="true" />
 			<then>
-				<ant antfile="build-test-authentication.xml" target="delete-openam-config" />
+				<ant antfile="build-test-openam.xml" target="delete-openam-config" />
 
-				<ant antfile="build-test-authentication.xml" target="setup-openam" />
+				<ant antfile="build-test-openam.xml" target="setup-openam" />
 			</then>
 		</if>
 
@@ -15515,7 +15511,7 @@ mail.send.blacklist=</echo>
 		<if>
 			<equals arg1="${openam.enabled}" arg2="true" />
 			<then>
-				<ant antfile="build-test-authentication.xml" target="delete-openam-config" />
+				<ant antfile="build-test-openam.xml" target="delete-openam-config" />
 			</then>
 		</if>
 

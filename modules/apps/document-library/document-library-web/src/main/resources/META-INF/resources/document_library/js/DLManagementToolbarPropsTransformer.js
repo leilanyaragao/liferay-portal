@@ -32,6 +32,7 @@ export default function propsTransformer({
 		editEntryURL,
 		folderConfiguration,
 		openViewMoreFileEntryTypesURL,
+		selectExtensionURL,
 		selectFileEntryTypeURL,
 		selectFolderURL,
 		trashEnabled,
@@ -200,12 +201,15 @@ export default function propsTransformer({
 			multiple: true,
 			onSelect(selectedItem) {
 				if (selectedItem) {
-					const url = addParams(
-						`${portletNamespace}fileEntryExtensions=${selectedItem.join(
-							','
-						)}`,
-						viewFileEntryTypeURL
+					const url = selectedItem.reduce(
+						(acc, item) =>
+							addParams(
+								`${portletNamespace}extension=${item}`,
+								acc
+							),
+						selectExtensionURL
 					);
+
 					navigate(url);
 				}
 			},

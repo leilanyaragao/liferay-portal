@@ -34,7 +34,9 @@ import com.liferay.dynamic.data.mapping.storage.StorageEngine;
 import com.liferay.dynamic.data.mapping.util.DDM;
 import com.liferay.dynamic.data.mapping.util.DDMFormValuesToFieldsConverter;
 import com.liferay.dynamic.data.mapping.util.FieldsToDDMFormValuesConverter;
+import com.liferay.petra.function.transform.TransformUtil;
 import com.liferay.petra.string.StringPool;
+import com.liferay.petra.string.StringUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -48,12 +50,9 @@ import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -70,11 +69,11 @@ public class DDLImpl implements DDL {
 			DDLRecord record, boolean latestRecordVersion, Locale locale)
 		throws Exception {
 
+		JSONObject jsonObject = _jsonFactory.createJSONObject();
+
 		DDLRecordSet recordSet = record.getRecordSet();
 
 		DDMStructure ddmStructure = recordSet.getDDMStructure();
-
-		JSONObject jsonObject = _jsonFactory.createJSONObject();
 
 		for (String fieldName : ddmStructure.getFieldNames()) {
 			jsonObject.put(fieldName, StringPool.BLANK);
@@ -92,11 +91,12 @@ public class DDLImpl implements DDL {
 			recordVersion = record.getLatestRecordVersion();
 		}
 
-		Fields fields = _ddmFormValuesToFieldsConverter.convert(
-			ddmStructure,
-			_storageEngine.getDDMFormValues(recordVersion.getDDMStorageId()));
+		for (Field field :
+				_ddmFormValuesToFieldsConverter.convert(
+					ddmStructure,
+					_storageEngine.getDDMFormValues(
+						recordVersion.getDDMStorageId()))) {
 
-		for (Field field : fields) {
 			Object[] fieldValues = _getFieldValues(field, locale);
 
 			if (fieldValues.length == 0) {
@@ -106,61 +106,58 @@ public class DDLImpl implements DDL {
 			String fieldName = field.getName();
 			String fieldType = field.getType();
 
-			Stream<Object> fieldValuesStream = Arrays.stream(fieldValues);
-
 			if (fieldType.equals(DDMFormFieldType.DOCUMENT_LIBRARY)) {
-				Stream<String> fieldValuesStringStream = fieldValuesStream.map(
-					fieldValue -> _getDocumentLibraryFieldValue(fieldValue));
-
 				JSONObject fieldJSONObject = JSONUtil.put(
 					"title",
-					fieldValuesStringStream.collect(
-						Collectors.joining(StringPool.COMMA_AND_SPACE)));
+					StringUtil.merge(
+						TransformUtil.transformToList(
+							fieldValues, this::_getDocumentLibraryFieldValue),
+						StringPool.COMMA_AND_SPACE));
 
 				jsonObject.put(fieldName, fieldJSONObject.toString());
 			}
 			else if (fieldType.equals(DDMFormFieldType.LINK_TO_PAGE)) {
-				Stream<String> fieldValuesStringStream = fieldValuesStream.map(
-					fieldValue -> _getLinkToPageFieldValue(fieldValue, locale));
-
 				JSONObject fieldJSONObject = JSONUtil.put(
 					"name",
-					fieldValuesStringStream.collect(
-						Collectors.joining(StringPool.COMMA_AND_SPACE)));
+					StringUtil.merge(
+						TransformUtil.transformToList(
+							fieldValues,
+							fieldValue -> _getLinkToPageFieldValue(
+								fieldValue, locale)),
+						StringPool.COMMA_AND_SPACE));
 
 				jsonObject.put(fieldName, fieldJSONObject.toString());
 			}
 			else if (fieldType.equals(DDMFormFieldType.SELECT)) {
 				JSONArray fieldJSONArray = _jsonFactory.createJSONArray();
 
-				fieldValuesStream.forEach(
-					fieldValue -> {
-						JSONArray valueJSONArray = _getJSONArrayValue(
-							fieldValue);
+				for (Object fieldValue : fieldValues) {
+					JSONArray valueJSONArray = _getJSONArrayValue(fieldValue);
 
-						for (Object object : valueJSONArray) {
-							fieldJSONArray.put(object);
-						}
-					});
+					for (Object object : valueJSONArray) {
+						fieldJSONArray.put(object);
+					}
+				}
 
 				jsonObject.put(fieldName, fieldJSONArray);
 			}
 			else {
-				Stream<String> fieldValuesStringStream = fieldValuesStream.map(
-					fieldValue -> {
-						if (fieldValue instanceof Date) {
-							Date fieldValueDate = (Date)fieldValue;
-
-							return String.valueOf(fieldValueDate.getTime());
-						}
-
-						return String.valueOf(fieldValue);
-					});
-
 				jsonObject.put(
 					fieldName,
-					fieldValuesStringStream.collect(
-						Collectors.joining(StringPool.COMMA_AND_SPACE)));
+					StringUtil.merge(
+						TransformUtil.transformToList(
+							fieldValues,
+							fieldValue -> {
+								if (fieldValue instanceof Date) {
+									Date fieldValueDate = (Date)fieldValue;
+
+									return String.valueOf(
+										fieldValueDate.getTime());
+								}
+
+								return String.valueOf(fieldValue);
+							}),
+						StringPool.COMMA_AND_SPACE));
 			}
 		}
 
@@ -176,9 +173,7 @@ public class DDLImpl implements DDL {
 
 		DDMStructure ddmStructure = recordSet.getDDMStructure();
 
-		List<DDMFormField> ddmFormFields = ddmStructure.getDDMFormFields(false);
-
-		for (DDMFormField ddmFormField : ddmFormFields) {
+		for (DDMFormField ddmFormField : ddmStructure.getDDMFormFields(false)) {
 			jsonArray.put(
 				JSONUtil.put(
 					"dataType", ddmFormField.getDataType()
@@ -210,16 +205,9 @@ public class DDLImpl implements DDL {
 			List<DDLRecord> records, boolean latestRecordVersion, Locale locale)
 		throws Exception {
 
-		JSONArray jsonArray = _jsonFactory.createJSONArray();
-
-		for (DDLRecord record : records) {
-			JSONObject jsonObject = getRecordJSONObject(
-				record, latestRecordVersion, locale);
-
-			jsonArray.put(jsonObject);
-		}
-
-		return jsonArray;
+		return JSONUtil.toJSONArray(
+			records,
+			record -> getRecordJSONObject(record, latestRecordVersion, locale));
 	}
 
 	@Override

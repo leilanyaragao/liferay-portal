@@ -110,7 +110,6 @@ definition {
 	}
 
 	@description = "Test Automation for LPS-130275: Validate if it's posible to create a segment based on Organization > Date modified criteria"
-	@ignore = "true"
 	@priority = 5
 	@uitest
 	test AddSegmentByOrganizationDateModified {
@@ -150,6 +149,8 @@ definition {
 
 			Segmentation.viewMembers(memberName = "userfn userln");
 
+			WaitForElementNotPresent(locator1 = "IFrame#MODAL_BODY");
+
 			Button.clickSave();
 
 			Alert.viewSuccessMessage();
@@ -158,7 +159,7 @@ definition {
 		task ("Assert the segment is correctly created") {
 			Segmentation.editSegment(entry = "AddSegmentByOrganizationDateModified Test");
 
-			var currentDate = DateUtil.getFormattedCurrentDate("yyyy-MM-dd");
+			var currentDate = DateUtil.getFormattedCurrentDate("yyyy/MM/dd");
 
 			AssertValue(
 				locator1 = "Segmentation#CRITERION_INPUT_ANY",
@@ -1243,7 +1244,6 @@ definition {
 	}
 
 	@description = "Test Automation for LPS-130284: Validate if it's posible to create a segment based on User > Date modified criteria"
-	@ignore = "true"
 	@priority = 5
 	@uitest
 	test AddSegmentByUserDateModified {
@@ -1273,6 +1273,8 @@ definition {
 
 			Segmentation.viewMembers(memberName = "userfn userln");
 
+			WaitForElementNotPresent(locator1 = "IFrame#MODAL_BODY");
+
 			Button.clickSave();
 
 			Alert.viewSuccessMessage();
@@ -1281,7 +1283,7 @@ definition {
 		task ("Assert the segment is correctly created") {
 			Segmentation.editSegment(entry = "AddSegmentByUserDateModified Test");
 
-			var currentDate = DateUtil.getFormattedCurrentDate("yyyy-MM-dd");
+			var currentDate = DateUtil.getFormattedCurrentDate("yyyy/MM/dd");
 
 			AssertValue(
 				locator1 = "Segmentation#CRITERION_INPUT_ANY",

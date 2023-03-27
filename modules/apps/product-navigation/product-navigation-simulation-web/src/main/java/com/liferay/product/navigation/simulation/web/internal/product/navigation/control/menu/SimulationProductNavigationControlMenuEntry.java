@@ -16,8 +16,6 @@ package com.liferay.product.navigation.simulation.web.internal.product.navigatio
 
 import com.liferay.application.list.PanelApp;
 import com.liferay.application.list.PanelAppRegistry;
-import com.liferay.application.list.PanelCategory;
-import com.liferay.application.list.constants.PanelCategoryKeys;
 import com.liferay.frontend.taglib.clay.servlet.taglib.ButtonTag;
 import com.liferay.petra.reflect.ReflectionUtil;
 import com.liferay.petra.string.StringPool;
@@ -55,8 +53,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.PortletRequest;
-import javax.portlet.PortletURL;
-import javax.portlet.WindowStateException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -118,23 +114,6 @@ public class SimulationProductNavigationControlMenuEntry
 			HttpServletResponse httpServletResponse)
 		throws IOException {
 
-		PortletURL simulationPanelURL = PortletURLBuilder.create(
-			_portletURLFactory.create(
-				httpServletRequest,
-				ProductNavigationSimulationPortletKeys.
-					PRODUCT_NAVIGATION_SIMULATION,
-				PortletRequest.RENDER_PHASE)
-		).setBackURL(
-			_portal.getCurrentCompleteURL(httpServletRequest)
-		).build();
-
-		try {
-			simulationPanelURL.setWindowState(LiferayWindowState.EXCLUSIVE);
-		}
-		catch (WindowStateException windowStateException) {
-			ReflectionUtil.throwException(windowStateException);
-		}
-
 		Map<String, String> values = new HashMap<>();
 
 		IconTag iconTag = new IconTag();
@@ -152,7 +131,19 @@ public class SimulationProductNavigationControlMenuEntry
 		}
 
 		values.put("portletNamespace", _portletNamespace);
-		values.put("simulationPanelURL", simulationPanelURL.toString());
+		values.put(
+			"simulationPanelURL",
+			PortletURLBuilder.create(
+				_portletURLFactory.create(
+					httpServletRequest,
+					ProductNavigationSimulationPortletKeys.
+						PRODUCT_NAVIGATION_SIMULATION,
+					PortletRequest.RENDER_PHASE)
+			).setBackURL(
+				_portal.getCurrentCompleteURL(httpServletRequest)
+			).setWindowState(
+				LiferayWindowState.EXCLUSIVE
+			).buildString());
 		values.put(
 			"title",
 			_html.escape(_language.get(httpServletRequest, "simulation")));
@@ -284,9 +275,6 @@ public class SimulationProductNavigationControlMenuEntry
 
 	@Reference
 	private PanelAppRegistry _panelAppRegistry;
-
-	@Reference(target = "(panel.category.key=" + PanelCategoryKeys.HIDDEN + ")")
-	private PanelCategory _panelCategory;
 
 	@Reference
 	private Portal _portal;

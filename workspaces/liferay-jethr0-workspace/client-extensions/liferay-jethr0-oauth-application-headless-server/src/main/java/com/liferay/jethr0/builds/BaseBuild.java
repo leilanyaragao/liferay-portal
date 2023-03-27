@@ -17,10 +17,15 @@ package com.liferay.jethr0.builds;
 import com.liferay.jethr0.builds.parameter.BuildParameter;
 import com.liferay.jethr0.project.Project;
 import com.liferay.jethr0.task.Task;
+import com.liferay.jethr0.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import org.json.JSONObject;
 
@@ -29,17 +34,17 @@ import org.json.JSONObject;
  */
 public abstract class BaseBuild implements Build {
 
+	@Override
 	public void addBuildParameter(BuildParameter buildParameter) {
 		addBuildParameters(Arrays.asList(buildParameter));
 	}
 
+	@Override
 	public void addBuildParameters(List<BuildParameter> buildParameters) {
-		for (BuildParameter buildParameter : buildParameters) {
-			if (_buildParameters.contains(buildParameter)) {
-				continue;
-			}
+		buildParameters.removeAll(Collections.singleton(null));
 
-			_buildParameters.add(buildParameter);
+		for (BuildParameter buildParameter : buildParameters) {
+			_buildParameters.put(buildParameter.getName(), buildParameter);
 		}
 	}
 
@@ -64,8 +69,14 @@ public abstract class BaseBuild implements Build {
 		return _buildName;
 	}
 
+	@Override
+	public BuildParameter getBuildParameter(String name) {
+		return _buildParameters.get(name);
+	}
+
+	@Override
 	public List<BuildParameter> getBuildParameters() {
-		return _buildParameters;
+		return new ArrayList<>(_buildParameters.values());
 	}
 
 	@Override
@@ -98,6 +109,40 @@ public abstract class BaseBuild implements Build {
 	}
 
 	@Override
+	public int getMaxSlaveCount() {
+		BuildParameter buildParameter = getBuildParameter("MAX_SLAVE_COUNT");
+
+		if (buildParameter == null) {
+			return _DEFAULT_MAX_SLAVE_COUNT;
+		}
+
+		String value = buildParameter.getValue();
+
+		if ((value == null) || !value.matches("\\d+")) {
+			return _DEFAULT_MAX_SLAVE_COUNT;
+		}
+
+		return Integer.valueOf(value);
+	}
+
+	@Override
+	public int getMinSlaveRAM() {
+		BuildParameter buildParameter = getBuildParameter("MIN_SLAVE_RAM");
+
+		if (buildParameter == null) {
+			return _DEFAULT_MIN_SLAVE_RAM;
+		}
+
+		String value = buildParameter.getValue();
+
+		if ((value == null) || !value.matches("\\d+")) {
+			return _DEFAULT_MIN_SLAVE_RAM;
+		}
+
+		return Integer.valueOf(value);
+	}
+
+	@Override
 	public Project getProject() {
 		return _project;
 	}
@@ -112,12 +157,16 @@ public abstract class BaseBuild implements Build {
 		return _tasks;
 	}
 
+	@Override
 	public void removeBuildParameter(BuildParameter buildParameter) {
-		_buildParameters.remove(buildParameter);
+		_buildParameters.remove(buildParameter.getName());
 	}
 
+	@Override
 	public void removeBuildParameters(List<BuildParameter> buildParameters) {
-		_buildParameters.removeAll(buildParameters);
+		for (BuildParameter buildParameter : buildParameters) {
+			removeBuildParameter(buildParameter);
+		}
 	}
 
 	@Override
@@ -128,6 +177,27 @@ public abstract class BaseBuild implements Build {
 	@Override
 	public void removeTasks(List<Task> tasks) {
 		_tasks.removeAll(tasks);
+	}
+
+	@Override
+	public boolean requiresGoodBattery() {
+		BuildParameter buildParameter = getBuildParameter(
+			"REQUIRES_GOOD_BATTERY");
+
+		if (buildParameter == null) {
+			return false;
+		}
+
+		String requiresGoodBattery = buildParameter.getValue();
+
+		if ((requiresGoodBattery == null) ||
+			!Objects.equals(
+				StringUtil.toLowerCase(requiresGoodBattery), "true")) {
+
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
@@ -149,8 +219,13 @@ public abstract class BaseBuild implements Build {
 		_state = State.get(jsonObject.getJSONObject("state"));
 	}
 
+	private static final int _DEFAULT_MAX_SLAVE_COUNT = 2;
+
+	private static final int _DEFAULT_MIN_SLAVE_RAM = 12;
+
 	private final String _buildName;
-	private final List<BuildParameter> _buildParameters = new ArrayList<>();
+	private final Map<String, BuildParameter> _buildParameters =
+		new HashMap<>();
 	private final long _id;
 	private String _jobName;
 	private final Project _project;

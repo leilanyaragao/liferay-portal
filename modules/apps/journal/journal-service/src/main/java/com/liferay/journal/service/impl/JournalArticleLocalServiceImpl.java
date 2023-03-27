@@ -118,6 +118,7 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
@@ -6782,9 +6783,12 @@ public class JournalArticleLocalServiceImpl
 
 			// Subscriptions
 
-			if (article.equals(
-					getOldestArticle(
-						article.getGroupId(), article.getArticleId()))) {
+			if (status == WorkflowConstants.STATUS_EXPIRED) {
+				action = "expired";
+			}
+			else if (article.equals(
+						getOldestArticle(
+							article.getGroupId(), article.getArticleId()))) {
 
 				action = "add";
 			}
@@ -7123,7 +7127,11 @@ public class JournalArticleLocalServiceImpl
 						currentArticle.setStatus(
 							WorkflowConstants.STATUS_EXPIRED);
 
-						journalArticlePersistence.update(currentArticle);
+						currentArticle = journalArticlePersistence.update(
+							currentArticle);
+
+						notifySubscribers(
+							0, currentArticle, "expired", new ServiceContext());
 					}
 				}
 
@@ -7131,6 +7139,8 @@ public class JournalArticleLocalServiceImpl
 
 				article = journalArticleLocalService.updateJournalArticle(
 					article);
+
+				notifySubscribers(0, article, "expired", new ServiceContext());
 
 				updatePreviousApprovedArticle(article);
 
@@ -7733,6 +7743,11 @@ public class JournalArticleLocalServiceImpl
 		if (action.equals("add") &&
 			journalGroupServiceConfiguration.emailArticleAddedEnabled()) {
 		}
+		else if (FeatureFlagManagerUtil.isEnabled("LPS-179142") &&
+				 action.equals("expired") &&
+				 journalGroupServiceConfiguration.
+					 emailArticleExpiredEnabled()) {
+		}
 		else if (action.equals("move_to") &&
 				 journalGroupServiceConfiguration.
 					 emailArticleMovedToFolderEnabled()) {
@@ -7901,6 +7916,10 @@ public class JournalArticleLocalServiceImpl
 		subscriptionSender.setNotificationType(_getNotificationType(action));
 		subscriptionSender.setReplyToAddress(fromAddress);
 
+		if (action.equals("expired") && (serviceContext.getUserId() == 0)) {
+			subscriptionSender.setSendToCurrentUser(true);
+		}
+
 		subscriptionSender.flushNotificationsAsync();
 	}
 
@@ -8022,6 +8041,12 @@ public class JournalArticleLocalServiceImpl
 		subscriptionSender.setContextAttribute(
 			"[$ARTICLE_USER_NAME$]", article.getUserName());
 		subscriptionSender.setEntryTitle(article.getTitle(user.getLocale()));
+
+		if (FeatureFlagManagerUtil.isEnabled("LPS-179142") &&
+			emailType.equals("review") && (serviceContext.getUserId() == 0)) {
+
+			subscriptionSender.setSendToCurrentUser(true);
+		}
 
 		subscriptionSender.addRuntimeSubscribers(toAddress, toName);
 
@@ -8672,6 +8697,11 @@ public class JournalArticleLocalServiceImpl
 					emailArticleApprovalDeniedBody());
 		}
 
+		if (emailType.equals("expired")) {
+			return _localization.getMap(
+				journalGroupServiceConfiguration.emailArticleExpiredBody());
+		}
+
 		if (emailType.equals("granted")) {
 			return _localization.getMap(
 				journalGroupServiceConfiguration.
@@ -8735,6 +8765,11 @@ public class JournalArticleLocalServiceImpl
 					emailArticleApprovalDeniedSubject());
 		}
 
+		if (emailType.equals("expired")) {
+			return _localization.getMap(
+				journalGroupServiceConfiguration.emailArticleExpiredSubject());
+		}
+
 		if (emailType.equals("granted")) {
 			return _localization.getMap(
 				journalGroupServiceConfiguration.
@@ -8792,6 +8827,10 @@ public class JournalArticleLocalServiceImpl
 	}
 
 	private int _getNotificationType(String emailType) {
+		if (emailType.equals("expired")) {
+			return UserNotificationDefinition.NOTIFICATION_TYPE_EXPIRED_ENTRY;
+		}
+
 		if (emailType.equals("move_from")) {
 			return JournalArticleConstants.
 				NOTIFICATION_TYPE_MOVE_ENTRY_FROM_FOLDER;

@@ -67,6 +67,7 @@ import com.liferay.journal.internal.upgrade.v4_4_0.GlobalJournalArticleUrlTitleU
 import com.liferay.journal.internal.upgrade.v4_4_3.JournalArticleLayoutClassedModelUsageUpgradeProcess;
 import com.liferay.journal.internal.upgrade.v4_4_4.JournalFeedTypeUpgradeProcess;
 import com.liferay.journal.internal.upgrade.v5_1_0.JournalArticleDDMStructureIdUpgradeProcess;
+import com.liferay.journal.internal.upgrade.v5_1_1.JournalArticleAssetEntryClassTypeIdUpgradeProcess;
 import com.liferay.journal.model.JournalArticle;
 import com.liferay.journal.util.JournalConverter;
 import com.liferay.layout.service.LayoutClassedModelUsageLocalService;
@@ -319,11 +320,11 @@ public class JournalServiceUpgradeStepRegistrator
 		registry.register(
 			"4.1.0", "4.2.0",
 			UpgradeProcessFactory.alterColumnType(
-				"JournalFeed", "DDMRendererTemplateKey", "VARCHAR(75) null"),
-			UpgradeProcessFactory.alterColumnType(
 				"JournalFeed", "DDMStructureKey", "VARCHAR(75) null"),
 			UpgradeProcessFactory.alterColumnType(
-				"JournalFeed", "DDMTemplateKey", "VARCHAR(75) null"));
+				"JournalFeed", "DDMTemplateKey", "VARCHAR(75) null"),
+			UpgradeProcessFactory.alterColumnType(
+				"JournalFeed", "DDMRendererTemplateKey", "VARCHAR(75) null"));
 
 		registry.register(
 			"4.2.0", "4.3.0",
@@ -380,6 +381,11 @@ public class JournalServiceUpgradeStepRegistrator
 			"5.0.0", "5.1.0",
 			new JournalArticleDDMStructureIdUpgradeProcess(
 				_classNameLocalService, _ddmStructureLocalService, _portal));
+
+		registry.register(
+			"5.1.0", "5.1.1",
+			new JournalArticleAssetEntryClassTypeIdUpgradeProcess(
+				_classNameLocalService));
 	}
 
 	private void _deleteTempImages() throws Exception {

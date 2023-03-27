@@ -39,6 +39,8 @@ public interface Build {
 
 	public String getBuildName();
 
+	public BuildParameter getBuildParameter(String name);
+
 	public List<BuildParameter> getBuildParameters();
 
 	public long getId();
@@ -46,6 +48,10 @@ public interface Build {
 	public String getJobName();
 
 	public JSONObject getJSONObject();
+
+	public int getMaxSlaveCount();
+
+	public int getMinSlaveRAM();
 
 	public Project getProject();
 
@@ -60,6 +66,8 @@ public interface Build {
 	public void removeTask(Task task);
 
 	public void removeTasks(List<Task> tasks);
+
+	public boolean requiresGoodBattery();
 
 	public void setJobName(String jobName);
 

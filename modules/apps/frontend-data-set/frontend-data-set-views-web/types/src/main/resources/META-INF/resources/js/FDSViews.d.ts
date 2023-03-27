@@ -15,15 +15,24 @@
 /// <reference types="react" />
 
 import '../css/FDSEntries.scss';
+export declare type TFDSView = {
+	description: string;
+	id: string;
+	label: string;
+};
 interface IFDSViewsProps {
 	fdsEntriesAPIURL: string;
 	fdsEntryId: string;
+	fdsEntryLabel: string;
+	fdsViewURL: string;
 	fdsViewsAPIURL: string;
 	namespace: string;
 }
 declare const FDSViews: ({
 	fdsEntriesAPIURL,
 	fdsEntryId,
+	fdsEntryLabel,
+	fdsViewURL,
 	fdsViewsAPIURL,
 	namespace,
 }: IFDSViewsProps) => JSX.Element;

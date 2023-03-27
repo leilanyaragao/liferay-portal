@@ -1,3 +1,5 @@
+/* eslint-disable radix */
+/* eslint-disable @liferay/portal/no-global-fetch */
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -8,6 +10,11 @@
  * permissions and limitations under the License, including but not limited to
  * distribution rights of the Software.
  */
+
+const userId = parseInt(
+	document.getElementById('user-id-container').textContent
+);
+const userInformation = [];
 
 function main() {
 	const requestType = document.querySelector('[name="requestType"]');
@@ -108,3 +115,76 @@ function toggleGrantRequired(grant) {
 function handleDocumentClick(requestType) {
 	updateValue(requestType);
 }
+
+const getUser = async () => {
+	const response = await fetch(
+		`/o/headless-admin-user/v1.0/user-accounts/${userId}`,
+		{
+			headers: {
+				'content-type': 'application/json',
+				'x-csrf-token': Liferay.authToken,
+			},
+			method: 'GET',
+		}
+	);
+
+	const data = await response.json();
+	userInformation.push(data);
+};
+
+getUser();
+
+const grantInput = document.querySelector('input[name="grantAmount"]');
+const hoursInput = document.querySelector('input[name="totalHoursRequested"]');
+const grantInputDiv = grantInput.parentNode;
+const hoursInputDiv = hoursInput.parentNode;
+const newParagraph = document.createElement('p');
+const message = document.createTextNode('Text');
+grantInputDiv.style.position = 'relative';
+newParagraph.setAttribute('style', 'display:none');
+newParagraph.setAttribute('style', 'color:#a90f0f');
+newParagraph.setAttribute('class', 'error-msg');
+newParagraph.appendChild(message);
+
+const compareGrants = async () => {
+	const grantInputValue = grantInput.value;
+
+	await getUser();
+
+	if (grantInputValue > userInformation[0].customFields[1].customValue.data) {
+		grantInputDiv.appendChild(newParagraph);
+		newParagraph.style.position = 'absolute';
+
+		document.querySelector('.error-msg').innerText = 'No funds available.';
+		document.querySelector('.error-msg').style.display = 'block';
+		document.querySelector('button[type="submit"]').disabled = true;
+	}
+	else {
+		document.querySelector('.error-msg').style.display = 'none';
+		document.querySelector('button[type="submit"]').disabled = false;
+	}
+};
+
+grantInput.addEventListener('change', compareGrants);
+
+const compareHours = async () => {
+	const hoursInputValue = hoursInput.value;
+
+	await getUser();
+
+	if (hoursInputValue > userInformation[0].customFields[0].customValue.data) {
+		hoursInputDiv.appendChild(newParagraph);
+
+		document.querySelector('.error-msg').innerText =
+			'No service hours available.';
+
+		document.querySelector('.error-msg').style.display = 'block';
+		document.querySelector('button[type="submit"]').disabled = true;
+	}
+	else {
+		document.querySelector('.error-msg').style.display = 'none';
+		document.querySelector('button[type="submit"]').disabled = false;
+	}
+};
+
+hoursInput.addEventListener('change', compareHours);

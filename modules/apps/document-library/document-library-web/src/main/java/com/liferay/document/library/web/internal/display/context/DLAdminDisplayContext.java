@@ -524,7 +524,8 @@ public class DLAdminDisplayContext {
 			_httpServletRequest, "curFolder");
 		String deltaFolder = ParamUtil.getString(
 			_httpServletRequest, "deltaFolder");
-
+		String[] extensions = ParamUtil.getStringValues(
+			_httpServletRequest, "extension");
 		long fileEntryTypeId = ParamUtil.getLong(
 			_httpServletRequest, "fileEntryTypeId", -1);
 
@@ -567,6 +568,7 @@ public class DLAdminDisplayContext {
 		portletURL.setParameter("curFolder", currentFolder);
 		portletURL.setParameter("deltaFolder", deltaFolder);
 		portletURL.setParameter("folderId", String.valueOf(folderId));
+		portletURL.setParameter("extension", extensions);
 
 		if (fileEntryTypeId >= 0) {
 			portletURL.setParameter(
@@ -625,7 +627,7 @@ public class DLAdminDisplayContext {
 
 		List<RepositoryEntry> results = new ArrayList<>();
 
-		if (fileEntryTypeId >= 0) {
+		if ((fileEntryTypeId >= 0) || ArrayUtil.isNotEmpty(extensions)) {
 			Indexer<?> indexer = IndexerRegistryUtil.getIndexer(
 				DLFileEntryConstants.getClassName());
 

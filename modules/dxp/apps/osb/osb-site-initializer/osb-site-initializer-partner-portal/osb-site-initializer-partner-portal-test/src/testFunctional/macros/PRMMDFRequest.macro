@@ -15,9 +15,11 @@ definition {
 
 	@summary = "Assert claim message"
 	macro assertClaimMessage {
+		var key_claimMessage = ${claimMessage};
+
 		AssertTextEquals.assertPartialText(
 			locator1 = "PRMMDFRequest#CLAIM_MESSAGE",
-			value1 = ${key_claimMessage});
+			value1 = ${claimMessage});
 	}
 
 	@summary = "Cannot view Manager Status Button on MDF Request detail page"
@@ -352,6 +354,19 @@ definition {
 		}
 	}
 
+	@summary = "Fill in and search"
+	macro SearchMDF {
+		Type(
+			key_placeHolder = "Search",
+			locator1 = "TextInput#ANY_PLACEHOLDER",
+			value1 = ${key_value});
+
+		KeyPress(
+			key_placeHolder = "Search",
+			locator1 = "TextInput#ANY_PLACEHOLDER",
+			value1 = "\RETURN");
+	}
+
 	@summary = "Assert button is not clickable"
 	macro viewDisabledButton {
 		AssertElementPresent(
@@ -382,6 +397,8 @@ definition {
 				echo("The string '${fileContentItem}' exists on this file");
 			}
 		}
+
+		FileUtil.delete("${directoryPath}/${fileName}");
 	}
 
 	@summary = "Verify the fills done by the user on the Campaign Information"

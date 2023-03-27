@@ -80,8 +80,12 @@ public class HorizontalCardTag extends BaseCardTag {
 			title = horizontalCard.getTitle();
 		}
 
-		return LanguageUtil.get(
-			TagResourceBundleUtil.getResourceBundle(pageContext), title);
+		if (_isTranslated()) {
+			title = LanguageUtil.get(
+				TagResourceBundleUtil.getResourceBundle(pageContext), title);
+		}
+
+		return title;
 	}
 
 	public void setHorizontalCard(HorizontalCard horizontalCard) {
@@ -92,11 +96,16 @@ public class HorizontalCardTag extends BaseCardTag {
 		_title = title;
 	}
 
+	public void setTranslated(Boolean translated) {
+		_translated = translated;
+	}
+
 	@Override
 	protected void cleanUp() {
 		super.cleanUp();
 
 		_title = null;
+		_translated = null;
 	}
 
 	@Override
@@ -174,6 +183,20 @@ public class HorizontalCardTag extends BaseCardTag {
 		return SKIP_BODY;
 	}
 
+	private boolean _isTranslated() {
+		if (_translated != null) {
+			return _translated;
+		}
+
+		HorizontalCard horizontalCard = getHorizontalCard();
+
+		if (horizontalCard == null) {
+			return true;
+		}
+
+		return horizontalCard.isTranslated();
+	}
+
 	private void _writeBody(JspWriter jspWriter) throws Exception {
 		jspWriter.write("<div class=\"card card-horizontal\"><div class=\"");
 		jspWriter.write("card-body\"><div class=\"card-row\"><div class=\"");
@@ -212,6 +235,8 @@ public class HorizontalCardTag extends BaseCardTag {
 				linkTag.setLabel(title);
 			}
 
+			linkTag.setTranslated(_isTranslated());
+
 			linkTag.doTag(pageContext);
 		}
 		else {
@@ -249,5 +274,6 @@ public class HorizontalCardTag extends BaseCardTag {
 	private static final String _ATTRIBUTE_NAMESPACE = "clay:horizontal-card:";
 
 	private String _title;
+	private Boolean _translated;
 
 }

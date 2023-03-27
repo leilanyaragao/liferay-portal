@@ -69,7 +69,6 @@ import java.io.File;
 import java.math.BigDecimal;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -168,6 +167,7 @@ public class CommerceOrderImporterTypeTest {
 					_user.getUserId(), _commerceChannel.getGroupId(),
 					_commerceAccount.getCommerceAccountId(),
 					_commerceCurrency.getCommerceCurrencyId(), 0),
+				null,
 				DLAppLocalServiceUtil.addFileEntry(
 					null, _serviceContext.getUserId(),
 					_serviceContext.getScopeGroupId(),
@@ -180,14 +180,11 @@ public class CommerceOrderImporterTypeTest {
 			commerceOrderImporterItems.toString(), 2,
 			commerceOrderImporterItems.size());
 
-		Stream<CommerceOrderImporterItem> stream =
-			commerceOrderImporterItems.stream();
+		for (CommerceOrderImporterItem commerceOrderImporterItem :
+				commerceOrderImporterItems) {
 
-		stream.map(
-			CommerceOrderImporterItem::getErrorMessages
-		).forEach(
-			errorMessages -> Assert.assertNotNull(errorMessages)
-		);
+			Assert.assertNotNull(commerceOrderImporterItem.getErrorMessages());
+		}
 	}
 
 	@Test
@@ -239,6 +236,7 @@ public class CommerceOrderImporterTypeTest {
 					_user.getUserId(), _commerceChannel.getGroupId(),
 					_commerceAccount.getCommerceAccountId(),
 					_commerceCurrency.getCommerceCurrencyId(), 0),
+				null,
 				DLAppLocalServiceUtil.addFileEntry(
 					null, _serviceContext.getUserId(),
 					_serviceContext.getScopeGroupId(),

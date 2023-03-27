@@ -63,6 +63,7 @@ import com.liferay.portal.kernel.servlet.taglib.ui.Menu;
 import com.liferay.portal.kernel.servlet.taglib.ui.URLMenuItem;
 import com.liferay.portal.kernel.theme.PortletDisplay;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.JavaConstants;
@@ -325,7 +326,12 @@ public class DLAdminManagementToolbarDisplayContext
 	public List<LabelItem> getFilterLabelItems() {
 		long fileEntryTypeId = _getFileEntryTypeId();
 
-		return LabelItemListBuilder.add(
+		LabelItemListBuilder.LabelItemListWrapper labelItemListWrapper =
+			new LabelItemListBuilder.LabelItemListWrapper();
+
+		_addExtensionFilterLabelItems(labelItemListWrapper);
+
+		labelItemListWrapper.add(
 			() -> fileEntryTypeId != -1,
 			labelItem -> {
 				labelItem.putData(
@@ -359,8 +365,9 @@ public class DLAdminManagementToolbarDisplayContext
 						"%s: %s",
 						LanguageUtil.get(_httpServletRequest, "document-type"),
 						HtmlUtil.escape(fileEntryTypeName)));
-			}
-		).add(
+			});
+
+		labelItemListWrapper.add(
 			() -> Objects.equals(_getNavigation(), "mine"),
 			labelItem -> {
 				labelItem.putData(
@@ -381,8 +388,9 @@ public class DLAdminManagementToolbarDisplayContext
 						"%s: %s",
 						LanguageUtil.get(_httpServletRequest, "owner"),
 						HtmlUtil.escape(user.getFullName())));
-			}
-		).build();
+			});
+
+		return labelItemListWrapper.build();
 	}
 
 	@Override
@@ -590,6 +598,38 @@ public class DLAdminManagementToolbarDisplayContext
 		return false;
 	}
 
+	private void _addExtensionFilterLabelItems(
+		LabelItemListBuilder.LabelItemListWrapper labelItemListWrapper) {
+
+		String[] extensions = _getExtensions(_httpServletRequest);
+
+		if (ArrayUtil.isEmpty(extensions)) {
+			return;
+		}
+
+		for (String extension : extensions) {
+			labelItemListWrapper.add(
+				labelItem -> {
+					labelItem.putData(
+						"removeLabelURL",
+						PortletURLBuilder.create(
+							PortletURLUtil.clone(
+								_currentURLObj, _liferayPortletResponse)
+						).setParameter(
+							"extension", ArrayUtil.remove(extensions, extension)
+						).buildString());
+
+					labelItem.setCloseable(true);
+
+					labelItem.setLabel(
+						String.format(
+							"%s: %s",
+							LanguageUtil.get(_httpServletRequest, "extension"),
+							HtmlUtil.escape(extension)));
+				});
+		}
+	}
+
 	private PortletURL _getCurrentSortingURL() {
 		int deltaEntry = ParamUtil.getInteger(
 			_httpServletRequest, "deltaEntry");
@@ -631,11 +671,11 @@ public class DLAdminManagementToolbarDisplayContext
 		return dlPortletInstanceSettings.getDisplayViews();
 	}
 
-	private long _getFileEntryTypeId() {
-		return ParamUtil.getLong(_httpServletRequest, "fileEntryTypeId", -1);
+	private String[] _getExtensions(HttpServletRequest httpServletRequest) {
+		return ParamUtil.getStringValues(httpServletRequest, "extension");
 	}
 
-	private String _getFileExtensionsItemSelectorURL() {
+	private String _getExtensionsItemSelectorURL() {
 		RequestBackedPortletURLFactory requestBackedPortletURLFactory =
 			RequestBackedPortletURLFactoryUtil.create(_liferayPortletRequest);
 
@@ -659,12 +699,17 @@ public class DLAdminManagementToolbarDisplayContext
 				portletResponse.getNamespace() + "selectedFileExtension",
 				fileExtensionItemSelectorCriterion)
 		).setParameter(
-			"checkedFileExtensions",
-			() -> ParamUtil.getStringValues(httpServletRequest, "fileExtension")
+			"checkedFileExtensions", () -> _getExtensions(httpServletRequest)
 		).buildString();
 	}
 
+	private long _getFileEntryTypeId() {
+		return ParamUtil.getLong(_httpServletRequest, "fileEntryTypeId", -1);
+	}
+
 	private List<DropdownItem> _getFilterNavigationDropdownItems() {
+		boolean extensionsIsEmpty = ArrayUtil.isEmpty(
+			_getExtensions(_httpServletRequest));
 		long fileEntryTypeId = _getFileEntryTypeId();
 		String navigation = ParamUtil.getString(
 			_httpServletRequest, "navigation", "home");
@@ -672,7 +717,8 @@ public class DLAdminManagementToolbarDisplayContext
 		return DropdownItemListBuilder.add(
 			dropdownItem -> {
 				dropdownItem.setActive(
-					navigation.equals("home") && (fileEntryTypeId == -1));
+					extensionsIsEmpty && (fileEntryTypeId == -1) &&
+					navigation.equals("home"));
 				dropdownItem.setHref(
 					PortletURLBuilder.create(
 						PortletURLUtil.clone(
@@ -683,6 +729,8 @@ public class DLAdminManagementToolbarDisplayContext
 						"home"
 					).setParameter(
 						"browseBy", (String)null
+					).setParameter(
+						"extension", (String)null
 					).setParameter(
 						"fileEntryTypeId", (String)null
 					).buildPortletURL());
@@ -755,9 +803,10 @@ public class DLAdminManagementToolbarDisplayContext
 			dropdownItem -> {
 				dropdownItem.putData("action", "openExtensionSelector");
 				dropdownItem.putData(
-					"extensionsFilterURL", _getFileExtensionsItemSelectorURL());
+					"extensionsFilterURL", _getExtensionsItemSelectorURL());
+				dropdownItem.setActive(!extensionsIsEmpty);
 				dropdownItem.setLabel(
-					LanguageUtil.get(_httpServletRequest, "extensions") +
+					LanguageUtil.get(_httpServletRequest, "extension") +
 						StringPool.TRIPLE_PERIOD);
 			}
 		).build();

@@ -36,6 +36,7 @@
 						"marginLeft": 0,
 						"marginRight": 0,
 						"marginTop": 0,
+						"opacity": 100,
 						"paddingBottom": 0,
 						"paddingLeft": 0,
 						"paddingRight": 0,
@@ -184,13 +185,40 @@
 									{
 										"definition": {
 											"fragment": {
-												"key": "clay-icon-link"
+												"key": "button-welcome-banner"
 											},
 											"fragmentConfig": {
-												"iconName": "video"
+												"videoButtonLink": "https://www.youtube.com/embed/bZeAh7dpskw"
 											},
 											"fragmentFields": [
+												{
+													"id": "first-banner-primary-button-text",
+													"value": {
+														"fragmentLink": {
+														},
+														"text": {
+															"value_i18n": {
+																"ar_SA": "Watch a Video Tour",
+																"ca_ES": "Watch a Video Tour",
+																"de_DE": "Watch a Video Tour",
+																"en_US": "Watch a Video Tour",
+																"es_ES": "Watch a Video Tour",
+																"fi_FI": "Watch a Video Tour",
+																"fr_FR": "Watch a Video Tour",
+																"hu_HU": "Watch a Video Tour",
+																"ja_JP": "Watch a Video Tour",
+																"nl_NL": "Watch a Video Tour",
+																"pt_BR": "Watch a Video Tour",
+																"sv_SE": "Watch a Video Tour",
+																"zh_CN": "Watch a Video Tour"
+															}
+														}
+													}
+												}
 											],
+											"fragmentStyle": {
+												"minWidth": "200px"
+											},
 											"indexed": true
 										},
 										"type": "Fragment"
@@ -256,6 +284,9 @@
 													}
 												}
 											],
+											"fragmentStyle": {
+												"minWidth": "254px"
+											},
 											"indexed": true
 										},
 										"type": "Fragment"
@@ -305,6 +336,11 @@
 										"type": "Fragment"
 									}
 								],
+								"type": "FragmentDropZone"
+							},
+							{
+								"definition": {
+								},
 								"type": "FragmentDropZone"
 							},
 							{
@@ -429,6 +465,7 @@
 								"marginLeft": 0,
 								"marginRight": 0,
 								"marginTop": 4,
+								"opacity": 100,
 								"paddingBottom": 0,
 								"paddingLeft": 0,
 								"paddingRight": 0,
@@ -443,7 +480,8 @@
 										"key": "DIALECT-dialect-text"
 									},
 									"fragmentConfig": {
-										"textType": "h4"
+										"textType": "h4",
+										"truncateText": false
 									},
 									"fragmentFields": [
 										{
@@ -596,6 +634,7 @@
 														"marginLeft": 0,
 														"marginRight": 0,
 														"marginTop": 0,
+														"opacity": 100,
 														"paddingBottom": 2,
 														"paddingLeft": 0,
 														"paddingRight": 2,
@@ -1092,6 +1131,7 @@
 																								"key": "clay-icon-link"
 																							},
 																							"fragmentConfig": {
+																								"iconLink": "",
 																								"iconName": "order-arrow-right"
 																							},
 																							"fragmentFields": [

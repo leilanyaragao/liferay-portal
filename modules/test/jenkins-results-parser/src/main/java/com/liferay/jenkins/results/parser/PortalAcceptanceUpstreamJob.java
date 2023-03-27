@@ -19,7 +19,8 @@ import org.json.JSONObject;
 /**
  * @author Michael Hashimoto
  */
-public class PortalAcceptanceUpstreamJob extends PortalAcceptanceTestSuiteJob {
+public class PortalAcceptanceUpstreamJob
+	extends PortalAcceptanceTestSuiteJob implements PortalWorkspaceJob {
 
 	protected PortalAcceptanceUpstreamJob(
 		BuildProfile buildProfile, String jobName,

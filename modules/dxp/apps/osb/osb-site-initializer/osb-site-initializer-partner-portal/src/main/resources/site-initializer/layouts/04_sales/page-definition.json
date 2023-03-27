@@ -36,6 +36,7 @@
 						"marginLeft": 0,
 						"marginRight": 0,
 						"marginTop": 0,
+						"opacity": 100,
 						"paddingBottom": 0,
 						"paddingLeft": 0,
 						"paddingRight": 0,
@@ -184,12 +185,36 @@
 									{
 										"definition": {
 											"fragment": {
-												"key": "clay-icon-link"
+												"key": "button-welcome-banner"
 											},
 											"fragmentConfig": {
-												"iconName": "video"
+												"videoButtonLink": "https://www.youtube.com/embed/bZeAh7dpskw"
 											},
 											"fragmentFields": [
+												{
+													"id": "first-banner-primary-button-text",
+													"value": {
+														"fragmentLink": {
+														},
+														"text": {
+															"value_i18n": {
+																"ar_SA": "Watch a Video Tour",
+																"ca_ES": "Watch a Video Tour",
+																"de_DE": "Watch a Video Tour",
+																"en_US": "Watch a Video Tour",
+																"es_ES": "Watch a Video Tour",
+																"fi_FI": "Watch a Video Tour",
+																"fr_FR": "Watch a Video Tour",
+																"hu_HU": "Watch a Video Tour",
+																"ja_JP": "Watch a Video Tour",
+																"nl_NL": "Watch a Video Tour",
+																"pt_BR": "Watch a Video Tour",
+																"sv_SE": "Watch a Video Tour",
+																"zh_CN": "Watch a Video Tour"
+															}
+														}
+													}
+												}
 											],
 											"indexed": true
 										},
@@ -321,6 +346,7 @@
 												"key": "clay-icon-link"
 											},
 											"fragmentConfig": {
+												"iconLink": "",
 												"iconName": "video"
 											},
 											"fragmentFields": [
@@ -406,6 +432,7 @@
 								"marginLeft": 0,
 								"marginRight": 0,
 								"marginTop": 4,
+								"opacity": 100,
 								"paddingBottom": 0,
 								"paddingLeft": 0,
 								"paddingRight": 0,
@@ -420,7 +447,8 @@
 										"key": "DIALECT-dialect-text"
 									},
 									"fragmentConfig": {
-										"textType": "h4"
+										"textType": "h4",
+										"truncateText": false
 									},
 									"fragmentFields": [
 										{
@@ -564,6 +592,7 @@
 														"marginLeft": 0,
 														"marginRight": 0,
 														"marginTop": 0,
+														"opacity": 100,
 														"paddingBottom": 2,
 														"paddingLeft": 2,
 														"paddingRight": 2,
@@ -588,6 +617,7 @@
 																"marginLeft": 0,
 																"marginRight": 0,
 																"marginTop": 0,
+																"opacity": 100,
 																"paddingBottom": 0,
 																"paddingLeft": 0,
 																"paddingRight": 0,
@@ -621,7 +651,8 @@
 																		"key": "DIALECT-dialect-text"
 																	},
 																	"fragmentConfig": {
-																		"textType": "h6"
+																		"textType": "h6",
+																		"truncateText": false
 																	},
 																	"fragmentFields": [
 																		{
@@ -668,7 +699,8 @@
 																"key": "DIALECT-dialect-text"
 															},
 															"fragmentConfig": {
-																"textType": "h4"
+																"textType": "h4",
+																"truncateText": false
 															},
 															"fragmentFields": [
 																{
@@ -775,6 +807,7 @@
 														"marginLeft": 0,
 														"marginRight": 0,
 														"marginTop": 0,
+														"opacity": 100,
 														"paddingBottom": 2,
 														"paddingLeft": 2,
 														"paddingRight": 2,
@@ -799,6 +832,7 @@
 																"marginLeft": 0,
 																"marginRight": 0,
 																"marginTop": 0,
+																"opacity": 100,
 																"paddingBottom": 0,
 																"paddingLeft": 0,
 																"paddingRight": 0,
@@ -832,7 +866,8 @@
 																		"key": "DIALECT-dialect-text"
 																	},
 																	"fragmentConfig": {
-																		"textType": "h6"
+																		"textType": "h6",
+																		"truncateText": false
 																	},
 																	"fragmentFields": [
 																		{
@@ -879,7 +914,8 @@
 																"key": "DIALECT-dialect-text"
 															},
 															"fragmentConfig": {
-																"textType": "h4"
+																"textType": "h4",
+																"truncateText": false
 															},
 															"fragmentFields": [
 																{
@@ -986,6 +1022,7 @@
 														"marginLeft": 0,
 														"marginRight": 0,
 														"marginTop": 0,
+														"opacity": 100,
 														"paddingBottom": 2,
 														"paddingLeft": 2,
 														"paddingRight": 2,
@@ -1010,6 +1047,7 @@
 																"marginLeft": 0,
 																"marginRight": 0,
 																"marginTop": 0,
+																"opacity": 100,
 																"paddingBottom": 0,
 																"paddingLeft": 0,
 																"paddingRight": 0,
@@ -1043,7 +1081,8 @@
 																		"key": "DIALECT-dialect-text"
 																	},
 																	"fragmentConfig": {
-																		"textType": "h6"
+																		"textType": "h6",
+																		"truncateText": false
 																	},
 																	"fragmentFields": [
 																		{
@@ -1090,7 +1129,8 @@
 																"key": "DIALECT-dialect-text"
 															},
 															"fragmentConfig": {
-																"textType": "h4"
+																"textType": "h4",
+																"truncateText": false
 															},
 															"fragmentFields": [
 																{
@@ -1172,6 +1212,7 @@
 								"marginLeft": 0,
 								"marginRight": 0,
 								"marginTop": 4,
+								"opacity": 100,
 								"paddingBottom": 0,
 								"paddingLeft": 0,
 								"paddingRight": 0,
@@ -1186,7 +1227,8 @@
 										"key": "DIALECT-dialect-text"
 									},
 									"fragmentConfig": {
-										"textType": "h4"
+										"textType": "h4",
+										"truncateText": false
 									},
 									"fragmentFields": [
 										{
@@ -1342,6 +1384,7 @@
 														"marginLeft": 0,
 														"marginRight": 0,
 														"marginTop": 0,
+														"opacity": 100,
 														"paddingBottom": 2,
 														"paddingLeft": 0,
 														"paddingRight": 2,
@@ -1913,8 +1956,12 @@
 														"borderColor": "colorNeutral3",
 														"borderWidth": 1,
 														"marginBottom": 2,
+														"marginLeft": 0,
+														"marginRight": 0,
+														"marginTop": 0,
 														"opacity": 100,
 														"paddingBottom": 2,
+														"paddingLeft": 0,
 														"paddingRight": 2,
 														"paddingTop": 2,
 														"widthType": "Fluid"
@@ -2113,8 +2160,6 @@
 																"pageElements": [
 																	{
 																		"definition": {
-																			"fragmentStyle": {
-																			},
 																			"fragmentViewports": [
 																				{
 																					"fragmentViewportStyle": {
@@ -2132,8 +2177,17 @@
 																			"indexed": true,
 																			"layout": {
 																				"align": "Start",
+																				"borderWidth": 0,
 																				"contentDisplay": "FlexColumn",
+																				"marginBottom": 0,
+																				"marginLeft": 0,
+																				"marginRight": 0,
+																				"marginTop": 0,
 																				"opacity": 100,
+																				"paddingBottom": 0,
+																				"paddingLeft": 0,
+																				"paddingRight": 0,
+																				"paddingTop": 0,
 																				"widthType": "Fluid"
 																			},
 																			"name": "Card Content Container"
@@ -2374,6 +2428,7 @@
 																								"key": "clay-icon-link"
 																							},
 																							"fragmentConfig": {
+																								"iconLink": "",
 																								"iconName": "order-arrow-right"
 																							},
 																							"fragmentFields": [
@@ -2711,6 +2766,10 @@
 																				"marginRight": 0,
 																				"marginTop": 0,
 																				"opacity": 100,
+																				"paddingBottom": 0,
+																				"paddingLeft": 0,
+																				"paddingRight": 0,
+																				"paddingTop": 0,
 																				"widthType": "Fluid"
 																			},
 																			"name": "Card Content Container"
@@ -3286,7 +3345,15 @@
 																			"layout": {
 																				"align": "Start",
 																				"contentDisplay": "FlexColumn",
+																				"marginBottom": 0,
+																				"marginLeft": 0,
+																				"marginRight": 0,
+																				"marginTop": 0,
 																				"opacity": 100,
+																				"paddingBottom": 0,
+																				"paddingLeft": 0,
+																				"paddingRight": 0,
+																				"paddingTop": 0,
 																				"widthType": "Fluid"
 																			},
 																			"name": "Card Content Container"
@@ -3533,6 +3600,7 @@
 																								"key": "clay-icon-link"
 																							},
 																							"fragmentConfig": {
+																								"iconLink": "",
 																								"iconName": "order-arrow-right"
 																							},
 																							"fragmentFields": [
@@ -3626,8 +3694,13 @@
 													"layout": {
 														"borderColor": "colorNeutral3",
 														"borderWidth": 1,
+														"marginBottom": 0,
+														"marginLeft": 0,
+														"marginRight": 0,
+														"marginTop": 0,
 														"opacity": 100,
 														"paddingBottom": 2,
+														"paddingLeft": 0,
 														"paddingRight": 2,
 														"paddingTop": 2,
 														"widthType": "Fluid"
@@ -3987,11 +4060,19 @@
 																			},
 																			{
 																				"definition": {
-																					"fragmentStyle": {
-																					},
 																					"indexed": true,
 																					"layout": {
+																						"borderWidth": 0,
 																						"contentDisplay": "FlexRow",
+																						"marginBottom": 0,
+																						"marginLeft": 0,
+																						"marginRight": 0,
+																						"marginTop": 0,
+																						"opacity": 100,
+																						"paddingBottom": 0,
+																						"paddingLeft": 0,
+																						"paddingRight": 0,
+																						"paddingTop": 0,
 																						"widthType": "Fluid"
 																					},
 																					"name": "Link Container"
@@ -4173,8 +4254,13 @@
 													"layout": {
 														"borderColor": "colorNeutral3",
 														"borderWidth": 1,
+														"marginBottom": 0,
+														"marginLeft": 0,
+														"marginRight": 0,
+														"marginTop": 0,
 														"opacity": 100,
 														"paddingBottom": 2,
+														"paddingLeft": 0,
 														"paddingRight": 2,
 														"paddingTop": 2,
 														"widthType": "Fluid"
@@ -4261,6 +4347,15 @@
 																				"borderWidth": 0,
 																				"contentDisplay": "FlexRow",
 																				"justify": "Center",
+																				"marginBottom": 0,
+																				"marginLeft": 0,
+																				"marginRight": 0,
+																				"marginTop": 0,
+																				"opacity": 100,
+																				"paddingBottom": 0,
+																				"paddingLeft": 0,
+																				"paddingRight": 0,
+																				"paddingTop": 0,
 																				"widthType": "Fluid"
 																			},
 																			"name": "Image Container"
@@ -4388,6 +4483,15 @@
 																			"layout": {
 																				"align": "Start",
 																				"contentDisplay": "FlexColumn",
+																				"marginBottom": 0,
+																				"marginLeft": 0,
+																				"marginRight": 0,
+																				"marginTop": 0,
+																				"opacity": 100,
+																				"paddingBottom": 0,
+																				"paddingLeft": 0,
+																				"paddingRight": 0,
+																				"paddingTop": 0,
 																				"widthType": "Fluid"
 																			},
 																			"name": "Card Content Container"

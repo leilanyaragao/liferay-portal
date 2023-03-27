@@ -4447,7 +4447,6 @@ definition {
 	}
 
 	@description = "Validate the interaction with how the user interacts with the Experiences Dropdown, when no segments available and the user has no permissions"
-	@ignore = "true"
 	@priority = 3
 	test ExperienceDropdownWithNoSegmentsUserWithNoPermisisons {
 		task ("Create a Role") {
@@ -4463,6 +4462,11 @@ definition {
 		task ("Set permissions for this role") {
 			Permissions.definePermissionViaJSONAPI(
 				resourceAction = "VIEW_SITE_ADMINISTRATION",
+				resourceName = "com.liferay.portal.kernel.model.Group",
+				roleTitle = "Experiences Test Role Test");
+
+			Permissions.definePermissionViaJSONAPI(
+				resourceAction = "MANAGE_LAYOUTS",
 				resourceName = "com.liferay.portal.kernel.model.Group",
 				roleTitle = "Experiences Test Role Test");
 		}

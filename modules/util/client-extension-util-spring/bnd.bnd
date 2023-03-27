@@ -1,0 +1,3 @@
+Bundle-Name: Liferay Client Extension Util Spring
+Bundle-SymbolicName: com.liferay.client.extension.util.spring
+Bundle-Version: 1.0.0

@@ -95,10 +95,10 @@ public class AddGroupMVCActionCommand extends BaseMVCActionCommand {
 		JSONObject jsonObject = _jsonFactory.createJSONObject();
 
 		try {
-			Callable<Group> groupCallable = new GroupCallable(actionRequest);
+			Callable<Group> callable = new GroupCallable(actionRequest);
 
 			Group group = TransactionInvokerUtil.invoke(
-				_transactionConfig, groupCallable);
+				_transactionConfig, callable);
 
 			long liveGroupId = ParamUtil.getLong(actionRequest, "liveGroupId");
 
