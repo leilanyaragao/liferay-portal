@@ -28,19 +28,11 @@ public class FieldMappingMap {
 	}
 
 	public FieldMappingMap(
-		String dataSourceFieldName, String name, Boolean repeatable,
-		String type) {
+		String dataSourceFieldName, String name, String type) {
 
 		_dataSourceFieldName = dataSourceFieldName;
 		_name = name;
-		_repeatable = repeatable;
 		_type = type;
-	}
-
-	public FieldMappingMap(
-		String dataSourceFieldName, String name, String type) {
-
-		this(dataSourceFieldName, name, false, type);
 	}
 
 	public String getDataSourceFieldName() {
@@ -49,10 +41,6 @@ public class FieldMappingMap {
 
 	public String getName() {
 		return _name;
-	}
-
-	public Boolean getRepeatable() {
-		return _repeatable;
 	}
 
 	public String getType() {
@@ -67,17 +55,12 @@ public class FieldMappingMap {
 		_name = name;
 	}
 
-	public void setRepeatable(Boolean repeatable) {
-		_repeatable = repeatable;
-	}
-
 	public void setType(String type) {
 		_type = type;
 	}
 
 	private String _dataSourceFieldName;
 	private String _name;
-	private Boolean _repeatable;
 	private String _type;
 
 }
