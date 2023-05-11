@@ -36,12 +36,20 @@ interface Action {
 	onClick: Function;
 }
 
+interface ContentRendererProps {
+	item: any;
+}
+
+interface Field {
+	contentRenderer?: React.FC<ContentRendererProps>;
+	headingTitle?: boolean;
+	label: string;
+	name: string;
+}
+
 interface OrderableTableRowProps {
 	actions?: Array<Action>;
-	fields: Array<{
-		label: string;
-		name: string;
-	}>;
+	fields: Array<Field>;
 	index: number;
 	item: any;
 	onOrderChange: Function;
@@ -126,11 +134,24 @@ const OrderableTableRow = ({
 						item.label || Liferay.Language.get('item')
 					)}
 					displayType={null}
+					size="sm"
 					symbol="drag"
 				/>
 			</ClayTable.Cell>
 
 			{fields.map((field) => {
+				if (field.contentRenderer) {
+					const ContentRenderer = field.contentRenderer as React.FC<
+						ContentRendererProps
+					>;
+
+					return (
+						<ClayTable.Cell key={field.name}>
+							<ContentRenderer item={item} />
+						</ClayTable.Cell>
+					);
+				}
+
 				const itemFieldValue = String(item[field.name]);
 
 				const fuzzyMatch = fuzzy.match(
@@ -140,7 +161,10 @@ const OrderableTableRow = ({
 				);
 
 				return (
-					<ClayTable.Cell key={field.name}>
+					<ClayTable.Cell
+						headingTitle={field.headingTitle}
+						key={field.name}
+					>
 						{fuzzyMatch ? (
 							<span
 								dangerouslySetInnerHTML={{
@@ -200,10 +224,7 @@ const OrderableTableRow = ({
 interface OrderableTableProps {
 	actions?: Array<Action>;
 	disableSave?: boolean;
-	fields: Array<{
-		label: string;
-		name: string;
-	}>;
+	fields: Array<Field>;
 	items: Array<any>;
 	noItemsButtonLabel: string;
 	noItemsDescription: string;
@@ -301,7 +322,10 @@ const OrderableTable = ({
 								<ClayTable.Cell className="drag-handle-cell" />
 
 								{fields.map((field) => (
-									<ClayTable.Cell key={field.name}>
+									<ClayTable.Cell
+										headingCell
+										key={field.name}
+									>
 										{field.label}
 									</ClayTable.Cell>
 								))}

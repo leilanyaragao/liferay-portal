@@ -13,9 +13,11 @@ definition {
 			var catalogLanguage = "en_US";
 		}
 
+		var userLoginInfo = JSONUtil2.formatJSONUser();
+
 		var curl = '''
 			${portalURL}/api/jsonws/commerce.commercecatalog/add-commerce-catalog \
-				-u test@liferay.com:test \
+				-u ${userLoginInfo} \
 				-d externalReferenceCode='' \
 				-d name=${catalogName} \
 				-d commerceCurrencyCode=${catalogCurrency} \
@@ -29,16 +31,18 @@ definition {
 		var baseURL = ${baseURL};
 
 		if (!(isSet(baseURL))) {
-			var baseURL = PropsUtil.get("portal.url");
+			var baseURL = JSONCompany.getPortalURL();
 		}
 
 		var catalogIds = CommerceJSONCatalogsAPI._getCommerceNoSystemCatalogIds();
 
 		if (${catalogIds} != "") {
 			for (var catalogId : list ${catalogIds}) {
+				var userLoginInfo = JSONUtil2.formatJSONUser();
+
 				var curl = '''
 					${baseURL}/o/headless-commerce-admin-catalog/v1.0/catalog/${catalogId} \
-						-u test@liferay.com:test \
+						-u ${userLoginInfo} \
 						-H 'accept: application/json' \
 				''';
 
@@ -57,7 +61,7 @@ definition {
 		var masterCatalogName = "Master";
 
 		if (!(isSet(baseURL))) {
-			var baseURL = PropsUtil.get("portal.url");
+			var baseURL = JSONCompany.getPortalURL();
 		}
 
 		if (isSet(catalogCount)) {
@@ -67,9 +71,11 @@ definition {
 			var catalogsCount = 100;
 		}
 
+		var userLoginInfo = JSONUtil2.formatJSONUser();
+
 		var curl = '''
 			${baseURL}/o/headless-commerce-admin-catalog/v1.0/catalogs?pageSize=${catalogsCount} \
-				-u test@liferay.com:test \
+				-u ${userLoginInfo} \
 				-H 'accept: application/json' \
 		''';
 
@@ -85,7 +91,7 @@ definition {
 		var masterCatalogName = "Master";
 
 		if (!(isSet(baseURL))) {
-			var baseURL = PropsUtil.get("portal.url");
+			var baseURL = JSONCompany.getPortalURL();
 		}
 
 		if (isSet(catalogCount)) {
@@ -95,9 +101,11 @@ definition {
 			var catalogsCount = 100;
 		}
 
+		var userLoginInfo = JSONUtil2.formatJSONUser();
+
 		var curl = '''
 			${baseURL}/o/headless-commerce-admin-catalog/v1.0/catalogs?pageSize=${catalogsCount} \
-				-u test@liferay.com:test \
+				-u ${userLoginInfo} \
 				-H 'accept: application/json' \
 		''';
 

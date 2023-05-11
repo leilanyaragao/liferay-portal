@@ -12,31 +12,18 @@
  * details.
  */
 
-import {ClayCheckbox, ClayInput} from '@clayui/form';
-import React, {useState} from 'react';
+package com.liferay.headless.commerce.admin.catalog.resource.v1_0.test;
 
-export default function SelectCustomThemeSettings({
-	label,
-	portletNamespace,
-	propertyName,
-	value,
-}) {
-	const [checked, setChecked] = useState(value === 'true');
+import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 
-	return (
-		<div className="mb-3">
-			<ClayInput
-				hidden
-				name={`${portletNamespace}${propertyName}`}
-				value={checked}
-			/>
+import org.junit.Ignore;
+import org.junit.runner.RunWith;
 
-			<ClayCheckbox
-				checked={checked}
-				label={Liferay.Language.get(label)}
-				onChange={() => setChecked(!checked)}
-				value="true"
-			/>
-		</div>
-	);
+/**
+ * @author Zoltán Takács
+ */
+@Ignore
+@RunWith(Arquillian.class)
+public class SkuVirtualSettingsResourceTest
+	extends BaseSkuVirtualSettingsResourceTestCase {
 }

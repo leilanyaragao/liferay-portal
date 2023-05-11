@@ -163,8 +163,8 @@ function SearchBarConfigurationSuggestions({
 			onInputSetsAdd({
 				attributes: {
 					characterThreshold: '0',
-					count: '5',
 					matchDisplayLanguageId: true,
+					minCounts: '5',
 				},
 				contributorName,
 				displayGroupName:

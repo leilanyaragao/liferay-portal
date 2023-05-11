@@ -6,7 +6,7 @@ definition {
 		var baseURL = ${baseURL};
 
 		if (!(isSet(baseURL))) {
-			var baseURL = PropsUtil.get("portal.url");
+			var baseURL = JSONCompany.getPortalURL();
 		}
 
 		var groupId = JSONCategorySetter.setGroupId(
@@ -16,10 +16,11 @@ definition {
 		var vocabularyId = JSONCategorySetter.setVocabularyId(
 			groupId = ${groupId},
 			vocabularyName = ${vocabularyName});
+		var userLoginInfo = JSONUtil2.formatJSONUser();
 
 		var curl = '''
 			${baseURL}/api/jsonws/assetcategory/get-vocabulary-categories \
-				-u test@liferay.com:test \
+				-u ${userLoginInfo} \
 				-d vocabularyId=${vocabularyId} \
 				-d <CURL_DATA[start=-1]CURL_DATA> \
 				-d <CURL_DATA[end=-1]CURL_DATA> \

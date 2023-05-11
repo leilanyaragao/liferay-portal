@@ -4,7 +4,7 @@ definition {
 		var baseURL = ${baseURL};
 
 		if (!(isSet(baseURL))) {
-			var baseURL = PropsUtil.get("portal.url");
+			var baseURL = JSONCompany.getPortalURL();
 		}
 
 		var commerceCurrenciesIds = CommerceJSONCurrenciesAPI._getCommerceCurrencies();
@@ -13,9 +13,11 @@ definition {
 			for (var commerceCurrenciesId : list ${commerceCurrenciesIds}) {
 				echo("Deleting Commerce Currency with id: ${commerceCurrenciesId}");
 
+				var userLoginInfo = JSONUtil2.formatJSONUser();
+
 				var curl = '''
 					${baseURL}/api/jsonws/commerce.commercecurrency/delete-commerce-currency \
-						-u test@liferay.com:test \
+						-u ${userLoginInfo} \
 						-d commerceCurrencyId=${commerceCurrenciesId}
 				''';
 
@@ -31,14 +33,15 @@ definition {
 		var baseURL = ${baseURL};
 
 		if (!(isSet(baseURL))) {
-			var baseURL = PropsUtil.get("portal.url");
+			var baseURL = JSONCompany.getPortalURL();
 		}
 
 		var companyId = JSONCompany.getCompanyId();
+		var userLoginInfo = JSONUtil2.formatJSONUser();
 
 		var curl = '''
 			${baseURL}/api/jsonws/commerce.commercecurrency/get-commerce-currencies \
-				-u test@liferay.com:test \
+				-u ${userLoginInfo} \
 				-d companyId=${companyId} \
 				-d "start=-1" \
 				-d "end=-1" \
@@ -60,14 +63,15 @@ definition {
 		var baseURL = ${baseURL};
 
 		if (!(isSet(baseURL))) {
-			var baseURL = PropsUtil.get("portal.url");
+			var baseURL = JSONCompany.getPortalURL();
 		}
 
 		var companyId = JSONCompany.getCompanyId();
+		var userLoginInfo = JSONUtil2.formatJSONUser();
 
 		var curl = '''
 			${baseURL}/api/jsonws/commerce.commercecurrency/get-commerce-currency \
-				-u test@liferay.com:test \
+				-u ${userLoginInfo} \
 				-d companyId=${companyId} \
 				-d code=${code}
 		''';

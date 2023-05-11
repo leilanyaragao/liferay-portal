@@ -12027,6 +12027,8 @@ auto.deploy.dest.dir=C:/WINDOWS/system32/config/systemprofile/liferay/websphere-
 			app.server.temp.dir=${app.server.tomcat.temp.dir}
 			app.server.type=${app.server.type}
 			component.names=${component.names}
+			custom.default.user.password=${custom.default.user.password}
+			custom.default.user.email=${custom.default.user.email}
 			get.location.max.retries=${test.get.location.max.retries}
 			get.location.timeout=${test.get.location.timeout}
 			ignore.errors.file.name=${project.dir}/portal-web/test-ignorable-error-lines.xml
@@ -12049,6 +12051,7 @@ auto.deploy.dest.dir=C:/WINDOWS/system32/config/systemprofile/liferay/websphere-
 			test.dependencies.dir.name=dependencies
 			test.poshi.warnings.file.name=${test.poshi.warnings.file.name}
 			test.retry.command.wait.time=${test.retry.command.wait.time}
+			virtual.instance.portal.url=${virtual.instance.portal.url}
 		</echo>
 
 		<if>

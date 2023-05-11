@@ -24,9 +24,12 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.vulcan.util.ObjectMapperUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -77,22 +80,47 @@ public class CPOptionCategoriesImporter {
 				serviceContext.getCompanyId(), key);
 
 		if (cpOptionCategory != null) {
-			return cpOptionCategory;
+			return _cpOptionCategoryLocalService.updateCPOptionCategory(
+				cpOptionCategory.getCPOptionCategoryId(),
+				_toMap(key, jsonObject, "title"),
+				_toMap(null, jsonObject, "description"),
+				jsonObject.getDouble("priority", defaultPriority), key);
 		}
 
-		Locale locale = LocaleUtil.getSiteDefault();
-
-		Map<Locale, String> titleMap = Collections.singletonMap(
-			locale, CommerceInitializerUtil.getValue(jsonObject, "title", key));
-
-		Map<Locale, String> descriptionMap = Collections.singletonMap(
-			locale, jsonObject.getString("description"));
-
-		double priority = jsonObject.getDouble("priority", defaultPriority);
-
 		return _cpOptionCategoryLocalService.addCPOptionCategory(
-			serviceContext.getUserId(), titleMap, descriptionMap, priority, key,
+			serviceContext.getUserId(), _toMap(key, jsonObject, "title"),
+			_toMap(null, jsonObject, "description"),
+			jsonObject.getDouble("priority", defaultPriority), key,
 			serviceContext);
+	}
+
+	private Map<Locale, String> _toMap(
+		String defaultValue, JSONObject jsonObject, String nodeName) {
+
+		String value = jsonObject.getString(nodeName);
+
+		if (Validator.isBlank(value)) {
+			if (Validator.isBlank(defaultValue)) {
+				return Collections.emptyMap();
+			}
+
+			return Collections.singletonMap(
+				LocaleUtil.getSiteDefault(),
+				CommerceInitializerUtil.getValue(
+					jsonObject, nodeName, defaultValue));
+		}
+
+		Map<Locale, String> map = new HashMap<>();
+
+		Map<String, String> valuesMap = ObjectMapperUtil.readValue(
+			HashMap.class, value);
+
+		for (Map.Entry<String, String> entry : valuesMap.entrySet()) {
+			map.put(
+				LocaleUtil.fromLanguageId(entry.getKey()), entry.getValue());
+		}
+
+		return map;
 	}
 
 	@Reference

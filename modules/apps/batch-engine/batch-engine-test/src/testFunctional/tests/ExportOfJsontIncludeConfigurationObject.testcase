@@ -24,6 +24,23 @@ definition {
 		}
 	}
 
+	@priority = 3
+	test JSONTConfigurationObjectContainsCallbackURL {
+		task ("When in Import/Export: exporting DSEnvelope Entity type with JSONT format with all fields to include selected") {
+			ImportExport.exportEntityWithAllFieldsInJsontFormat(entityType = "DSEnvelope (v1_0 - Liferay Digital Signature REST)");
+		}
+
+		task ("And When I download generated file") {
+			ImportExport.unzipDownloadedExportFile();
+		}
+
+		task ("Then the jsont format file contains configuration node with callbackURL parameter") {
+			BatchEngine.assertExportedJsontContainsCorrectObject(
+				expectedValue = "",
+				jsonObject = "$.configuration..callbackURL");
+		}
+	}
+
 	@priority = 5
 	test JSONTConfigurationObjectContainsClassname {
 		property portal.acceptance = "true";
@@ -43,9 +60,9 @@ definition {
 		}
 
 		task ("Then the jsont format file contains configuration node with className 'com.liferay.object.rest.dto.v1_0.ObjectEntry' parameter") {
-			BatchEngine.assertExportedJsontContainsCorrectConfigurationObject(
+			BatchEngine.assertExportedJsontContainsCorrectObject(
 				expectedValue = "com.liferay.object.rest.dto.v1_0.ObjectEntry",
-				jsonObject = "className");
+				jsonObject = "$.configuration.className");
 		}
 	}
 
@@ -64,9 +81,9 @@ definition {
 		task ("Then the jsont format file contains configuration node with companyId parameter") {
 			var companyId = JSONCompany.getCompanyId();
 
-			BatchEngine.assertExportedJsontContainsCorrectConfigurationObject(
+			BatchEngine.assertExportedJsontContainsCorrectObject(
 				expectedValue = ${companyId},
-				jsonObject = "companyId");
+				jsonObject = "$.configuration.companyId");
 		}
 	}
 
@@ -83,9 +100,9 @@ definition {
 		}
 
 		task ("Then the jsont format file contains configuration node with parameters.createStrategy parameter with 'INSERT' value") {
-			BatchEngine.assertExportedJsontContainsCorrectConfigurationObject(
+			BatchEngine.assertExportedJsontContainsCorrectObject(
 				expectedValue = "INSERT",
-				jsonObject = "parameters.createStrategy");
+				jsonObject = "$.configuration.parameters.createStrategy");
 		}
 	}
 
@@ -102,9 +119,32 @@ definition {
 		}
 
 		task ("Then the jsont format file contains configuration node with parameters.importStrategy parameter with 'false' value") {
-			BatchEngine.assertExportedJsontContainsCorrectConfigurationObject(
+			BatchEngine.assertExportedJsontContainsCorrectObject(
 				expectedValue = "ON_ERROR_FAIL",
-				jsonObject = "parameters.importStrategy");
+				jsonObject = "$.configuration.parameters.importStrategy");
+		}
+	}
+
+	@priority = 3
+	test JSONTConfigurationObjectContainsTaskItemDelegateName {
+		task ("When in Import/Export: exporting C_Stock Entity type with JSONT format with all fields to include selected") {
+			ObjectDefinitionAPI.createAndPublishObjectDefinition(
+				en_US_label = "stock",
+				en_US_plural_label = "stocks",
+				name = "Stock",
+				requiredStringFieldName = "name");
+
+			ImportExport.exportEntityWithAllFieldsInJsontFormat(entityType = "C_Stock (v1_0 - Liferay Object REST)");
+		}
+
+		task ("And When I download generated file") {
+			ImportExport.unzipDownloadedExportFile();
+		}
+
+		task ("Then the jsont format file contains configuration node with taskItemDelegateName parameter with 'C_Stock' value") {
+			BatchEngine.assertExportedJsontContainsCorrectObject(
+				expectedValue = "C_Stock",
+				jsonObject = "$.configuration..taskItemDelegateName");
 		}
 	}
 
@@ -121,9 +161,9 @@ definition {
 		}
 
 		task ("Then the jsont format file contains configuration node with parameters.updateStrategy parameter with 'UPDATE' value") {
-			BatchEngine.assertExportedJsontContainsCorrectConfigurationObject(
+			BatchEngine.assertExportedJsontContainsCorrectObject(
 				expectedValue = "UPDATE",
-				jsonObject = "parameters.updateStrategy");
+				jsonObject = "$.configuration.parameters.updateStrategy");
 		}
 	}
 
@@ -142,9 +182,26 @@ definition {
 		task ("Then the jsont format file contains configuration node with userId {userId} parameter") {
 			var userId = JSONUserAPI._getUserIdByEmailAddress(userEmailAddress = "test@liferay.com");
 
-			BatchEngine.assertExportedJsontContainsCorrectConfigurationObject(
+			BatchEngine.assertExportedJsontContainsCorrectObject(
 				expectedValue = ${userId},
-				jsonObject = "userId");
+				jsonObject = "$.configuration.userId");
+		}
+	}
+
+	@priority = 3
+	test JSONTConfigurationObjectContainsVersion {
+		task ("When in Import/Export: exporting Catalog Commerce Entity type with JSONT format with all fields to include selected") {
+			ImportExport.exportEntityWithAllFieldsInJsontFormat(entityType = "Catalog (v1_0 - Liferay Headless Commerce Admin Catalog)");
+		}
+
+		task ("And When I download generated file") {
+			ImportExport.unzipDownloadedExportFile();
+		}
+
+		task ("Then the jsont format file contains configuration node with version parameter with value {current version of Catalog}") {
+			BatchEngine.assertExportedJsontContainsCorrectObject(
+				expectedValue = "v1.0",
+				jsonObject = "$.configuration.version");
 		}
 	}
 

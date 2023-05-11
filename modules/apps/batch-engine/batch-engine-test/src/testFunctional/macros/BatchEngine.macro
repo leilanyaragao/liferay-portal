@@ -16,12 +16,12 @@ definition {
 		return ${archivedFilePath};
 	}
 
-	macro assertExportedJsontContainsCorrectConfigurationObject {
+	macro assertExportedJsontContainsCorrectObject {
 		Variables.assertDefined(parameterList = "${jsonObject},${expectedValue}");
 
 		var fileContent = TestCase.getTempFileContent(fileName = "export.batch-engine-data.json");
 
-		var actualValue = JSONUtil.getWithJSONPath(${fileContent}, "$.configuration.${jsonObject}");
+		var actualValue = JSONUtil.getWithJSONPath(${fileContent}, ${jsonObject});
 
 		TestUtils.assertEquals(
 			actual = ${actualValue},

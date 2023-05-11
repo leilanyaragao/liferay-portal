@@ -462,7 +462,7 @@ public class MainServlet extends HttpServlet {
 		}
 
 		if (_log.isDebugEnabled()) {
-			_log.debug("Get company id");
+			_log.debug("Get company ID");
 		}
 
 		long companyId = PortalInstances.getCompanyId(httpServletRequest);
@@ -752,19 +752,23 @@ public class MainServlet extends HttpServlet {
 				0, true);
 		}
 
-		String[] webIds = PortalInstances.getWebIds();
-
-		for (String webId : webIds) {
-			boolean skipCheck = false;
-
-			if (StartupHelperUtil.isDBNew() &&
-				webId.equals(PropsValues.COMPANY_DEFAULT_WEB_ID)) {
-
-				skipCheck = true;
-			}
-
-			PortalInstances.initCompany(webId, skipCheck);
+		if (Validator.isNull(PropsValues.COMPANY_DEFAULT_WEB_ID)) {
+			throw new RuntimeException("Company default web ID is null");
 		}
+
+		CompanyLocalServiceUtil.forEachCompany(
+			company -> {
+				if (StartupHelperUtil.isDBNew() &&
+					Objects.equals(
+						PropsValues.COMPANY_DEFAULT_WEB_ID,
+						company.getWebId())) {
+
+					PortalInstances.initCompany(company, true);
+				}
+				else {
+					PortalInstances.initCompany(company, false);
+				}
+			});
 	}
 
 	private void _initLayoutTemplates(PluginPackage pluginPackage) {

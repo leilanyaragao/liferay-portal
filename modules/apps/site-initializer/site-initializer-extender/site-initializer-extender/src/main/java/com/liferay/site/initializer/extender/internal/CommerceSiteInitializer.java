@@ -14,10 +14,10 @@
 
 package com.liferay.site.initializer.extender.internal;
 
-import com.liferay.commerce.account.constants.CommerceAccountConstants;
 import com.liferay.commerce.account.util.CommerceAccountRoleHelper;
 import com.liferay.commerce.currency.service.CommerceCurrencyLocalService;
 import com.liferay.commerce.initializer.util.CPDefinitionsImporter;
+import com.liferay.commerce.initializer.util.CPOptionCategoriesImporter;
 import com.liferay.commerce.initializer.util.CPOptionsImporter;
 import com.liferay.commerce.initializer.util.CPSpecificationOptionsImporter;
 import com.liferay.commerce.initializer.util.CommerceInventoryWarehousesImporter;
@@ -125,6 +125,8 @@ public class CommerceSiteInitializer {
 			bundle, channel.getId(), documentsStringUtilReplaceValues,
 			objectDefinitionIdsStringUtilReplaceValues, serviceContext,
 			servletContext);
+
+		_addOrUpdateCPOptionCategories(serviceContext, servletContext);
 	}
 
 	public void addPortletSettings(
@@ -160,6 +162,42 @@ public class CommerceSiteInitializer {
 
 	public String getCommerceOrderClassName() {
 		return CommerceOrder.class.getName();
+	}
+
+	private void _addCommerceChannelConfiguration(
+			Channel channel, String resourcePath, ServletContext servletContext)
+		throws Exception {
+
+		String json = SiteInitializerUtil.read(resourcePath, servletContext);
+
+		if (json == null) {
+			return;
+		}
+
+		CommerceChannel commerceChannel =
+			_commerceChannelService.getCommerceChannel(channel.getId());
+
+		JSONObject jsonObject = _jsonFactory.createJSONObject(json);
+
+		Map<String, Object> map1 = jsonObject.toMap();
+
+		for (Map.Entry<String, Object> entry1 : map1.entrySet()) {
+			Settings settings = _settingsFactory.getSettings(
+				new GroupServiceSettingsLocator(
+					commerceChannel.getGroupId(), entry1.getKey()));
+
+			ModifiableSettings modifiableSettings =
+				settings.getModifiableSettings();
+
+			Map<String, Object> map2 = (Map<String, Object>)entry1.getValue();
+
+			for (Map.Entry<String, Object> entry2 : map2.entrySet()) {
+				modifiableSettings.setValue(
+					entry2.getKey(), String.valueOf(entry2.getValue()));
+			}
+
+			modifiableSettings.store();
+		}
 	}
 
 	private List<CommerceInventoryWarehouse> _addCommerceInventoryWarehouses(
@@ -669,6 +707,10 @@ public class CommerceSiteInitializer {
 				existingChannel.getId(), channel);
 		}
 
+		_addCommerceChannelConfiguration(
+			channel,
+			StringUtil.replaceLast(resourcePath, ".json", ".config.json"),
+			servletContext);
 		_addDefaultCPDisplayLayout(
 			channel,
 			StringUtil.replaceLast(
@@ -679,20 +721,6 @@ public class CommerceSiteInitializer {
 			StringUtil.replaceLast(
 				resourcePath, ".json", ".model-resource-permissions.json"),
 			serviceContext, servletContext);
-
-		Settings settings = _settingsFactory.getSettings(
-			new GroupServiceSettingsLocator(
-				serviceContext.getScopeGroupId(),
-				CommerceAccountConstants.SERVICE_NAME));
-
-		ModifiableSettings modifiableSettings =
-			settings.getModifiableSettings();
-
-		modifiableSettings.setValue(
-			"commerceSiteType",
-			String.valueOf(CommerceAccountConstants.SITE_TYPE_B2C));
-
-		modifiableSettings.store();
 
 		_commerceAccountRoleHelper.checkCommerceAccountRoles(serviceContext);
 
@@ -752,6 +780,26 @@ public class CommerceSiteInitializer {
 				commercePriceEntry.getCommercePriceEntryId(), price,
 				BigDecimal.ZERO, serviceContext);
 		}
+	}
+
+	private void _addOrUpdateCPOptionCategories(
+			ServiceContext serviceContext, ServletContext servletContext)
+		throws Exception {
+
+		String resourcePath =
+			"/site-initializer/commerce-option-categories.json";
+
+		String json = SiteInitializerUtil.read(resourcePath, servletContext);
+
+		if (json == null) {
+			return;
+		}
+
+		JSONArray jsonArray = _jsonFactory.createJSONArray(json);
+
+		_cpOptionCategoriesImporter.importCPOptionCategories(
+			jsonArray, serviceContext.getScopeGroupId(),
+			serviceContext.getUserId());
 	}
 
 	private void _updateCPInstanceProperties(
@@ -863,6 +911,9 @@ public class CommerceSiteInitializer {
 
 	@Reference
 	private CPMeasurementUnitLocalService _cpMeasurementUnitLocalService;
+
+	@Reference
+	private CPOptionCategoriesImporter _cpOptionCategoriesImporter;
 
 	@Reference
 	private CPOptionLocalService _cpOptionLocalService;

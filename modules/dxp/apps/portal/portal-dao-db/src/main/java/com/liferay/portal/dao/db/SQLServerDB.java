@@ -212,6 +212,14 @@ public class SQLServerDB extends BaseDB {
 		}
 	}
 
+	protected String getCopyTableStructureSQL(
+		String tableName, String newTableName) {
+
+		return StringBundler.concat(
+			"select * into ", newTableName, " from ", tableName,
+			" where 1 = 0");
+	}
+
 	@Override
 	protected int[] getSQLTypes() {
 		return _SQL_TYPES;

@@ -234,10 +234,10 @@ function SiteActivities({index, onBlur, onInputSetItemChange, touched, value}) {
 				</ClayInput.GroupItem>
 
 				<MinimumSearchesInput
-					onBlur={onBlur('attributes.count')}
-					onChange={_handleChangeAttribute('count')}
-					touched={touched['attributes.count']}
-					value={value.attributes?.count}
+					onBlur={onBlur('attributes.minCounts')}
+					onChange={_handleChangeAttribute('minCounts')}
+					touched={touched['attributes.minCounts']}
+					value={value.attributes?.minCounts}
 				/>
 			</div>
 		</>

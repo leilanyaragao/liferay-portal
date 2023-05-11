@@ -35,6 +35,7 @@ import com.liferay.message.boards.exception.MessageBodyException;
 import com.liferay.message.boards.exception.MessageSubjectException;
 import com.liferay.message.boards.exception.NoSuchThreadException;
 import com.liferay.message.boards.exception.RequiredMessageException;
+import com.liferay.message.boards.internal.helper.MBMessageNotificationTemplateHelper;
 import com.liferay.message.boards.internal.util.MBDiscussionSubscriptionSender;
 import com.liferay.message.boards.internal.util.MBMailUtil;
 import com.liferay.message.boards.internal.util.MBMessageUtil;
@@ -67,6 +68,7 @@ import com.liferay.portal.kernel.comment.Comment;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.feature.flag.FeatureFlagManagerUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.language.Language;
@@ -83,7 +85,6 @@ import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.module.configuration.ConfigurationException;
 import com.liferay.portal.kernel.module.configuration.ConfigurationProvider;
 import com.liferay.portal.kernel.notifications.UserNotificationDefinition;
-import com.liferay.portal.kernel.parsers.bbcode.BBCodeTranslatorUtil;
 import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
 import com.liferay.portal.kernel.portlet.url.builder.PortletURLBuilder;
@@ -136,7 +137,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.SubscriptionSender;
 import com.liferay.portal.kernel.util.TempFileEntryUtil;
 import com.liferay.portal.kernel.util.Validator;
-import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowHandlerRegistryUtil;
 import com.liferay.portal.kernel.workflow.WorkflowThreadLocal;
@@ -2127,7 +2127,9 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 			String messageBody, String messageSubject,
 			String messageSubjectPrefix, String inReplyTo, String fromName,
 			String fromAddress, String replyToAddress, String emailAddress,
-			String fullName, LocalizedValuesMap subjectLocalizedValuesMap,
+			String fullName, String messageParentMessageContent,
+			String messageSiblingMessagesContent, String rootMessageBody,
+			LocalizedValuesMap subjectLocalizedValuesMap,
 			LocalizedValuesMap bodyLocalizedValuesMap,
 			ServiceContext serviceContext)
 		throws PortalException {
@@ -2166,6 +2168,16 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 			"[$MESSAGE_SUBJECT_PREFIX$]", messageSubjectPrefix,
 			"[$MESSAGE_URL$]", messageURL, "[$MESSAGE_USER_ADDRESS$]",
 			emailAddress, "[$MESSAGE_USER_NAME$]", fullName);
+
+		if (FeatureFlagManagerUtil.isEnabled("LPS-182020")) {
+			subscriptionSender.setContextAttribute(
+				"[$MESSAGE_PARENT$]", messageParentMessageContent, false);
+			subscriptionSender.setContextAttribute(
+				"[$MESSAGE_SIBLINGS$]", messageSiblingMessagesContent, false);
+			subscriptionSender.setContextAttribute(
+				"[$ROOT_MESSAGE_BODY$]", rootMessageBody, false);
+		}
+
 		subscriptionSender.setCreatorUserId(message.getUserId());
 		subscriptionSender.setCurrentUserId(userId);
 		subscriptionSender.setEntryTitle(entryTitle);
@@ -2458,36 +2470,23 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 		}
 
 		boolean htmlFormat = mbGroupServiceSettings.isEmailHtmlFormat();
+		int maxNumberOfMessages = 3;
+		int maxNumberOfParentMessages = 1;
 
-		String messageBody = message.getBody();
+		MBMessageNotificationTemplateHelper
+			mbMessageNotificationTemplateHelper =
+				new MBMessageNotificationTemplateHelper(
+					htmlFormat, maxNumberOfMessages, maxNumberOfParentMessages,
+					mbMessageLocalService, serviceContext);
 
-		if (htmlFormat && message.isFormatBBCode()) {
-			try {
-				messageBody = BBCodeTranslatorUtil.getHTML(messageBody);
-
-				HttpServletRequest httpServletRequest =
-					serviceContext.getRequest();
-
-				if (httpServletRequest != null) {
-					ThemeDisplay themeDisplay =
-						(ThemeDisplay)httpServletRequest.getAttribute(
-							WebKeys.THEME_DISPLAY);
-
-					messageBody = MBUtil.replaceMessageBodyPaths(
-						themeDisplay, messageBody);
-				}
-			}
-			catch (Exception exception) {
-				_log.error(
-					StringBundler.concat(
-						"Unable to parse message ", message.getMessageId(),
-						": ", exception.getMessage()));
-			}
-		}
+		String messageBody = mbMessageNotificationTemplateHelper.getMessageBody(
+			message, StringPool.BLANK);
 
 		String inReplyTo = null;
 		String messageSubject = message.getSubject();
 		String messageSubjectPrefix = StringPool.BLANK;
+		String messageParentMessageContent = StringPool.BLANK;
+		String messageSiblingMessagesContent = StringPool.BLANK;
 
 		if (message.getParentMessageId() !=
 				MBMessageConstants.DEFAULT_PARENT_MESSAGE_ID) {
@@ -2511,13 +2510,25 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 				messageSubject = messageSubject.substring(
 					messageSubjectPrefix.length());
 			}
+
+			messageParentMessageContent =
+				mbMessageNotificationTemplateHelper.
+					renderMessageParentMessageContent(parentMessage);
+			messageSiblingMessagesContent =
+				mbMessageNotificationTemplateHelper.
+					renderMessageSiblingMessagesContent(message);
 		}
+
+		String rootMessageBody =
+			mbMessageNotificationTemplateHelper.renderRootMessage(message);
 
 		SubscriptionSender subscriptionSender = _getSubscriptionSender(
 			userId, category, message, messageURL, entryTitle, htmlFormat,
 			messageBody, messageSubject, messageSubjectPrefix, inReplyTo,
 			fromName, fromAddress, replyToAddress, emailAddress, fullName,
-			subjectLocalizedValuesMap, bodyLocalizedValuesMap, serviceContext);
+			messageParentMessageContent, messageSiblingMessagesContent,
+			rootMessageBody, subjectLocalizedValuesMap, bodyLocalizedValuesMap,
+			serviceContext);
 
 		subscriptionSender.addAssetEntryPersistedSubscribers(
 			MBMessage.class.getName(), message.getMessageId());
@@ -2544,6 +2555,8 @@ public class MBMessageLocalServiceImpl extends MBMessageLocalServiceBaseImpl {
 						htmlFormat, messageBody, messageSubject,
 						messageSubjectPrefix, inReplyTo, fromName, fromAddress,
 						replyToAddress, emailAddress, fullName,
+						messageParentMessageContent,
+						messageSiblingMessagesContent, rootMessageBody,
 						subjectLocalizedValuesMap, bodyLocalizedValuesMap,
 						serviceContext);
 

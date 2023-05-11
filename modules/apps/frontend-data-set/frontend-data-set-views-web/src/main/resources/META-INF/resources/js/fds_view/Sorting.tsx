@@ -28,6 +28,10 @@ import {getFields} from '../api';
 import OrderableTable from '../components/OrderableTable';
 import RequiredMark from '../components/RequiredMark';
 
+interface ContentRendererProps {
+	item: FDSSort;
+}
+
 interface Field {
 	format: string;
 	label: string;
@@ -77,6 +81,16 @@ function alertSuccess() {
 		type: 'success',
 	});
 }
+
+const SortingDirectionContentRenderer = ({item}: ContentRendererProps) => {
+	return (
+		<span>
+			{item.sortingDirection === SORTING_DIRECTION.ASCENDING.value
+				? SORTING_DIRECTION.ASCENDING.label
+				: SORTING_DIRECTION.DESCENDING.label}
+		</span>
+	);
+};
 
 const AddFDSSortModalContent = ({
 	closeModal,
@@ -323,10 +337,12 @@ const Sorting = ({fdsView, fdsViewsURL}: FDSViewSectionInterface) => {
 						disableSave={!newFDSSortsOrder.length}
 						fields={[
 							{
+								headingTitle: true,
 								label: Liferay.Language.get('name'),
 								name: 'fieldName',
 							},
 							{
+								contentRenderer: SortingDirectionContentRenderer,
 								label: Liferay.Language.get('value'),
 								name: 'sortingDirection',
 							},

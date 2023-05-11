@@ -19,35 +19,20 @@ import com.liferay.commerce.product.model.CPDefinition;
 import com.liferay.commerce.product.type.virtual.constants.VirtualCPTypeConstants;
 import com.liferay.commerce.product.type.virtual.model.CPDefinitionVirtualSetting;
 import com.liferay.commerce.product.type.virtual.service.CPDefinitionVirtualSettingService;
-import com.liferay.document.library.kernel.model.DLFolderConstants;
-import com.liferay.document.library.kernel.service.DLAppServiceUtil;
 import com.liferay.headless.commerce.admin.catalog.dto.v1_0.ProductVirtualSettings;
+import com.liferay.headless.commerce.admin.catalog.internal.util.FileEntryUtil;
 import com.liferay.headless.commerce.core.util.LanguageUtils;
 import com.liferay.journal.model.JournalArticle;
-import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.util.ArrayUtil;
-import com.liferay.portal.kernel.util.Base64;
-import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.MimeTypesUtil;
-import com.liferay.portal.kernel.util.TempFileEntryUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.upload.UniqueFileNameProvider;
 
-import java.io.File;
-
 import java.net.URL;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -80,35 +65,6 @@ public class ProductVirtualSettingsUtil {
 			serviceContext);
 	}
 
-	private static FileEntry _addFileEntry(
-			File file, String contentType,
-			UniqueFileNameProvider uniqueFileNameProvider,
-			ServiceContext serviceContext)
-		throws Exception {
-
-		String uniqueFileName = uniqueFileNameProvider.provide(
-			file.getName(),
-			curFileName -> _exists(
-				serviceContext.getScopeGroupId(), serviceContext.getUserId(),
-				curFileName));
-
-		if (Validator.isNull(contentType)) {
-			contentType = MimeTypesUtil.getContentType(file);
-		}
-
-		uniqueFileName = _appendExtension(contentType, uniqueFileName);
-
-		FileEntry fileEntry = DLAppServiceUtil.addFileEntry(
-			null, serviceContext.getScopeGroupId(),
-			DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, uniqueFileName,
-			contentType, uniqueFileName, StringPool.BLANK, null,
-			StringPool.BLANK, file, null, null, serviceContext);
-
-		FileUtil.delete(file);
-
-		return fileEntry;
-	}
-
 	private static CPDefinitionVirtualSetting _addProductVirtualSettings(
 			CPDefinition cpDefinition,
 			ProductVirtualSettings productVirtualSettings,
@@ -117,25 +73,25 @@ public class ProductVirtualSettingsUtil {
 			ServiceContext serviceContext)
 		throws Exception {
 
-		String attachmentUrl = _validateUrl(productVirtualSettings.getUrl());
+		String attachmentURL = _validateURL(productVirtualSettings.getUrl());
 
-		long attachmentFileEntryId = _getFileEntryId(
-			productVirtualSettings.getAttachment(), attachmentUrl,
+		long attachmentFileEntryId = FileEntryUtil.getFileEntryId(
+			productVirtualSettings.getAttachment(), attachmentURL,
 			uniqueFileNameProvider, serviceContext);
 
-		String sampleAttachmentUrl = null;
+		String sampleAttachmentURL = null;
 		long sampleFileEntryId = 0;
 
 		boolean useSample = GetterUtil.getBoolean(
 			productVirtualSettings.getUseSample());
 
 		if (useSample) {
-			sampleAttachmentUrl = _validateUrl(
+			sampleAttachmentURL = _validateURL(
 				productVirtualSettings.getSampleUrl());
 
-			sampleFileEntryId = _getFileEntryId(
+			sampleFileEntryId = FileEntryUtil.getFileEntryId(
 				productVirtualSettings.getSampleAttachment(),
-				sampleAttachmentUrl, uniqueFileNameProvider, serviceContext);
+				sampleAttachmentURL, uniqueFileNameProvider, serviceContext);
 		}
 
 		Map<Locale, String> termsOfUseContentMap = null;
@@ -153,7 +109,7 @@ public class ProductVirtualSettingsUtil {
 
 		return cpDefinitionVirtualSettingService.addCPDefinitionVirtualSetting(
 			CPDefinition.class.getName(), cpDefinition.getCPDefinitionId(),
-			attachmentFileEntryId, attachmentUrl,
+			attachmentFileEntryId, attachmentURL,
 			_getActivationStatus(
 				GetterUtil.getInteger(
 					productVirtualSettings.getActivationStatus(),
@@ -161,49 +117,9 @@ public class ProductVirtualSettingsUtil {
 			TimeUnit.DAYS.toMillis(
 				GetterUtil.getLong(productVirtualSettings.getDuration())),
 			GetterUtil.getInteger(productVirtualSettings.getMaxUsages()),
-			useSample, sampleFileEntryId, sampleAttachmentUrl,
+			useSample, sampleFileEntryId, sampleAttachmentURL,
 			termsOfUseRequired, termsOfUseContentMap,
 			termsOfUseJournalArticleId, serviceContext);
-	}
-
-	private static String _appendExtension(
-		String contentType, String uniqueFileName) {
-
-		String extension = StringPool.BLANK;
-
-		Set<String> extensions = MimeTypesUtil.getExtensions(contentType);
-
-		if (!extensions.isEmpty()) {
-			Iterator<String> iterator = extensions.iterator();
-
-			if (iterator.hasNext()) {
-				extension = iterator.next();
-			}
-		}
-
-		return uniqueFileName.concat(extension);
-	}
-
-	private static boolean _exists(
-		long groupId, long userId, String curFileName) {
-
-		try {
-			FileEntry fileEntry = TempFileEntryUtil.getTempFileEntry(
-				groupId, userId, _TEMP_FILE_NAME, curFileName);
-
-			if (fileEntry != null) {
-				return true;
-			}
-
-			return false;
-		}
-		catch (PortalException portalException) {
-			if (_log.isDebugEnabled()) {
-				_log.debug(portalException);
-			}
-
-			return false;
-		}
 	}
 
 	private static int _getActivationStatus(int activationStatus) {
@@ -216,25 +132,6 @@ public class ProductVirtualSettingsUtil {
 		return CommerceOrderConstants.ORDER_STATUS_COMPLETED;
 	}
 
-	private static long _getFileEntryId(
-			String attachment, String url,
-			UniqueFileNameProvider uniqueFileNameProvider,
-			ServiceContext serviceContext)
-		throws Exception {
-
-		if (Validator.isNotNull(attachment) && Validator.isNull(url)) {
-			serviceContext.setExpandoBridgeAttributes(new HashMap<>());
-
-			FileEntry fileEntry = _addFileEntry(
-				FileUtil.createTempFile(Base64.decode(attachment)), null,
-				uniqueFileNameProvider, serviceContext);
-
-			return fileEntry.getFileEntryId();
-		}
-
-		return 0;
-	}
-
 	private static CPDefinitionVirtualSetting _updateProductVirtualSettings(
 			CPDefinitionVirtualSetting cpDefinitionVirtualSetting,
 			ProductVirtualSettings productVirtualSettings,
@@ -244,15 +141,15 @@ public class ProductVirtualSettingsUtil {
 		throws Exception {
 
 		long attachmentFileEntryId = 0;
-		String attachmentUrl = _validateUrl(productVirtualSettings.getUrl());
+		String attachmentURL = _validateURL(productVirtualSettings.getUrl());
 
-		if (Validator.isNull(attachmentUrl)) {
+		if (Validator.isNull(attachmentURL)) {
 			if (Validator.isNull(productVirtualSettings.getAttachment())) {
-				attachmentUrl = cpDefinitionVirtualSetting.getUrl();
+				attachmentURL = cpDefinitionVirtualSetting.getUrl();
 			}
 			else {
-				attachmentFileEntryId = _getFileEntryId(
-					productVirtualSettings.getAttachment(), attachmentUrl,
+				attachmentFileEntryId = FileEntryUtil.getFileEntryId(
+					productVirtualSettings.getAttachment(), attachmentURL,
 					uniqueFileNameProvider, serviceContext);
 			}
 
@@ -268,7 +165,7 @@ public class ProductVirtualSettingsUtil {
 			duration = TimeUnit.DAYS.toMillis(duration);
 		}
 
-		String sampleAttachmentUrl = null;
+		String sampleAttachmentURL = null;
 		long sampleFileEntryId = 0;
 
 		boolean useSample = GetterUtil.getBoolean(
@@ -276,20 +173,20 @@ public class ProductVirtualSettingsUtil {
 			cpDefinitionVirtualSetting.isUseSample());
 
 		if (useSample) {
-			sampleAttachmentUrl = _validateUrl(
+			sampleAttachmentURL = _validateURL(
 				productVirtualSettings.getSampleUrl());
 
-			if (Validator.isNull(sampleAttachmentUrl)) {
+			if (Validator.isNull(sampleAttachmentURL)) {
 				if (Validator.isNull(
 						productVirtualSettings.getSampleAttachment())) {
 
-					sampleAttachmentUrl =
+					sampleAttachmentURL =
 						cpDefinitionVirtualSetting.getSampleUrl();
 				}
 				else {
-					sampleFileEntryId = _getFileEntryId(
+					sampleFileEntryId = FileEntryUtil.getFileEntryId(
 						productVirtualSettings.getSampleAttachment(),
-						sampleAttachmentUrl, uniqueFileNameProvider,
+						sampleAttachmentURL, uniqueFileNameProvider,
 						serviceContext);
 				}
 
@@ -333,7 +230,7 @@ public class ProductVirtualSettingsUtil {
 		return cpDefinitionVirtualSettingService.
 			updateCPDefinitionVirtualSetting(
 				cpDefinitionVirtualSetting.getCPDefinitionVirtualSettingId(),
-				attachmentFileEntryId, attachmentUrl,
+				attachmentFileEntryId, attachmentURL,
 				_getActivationStatus(
 					GetterUtil.getInteger(
 						productVirtualSettings.getActivationStatus(),
@@ -343,12 +240,12 @@ public class ProductVirtualSettingsUtil {
 				GetterUtil.getInteger(
 					productVirtualSettings.getMaxUsages(),
 					cpDefinitionVirtualSetting.getMaxUsages()),
-				useSample, sampleFileEntryId, sampleAttachmentUrl,
+				useSample, sampleFileEntryId, sampleAttachmentURL,
 				termsOfUseRequired, termsOfUseContentMap,
 				termsOfUseJournalArticleId, serviceContext);
 	}
 
-	private static String _validateUrl(String value) throws Exception {
+	private static String _validateURL(String value) throws Exception {
 		if (Validator.isNotNull(value)) {
 			URL url = new URL(value);
 
@@ -357,11 +254,5 @@ public class ProductVirtualSettingsUtil {
 
 		return null;
 	}
-
-	private static final String _TEMP_FILE_NAME =
-		ProductVirtualSettingsUtil.class.getName();
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		ProductVirtualSettingsUtil.class);
 
 }

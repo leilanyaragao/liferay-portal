@@ -117,8 +117,9 @@ public class ProductVirtualSettingsDTOConverter
 
 						return _commerceMediaResolver.
 							getDownloadVirtualProductSampleURL(
-								CommerceAccountConstants.ACCOUNT_ID_ADMIN,
+								CPDefinition.class.getName(),
 								cpDefinition.getCPDefinitionId(),
+								CommerceAccountConstants.ACCOUNT_ID_ADMIN,
 								fileEntry.getFileEntryId());
 					});
 				setSrc(
@@ -132,8 +133,9 @@ public class ProductVirtualSettingsDTOConverter
 
 						return _commerceMediaResolver.
 							getDownloadVirtualProductURL(
-								CommerceAccountConstants.ACCOUNT_ID_ADMIN,
+								CPDefinition.class.getName(),
 								cpDefinition.getCPDefinitionId(),
+								CommerceAccountConstants.ACCOUNT_ID_ADMIN,
 								fileEntry.getFileEntryId());
 					});
 				setTermsOfUseJournalArticleId(

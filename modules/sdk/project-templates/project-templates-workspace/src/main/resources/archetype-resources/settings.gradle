@@ -8,16 +8,13 @@ buildscript {
 	}
 
 	repositories {
-		maven {
-			url "https://repository-cdn.liferay.com/nexus/content/groups/public"
-		}
+		mavenLocal()
 
 		maven {
-			url "https://repository.liferay.com/nexus/content/groups/public"
+			url "https://repository-cdn.liferay.com/nexus/content/groups/public"
 		}
 	}
 }
 
-apply plugin: "net.saliman.properties"
-
 apply plugin: "com.liferay.workspace"
+apply plugin: "net.saliman.properties"

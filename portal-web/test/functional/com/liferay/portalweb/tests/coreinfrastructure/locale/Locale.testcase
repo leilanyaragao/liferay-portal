@@ -8,8 +8,6 @@ definition {
 
 	setUp {
 		TestCase.setUpPortalInstance();
-
-		HeadlessSite.addSite(siteName = "Test Site Name");
 	}
 
 	tearDown {
@@ -293,6 +291,8 @@ definition {
 
 		User.firstLoginPG();
 
+		HeadlessSite.addSite(siteName = "Test Site Name");
+
 		JSONLayout.addPublicLayout(
 			groupName = "Test Site Name",
 			layoutName = "Test Page");
@@ -376,6 +376,8 @@ definition {
 
 		User.firstLoginPG();
 
+		HeadlessSite.addSite(siteName = "Test Site Name");
+
 		JSONLayout.addPublicLayout(
 			groupName = "Test Site Name",
 			layoutName = "Site Page");
@@ -404,7 +406,9 @@ definition {
 		property custom.properties = "locale.prepend.friendly.url.style=3";
 		property test.name.skip.portal.instance = "Locale#PrependFriendlyURLStyle";
 
-		var portalURL = PropsUtil.get("portal.url");
+		var portalURL = JSONCompany.getPortalURL();
+
+		HeadlessSite.addSite(siteName = "Test Site Name");
 
 		JSONLayout.addPublicLayout(
 			groupName = "Test Site Name",
@@ -899,6 +903,8 @@ definition {
 
 		User.firstLoginPG();
 
+		HeadlessSite.addSite(siteName = "Test Site Name");
+
 		JSONLayout.addPublicLayout(
 			groupName = "Test Site Name",
 			layoutName = "Test Page");
@@ -926,7 +932,7 @@ definition {
 
 		User.firstLoginPG();
 
-		var baseURL = PropsUtil.get("portal.url");
+		var baseURL = JSONCompany.getPortalURL();
 
 		task ("Assert time zone id America/Phoenix always displays in English") {
 			Navigator.openSpecificURL(url = "${baseURL}/ja/group/control_panel/manage?p_p_id=com_liferay_configuration_admin_web_portlet_InstanceSettingsPortlet");
@@ -1043,6 +1049,8 @@ definition {
 
 		User.firstLoginPG();
 
+		HeadlessSite.addSite(siteName = "Test Site Name");
+
 		JSONLayout.addPublicLayout(
 			groupName = "Test Site Name",
 			layoutName = "Test Page");
@@ -1091,6 +1099,8 @@ definition {
 
 		User.firstLoginPG();
 
+		HeadlessSite.addSite(siteName = "Test Site Name");
+
 		JSONLayout.addPublicLayout(
 			groupName = "Test Site Name",
 			layoutName = "Test Page");
@@ -1133,6 +1143,22 @@ definition {
 		AssertElementPresent(
 			key_panel = "Control Panel",
 			locator1 = "ApplicationsMenu#PANEL");
+	}
+
+	@priority = "3"
+	test WarningGeneratedWhenUsingNonStandardTimezone {
+		property skip.start.app.server = "true";
+		property test.name.skip.portal.instance = "Locale#WarningGeneratedWhenUsingNonStandardTimezone";
+
+		var tomcatBinDir = PropsUtil.get("app.server.bin.dir");
+
+		var setenvFile = "${tomcatBinDir}/setenv.sh";
+
+		FileUtil.replaceStringInFile(${setenvFile}, "-Duser.timezone=GMT", "-Duser.timezone=Europe/Paris");
+
+		Portlet.startServer(keepOSGiState = "true");
+
+		AssertConsoleTextPresent(value1 = "is not UTC or GMT. Please review the JVM property \"user.timezone\".");
 	}
 
 }

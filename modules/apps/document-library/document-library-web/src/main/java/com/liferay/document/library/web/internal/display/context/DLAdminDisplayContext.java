@@ -544,7 +544,8 @@ public class DLAdminDisplayContext {
 
 		for (String assetTagName : assetTagNames) {
 			booleanFilter.addTerm(
-				Field.ASSET_TAG_NAMES, assetTagName, BooleanClauseOccur.MUST);
+				Field.ASSET_TAG_NAMES + ".raw", assetTagName,
+				BooleanClauseOccur.MUST);
 		}
 
 		return booleanFilter;
@@ -660,10 +661,6 @@ public class DLAdminDisplayContext {
 			}
 
 			SearchContext searchContext = _getSearchContext(dlSearchContainer);
-
-			if (ArrayUtil.isNotEmpty(assetTagIds)) {
-				searchContext.setAssetTagNames(assetTagIds);
-			}
 
 			long userId = 0;
 

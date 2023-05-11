@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,23 +11,24 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<%@ include file="/init.jsp" %>
+package com.liferay.commerce.payment.constants;
 
-<liferay-frontend:fieldset
-	collapsed="<%= false %>"
-	collapsible="<%= true %>"
-	label="theme-css-client-extension"
->
-	<p class="text-secondary">
-		<liferay-ui:message key="use-this-client-extension-to-fully-replace-the-default-css-contained-in-the-theme" />
-	</p>
+/**
+ * @author Luca Pellizzon
+ */
+public class CommercePaymentEntryAuditConstants {
 
-	<div>
-		<react:component
-			module="js/ThemeCSSReplacementSelector"
-			props="<%= layoutsAdminDisplayContext.getThemeCSSReplacementSelectorProps() %>"
-		/>
-	</div>
-</liferay-frontend:fieldset>
+	public static final String FIELD_CLASS_NAME_ID = "classNameId";
+
+	public static final String FIELD_CLASS_PK = "classPK";
+
+	public static final String TYPE_AUTHORIZE_PAYMENT = "authorize-payment";
+
+	public static final String TYPE_CANCEL_PAYMENT = "cancel-payment";
+
+	public static final String TYPE_CAPTURE_PAYMENT = "capture-payment";
+
+	public static final String TYPE_REFUND_PAYMENT = "refund-payment";
+
+}
