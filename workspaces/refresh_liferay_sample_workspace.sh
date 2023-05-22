@@ -65,7 +65,7 @@ function refresh_liferay_sample_workspace {
 	mv gradle.properties.tmp gradle.properties
 
 	sed -i 's/name: "biz.aQute.bnd", version: ".*"/name: "biz.aQute.bnd.gradle", version: "5.2.0"/' settings.gradle
-	sed -i 's/name: "com.liferay.gradle.plugins.workspace", version: ".*"/name: "com.liferay.gradle.plugins.workspace", version: "6.1.2"/' settings.gradle
+	sed -i 's/name: "com.liferay.gradle.plugins.workspace", version: ".*"/name: "com.liferay.gradle.plugins.workspace", version: "6.1.3"/' settings.gradle
 
 	echo -en "\ninclude \"poshi\"" >> settings.gradle
 
@@ -120,23 +120,21 @@ import React from 'react';
 
 import {Liferay} from '../services/liferay/liferay';
 
+const oAuth2Client = Liferay.OAuth2Client.FromUserAgentApplication(
+	'liferay-sample-etc-spring-boot-oauth-application-user-agent'
+);
+
 function DadJoke() {
 	const [joke, setJoke] = React.useState(null);
 
-	const oAuth2Client = Liferay.OAuth2Client.FromUserAgentApplication(
-		'liferay-sample-etc-spring-boot-oauth-application-user-agent'
-	);
-
 	React.useEffect(() => {
-		const request = oAuth2Client
+		oAuth2Client
 			.fetch('/dad/joke')
 			.then((response) => response.text())
 			.then((joke) => {
 				setJoke(joke);
 			});
-
-		return () => request.cancel();
-	}, [oAuth2Client]);
+	}, []);
 
 	if (!joke) {
 		return <div>Loading...</div>;

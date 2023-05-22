@@ -1,4 +1,4 @@
-FROM liferay/dxp:7.1.10-dxp-26-d4.1.0-20220613181358
+FROM liferay/dxp:latest
 
 USER root
 
@@ -9,7 +9,7 @@ ENV FARO_DEFAULT_WE_DEPLOY_KEY=osbasah.lfr.cloud \
 	FARO_DEMO_CREATOR_METHOD=snapshot \
 	FARO_PROJECT_ID=FARO-DEV-liferay \
 	FARO_URL=http://localhost:8080 \
-	JAVA_OPTS=-Djava.rmi.server.hostname="localhost -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n" \
+	JAVA_OPTS=-Djava.rmi.server.hostname="localhost -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n -XX:+IgnoreUnrecognizedVMOptions" \
 	LABEL_BUILD_DATE=${LABEL_BUILD_DATE} \
 	LABEL_VCS_REF=${LABEL_VCS_REF} \
 	OSB_API_PORT=443 \
@@ -45,4 +45,4 @@ COPY *.war $LIFERAY_HOME/osgi/war/
 
 # Modules
 
-COPY *.jar $LIFERAY_HOME/osgi/modules/
+COPY *osb.faro*.jar $LIFERAY_HOME/osgi/modules/

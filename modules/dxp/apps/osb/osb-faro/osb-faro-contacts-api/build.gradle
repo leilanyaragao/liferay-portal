@@ -5,3 +5,13 @@ dependencies {
 	compileOnly project(":core:petra:petra-sql-dsl-api")
 	compileOnly project(":core:petra:petra-string")
 }
+
+deploy {
+	doFirst {
+		delete file(liferay.deployDir)
+	}
+
+	liferay {
+		deployDir = new File("${rootDir}/dxp/apps/osb/osb-faro/build/deploy")
+	}
+}

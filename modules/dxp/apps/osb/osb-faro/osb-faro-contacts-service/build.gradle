@@ -14,3 +14,13 @@ dependencies {
 	compileOnly project(":core:petra:petra-string")
 	compileOnly project(":dxp:apps:osb:osb-faro:osb-faro-contacts-api")
 }
+
+deploy {
+	doFirst {
+		delete file(liferay.deployDir)
+	}
+
+	liferay {
+		deployDir = new File("${rootDir}/dxp/apps/osb/osb-faro/build/deploy")
+	}
+}
