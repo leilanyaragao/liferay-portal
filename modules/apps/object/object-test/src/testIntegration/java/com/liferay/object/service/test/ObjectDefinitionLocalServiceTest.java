@@ -405,7 +405,7 @@ public class ObjectDefinitionLocalServiceTest {
 				AssertUtils.assertFailure(
 					ObjectDefinitionStatusException.class,
 					"Nonroot object definitions within a hierarchical " +
-						"structure are ineligible for publication",
+					"structure are ineligible for publication",
 					() ->
 						_objectDefinitionLocalService.
 							publishCustomObjectDefinition(
@@ -586,7 +586,7 @@ public class ObjectDefinitionLocalServiceTest {
 
 					@Override
 					public long addBaseModel(
-							User user, Map<String, Object> values)
+						User user, Map<String, Object> values)
 						throws Exception {
 
 						return 0;
@@ -607,7 +607,7 @@ public class ObjectDefinitionLocalServiceTest {
 
 					@Override
 					public BaseModel<?> getBaseModelByExternalReferenceCode(
-							String externalReferenceCode, long companyId)
+						String externalReferenceCode, long companyId)
 						throws PortalException {
 
 						return null;
@@ -615,7 +615,7 @@ public class ObjectDefinitionLocalServiceTest {
 
 					@Override
 					public String getBaseModelExternalReferenceCode(
-							long primaryKey)
+						long primaryKey)
 						throws PortalException {
 
 						return null;
@@ -628,7 +628,7 @@ public class ObjectDefinitionLocalServiceTest {
 
 					@Override
 					public JaxRsApplicationDescriptor
-						getJaxRsApplicationDescriptor() {
+					getJaxRsApplicationDescriptor() {
 
 						return null;
 					}
@@ -708,8 +708,8 @@ public class ObjectDefinitionLocalServiceTest {
 
 					@Override
 					public void updateBaseModel(
-							long primaryKey, User user,
-							Map<String, Object> values)
+						long primaryKey, User user,
+						Map<String, Object> values)
 						throws Exception {
 					}
 
@@ -767,7 +767,7 @@ public class ObjectDefinitionLocalServiceTest {
 
 					@Override
 					public long addBaseModel(
-							User user, Map<String, Object> values)
+						User user, Map<String, Object> values)
 						throws Exception {
 
 						return 0;
@@ -788,7 +788,7 @@ public class ObjectDefinitionLocalServiceTest {
 
 					@Override
 					public BaseModel<?> getBaseModelByExternalReferenceCode(
-							String externalReferenceCode, long companyId)
+						String externalReferenceCode, long companyId)
 						throws PortalException {
 
 						return null;
@@ -796,7 +796,7 @@ public class ObjectDefinitionLocalServiceTest {
 
 					@Override
 					public String getBaseModelExternalReferenceCode(
-							long primaryKey)
+						long primaryKey)
 						throws PortalException {
 
 						return null;
@@ -809,7 +809,7 @@ public class ObjectDefinitionLocalServiceTest {
 
 					@Override
 					public JaxRsApplicationDescriptor
-						getJaxRsApplicationDescriptor() {
+					getJaxRsApplicationDescriptor() {
 
 						return null;
 					}
@@ -889,8 +889,8 @@ public class ObjectDefinitionLocalServiceTest {
 
 					@Override
 					public void updateBaseModel(
-							long primaryKey, User user,
-							Map<String, Object> values)
+						long primaryKey, User user,
+						Map<String, Object> values)
 						throws Exception {
 					}
 
@@ -944,7 +944,7 @@ public class ObjectDefinitionLocalServiceTest {
 				ObjectDefinitionExternalReferenceCodeException.
 					ForbiddenUnmodifiableSystemObjectDefinitionExternalReferenceCode.class,
 				"Forbidden unmodifiable system object definition external " +
-					"reference code INVALID_TEST",
+				"reference code INVALID_TEST",
 				() ->
 					ObjectDefinitionTestUtil.
 						addUnmodifiableSystemObjectDefinition(
@@ -1253,7 +1253,7 @@ public class ObjectDefinitionLocalServiceTest {
 			Assert.fail();
 		}
 		catch (ObjectDefinitionStatusException
-					objectDefinitionStatusException) {
+			objectDefinitionStatusException) {
 
 			Assert.assertNotNull(objectDefinitionStatusException);
 		}
@@ -1348,7 +1348,7 @@ public class ObjectDefinitionLocalServiceTest {
 		AssertUtils.assertFailure(
 			ObjectDefinitionRootObjectDefinitionIdException.class,
 			"Object definitions that belong to a hierarchical structure " +
-				"cannot be deleted",
+			"cannot be deleted",
 			() -> _objectDefinitionLocalService.deleteObjectDefinition(
 				finalObjectDefinition));
 
@@ -1397,6 +1397,53 @@ public class ObjectDefinitionLocalServiceTest {
 	}
 
 	@Test
+	public void testEnableAccountEntryRestricted() throws Exception {
+		ObjectDefinition objectDefinition =
+			_objectDefinitionLocalService.addObjectDefinition(
+				RandomTestUtil.randomString(), TestPropsValues.getUserId(), 0,
+				true, false);
+
+		objectDefinition =
+			_objectDefinitionLocalService.enableAccountEntryRestricted(
+				_objectRelationshipLocalService.addObjectRelationship(
+					null, TestPropsValues.getUserId(),
+					_objectDefinitionLocalService.fetchSystemObjectDefinition(
+						"AccountEntry"
+					).getObjectDefinitionId(),
+					objectDefinition.getObjectDefinitionId(), 0,
+					ObjectRelationshipConstants.DELETION_TYPE_PREVENT,
+					LocalizedMapUtil.getLocalizedMap(
+						RandomTestUtil.randomString()),
+					StringUtil.randomId(), false,
+					ObjectRelationshipConstants.TYPE_ONE_TO_MANY));
+
+		Assert.assertTrue(
+			objectDefinition.getAccountEntryRestrictedObjectFieldId() > 0);
+		Assert.assertTrue(objectDefinition.isAccountEntryRestricted());
+		Assert.assertFalse(objectDefinition.isSystem());
+
+		_objectDefinitionLocalService.deleteObjectDefinition(objectDefinition);
+
+		AssertUtils.assertFailure(
+			ObjectDefinitionAccountEntryRestrictedException.class,
+			"Custom object definitions can only be restricted by account entry",
+			() -> _objectDefinitionLocalService.enableAccountEntryRestricted(
+				_objectRelationshipLocalService.addObjectRelationship(
+					null, TestPropsValues.getUserId(),
+					_addCustomObjectDefinition(
+						"Test" + RandomTestUtil.randomString()
+					).getObjectDefinitionId(),
+					_addCustomObjectDefinition(
+						"Test" + RandomTestUtil.randomString()
+					).getObjectDefinitionId(),
+					0, ObjectRelationshipConstants.DELETION_TYPE_PREVENT,
+					LocalizedMapUtil.getLocalizedMap(
+						RandomTestUtil.randomString()),
+					StringUtil.randomId(), false,
+					ObjectRelationshipConstants.TYPE_ONE_TO_MANY)));
+	}
+
+	@Test
 	public void testEnableAccountEntryRestrictedForNondefaultStorageType()
 		throws Exception {
 
@@ -1440,7 +1487,7 @@ public class ObjectDefinitionLocalServiceTest {
 		AssertUtils.assertFailure(
 			ObjectDefinitionAccountEntryRestrictedException.class,
 			"Custom object definitions can only be restricted by an integer, " +
-				"long integer, or text field",
+			"long integer, or text field",
 			() ->
 				_objectDefinitionLocalService.
 					enableAccountEntryRestrictedForNondefaultStorageType(
@@ -1554,7 +1601,7 @@ public class ObjectDefinitionLocalServiceTest {
 		objectDefinition =
 			_objectDefinitionLocalService.enableAccountEntryRestricted(
 				_objectRelationshipLocalService.addObjectRelationship(
-					TestPropsValues.getUserId(),
+					null, TestPropsValues.getUserId(),
 					_objectDefinitionLocalService.fetchSystemObjectDefinition(
 						"AccountEntry"
 					).getObjectDefinitionId(),
@@ -1577,7 +1624,7 @@ public class ObjectDefinitionLocalServiceTest {
 			"Custom object definitions can only be restricted by account entry",
 			() -> _objectDefinitionLocalService.enableAccountEntryRestricted(
 				_objectRelationshipLocalService.addObjectRelationship(
-					TestPropsValues.getUserId(),
+					null, TestPropsValues.getUserId(),
 					_addCustomObjectDefinition(
 						"Test" + RandomTestUtil.randomString()
 					).getObjectDefinitionId(),
@@ -1713,7 +1760,7 @@ public class ObjectDefinitionLocalServiceTest {
 		AssertUtils.assertFailure(
 			ObjectDefinitionEnableObjectEntryHistoryException.class,
 			"Enable object entry history is only allowed for object " +
-				"definitions with the default storage type",
+			"definitions with the default storage type",
 			() -> _updateObjectDefinition(
 				null, objectDefinitionId, 0, 0, true,
 				LocalizedMapUtil.getLocalizedMap("Able"), "Able",
@@ -1926,7 +1973,7 @@ public class ObjectDefinitionLocalServiceTest {
 		AssertUtils.assertFailure(
 			ObjectDefinitionRootObjectDefinitionIdException.class,
 			"Object definition " + objectDefinition2.getObjectDefinitionId() +
-				" is not a root object definition",
+			" is not a root object definition",
 			() -> _objectDefinitionLocalService.updateRootObjectDefinitionId(
 				objectDefinition1.getObjectDefinitionId(),
 				objectDefinition2.getObjectDefinitionId()));
@@ -2154,7 +2201,7 @@ public class ObjectDefinitionLocalServiceTest {
 	}
 
 	private ObjectDefinition _addCustomObjectDefinition(
-			String label, String name, String pluralLabel)
+		String label, String name, String pluralLabel)
 		throws Exception {
 
 		return _objectDefinitionLocalService.addCustomObjectDefinition(
@@ -2185,7 +2232,7 @@ public class ObjectDefinitionLocalServiceTest {
 	}
 
 	private ObjectDefinition _addUnmodifiableSystemObjectDefinition(
-			String label, String name, String pluralLabel)
+		String label, String name, String pluralLabel)
 		throws Exception {
 
 		return ObjectDefinitionTestUtil.addUnmodifiableSystemObjectDefinition(
@@ -2205,8 +2252,8 @@ public class ObjectDefinitionLocalServiceTest {
 	}
 
 	private void _assertObjectField(
-			ObjectDefinition objectDefinition, String dbColumnName,
-			String dbType, String name, boolean required)
+		ObjectDefinition objectDefinition, String dbColumnName,
+		String dbType, String name, boolean required)
 		throws Exception {
 
 		ObjectField objectField = _objectFieldLocalService.getObjectField(
@@ -2353,9 +2400,9 @@ public class ObjectDefinitionLocalServiceTest {
 	}
 
 	private void _testBindObjectDefinitions(
-			Map<String, String[]> expectedMap,
-			List<ObjectRelationship> objectRelationships,
-			long rootObjectDefinitionId)
+		Map<String, String[]> expectedMap,
+		List<ObjectRelationship> objectRelationships,
+		long rootObjectDefinitionId)
 		throws Exception {
 
 		TreeTestUtil.bind(_objectDefinitionLocalService, objectRelationships);
@@ -2515,8 +2562,8 @@ public class ObjectDefinitionLocalServiceTest {
 	}
 
 	private void
-			_testUpdateCustomObjectDefinitionThrowsObjectFieldRelationshipTypeException(
-				ObjectDefinition objectDefinition1)
+	_testUpdateCustomObjectDefinitionThrowsObjectFieldRelationshipTypeException(
+		ObjectDefinition objectDefinition1)
 		throws Exception {
 
 		ObjectDefinition objectDefinition2 =
@@ -2535,7 +2582,7 @@ public class ObjectDefinitionLocalServiceTest {
 
 		ObjectRelationship objectRelationship =
 			_objectRelationshipLocalService.addObjectRelationship(
-				TestPropsValues.getUserId(),
+				null, TestPropsValues.getUserId(),
 				objectDefinition1.getObjectDefinitionId(),
 				objectDefinition2.getObjectDefinitionId(), 0,
 				ObjectRelationshipConstants.DELETION_TYPE_PREVENT,
@@ -2557,11 +2604,11 @@ public class ObjectDefinitionLocalServiceTest {
 			Assert.fail();
 		}
 		catch (ObjectFieldRelationshipTypeException
-					objectFieldRelationshipTypeException) {
+			objectFieldRelationshipTypeException) {
 
 			Assert.assertEquals(
 				"Description and title object fields cannot have a " +
-					"relationship type",
+				"relationship type",
 				objectFieldRelationshipTypeException.getMessage());
 		}
 		finally {
@@ -2578,10 +2625,10 @@ public class ObjectDefinitionLocalServiceTest {
 	}
 
 	private ObjectDefinition _updateObjectDefinition(
-			String externalReferenceCode, long objectDefinitionId,
-			long descriptionObjectFieldId, long titleObjectFieldId,
-			boolean enableObjectEntryHistory, Map<Locale, String> labelMap,
-			String name, Map<Locale, String> pluralLabelMap, String scope)
+		String externalReferenceCode, long objectDefinitionId,
+		long descriptionObjectFieldId, long titleObjectFieldId,
+		boolean enableObjectEntryHistory, Map<Locale, String> labelMap,
+		String name, Map<Locale, String> pluralLabelMap, String scope)
 		throws PortalException {
 
 		return _objectDefinitionLocalService.updateCustomObjectDefinition(
