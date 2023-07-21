@@ -28,6 +28,7 @@ import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.model.ObjectEntry;
 import com.liferay.object.model.ObjectField;
 import com.liferay.object.model.ObjectRelationship;
+import com.liferay.object.rest.dto.v1_0.ListEntry;
 import com.liferay.object.rest.dto.v1_0.util.LinkUtil;
 import com.liferay.object.rest.manager.v1_0.ObjectEntryManager;
 import com.liferay.object.service.ObjectEntryLocalService;
@@ -39,6 +40,7 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -48,6 +50,7 @@ import java.io.Serializable;
 
 import java.text.Format;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -162,11 +165,65 @@ public class ObjectEntryRowInfoItemRenderer
 					_objectDefinition.getObjectDefinitionId(), false));
 
 		for (ObjectField objectField : objectFields) {
+			Object value = values.get(objectField.getName());
+
 			if (objectField.getListTypeDefinitionId() != 0) {
+				if (Objects.equals(
+						objectField.getBusinessType(),
+						ObjectFieldConstants.
+							BUSINESS_TYPE_MULTISELECT_PICKLIST)) {
+
+					List<String> listTypeEntryKeys = new ArrayList<>();
+
+					if (value instanceof List) {
+						for (ListEntry listEntry : (List<ListEntry>)value) {
+							listTypeEntryKeys.add(listEntry.getKey());
+						}
+					}
+					else {
+						listTypeEntryKeys = ListUtil.fromString(
+							(String)value, StringPool.COMMA_AND_SPACE);
+					}
+
+					// TODO:
+
+					sortedValues.put(
+						objectField.getName(), (Serializable)listTypeEntryKeys);
+
+					//for (String key : listTypeEntryKeys) {
+
+					// ListTypeEntry listTypeEntry =
+
+					//		_listTypeEntryLocalService.fetchListTypeEntry(
+					//			objectField.getListTypeDefinitionId(), key);
+					//
+					//	if (listTypeEntry == null) {
+					//		continue;
+					//	}
+					//}
+
+					continue;
+				}
+
+				String listTypeEntryKey = null;
+
+				if (value instanceof ListEntry) {
+					listTypeEntryKey = ((ListEntry)value).getKey();
+				}
+				else {
+					listTypeEntryKey = (String)value;
+				}
+
 				ListTypeEntry listTypeEntry =
 					_listTypeEntryLocalService.fetchListTypeEntry(
 						objectField.getListTypeDefinitionId(),
-						(String)values.get(objectField.getName()));
+						listTypeEntryKey);
+
+				if (listTypeEntry == null) {
+					sortedValues.put(objectField.getName(), StringPool.BLANK);
+
+					continue;
+				}
 
 				sortedValues.put(
 					objectField.getName(),
@@ -223,8 +280,6 @@ public class ObjectEntryRowInfoItemRenderer
 			}
 
 			if (Validator.isNotNull(objectField.getRelationshipType())) {
-				Object value = values.get(objectField.getName());
-
 				if (GetterUtil.getLong(value) <= 0) {
 					sortedValues.put(objectField.getName(), StringPool.BLANK);
 
@@ -249,8 +304,6 @@ public class ObjectEntryRowInfoItemRenderer
 					throw new RuntimeException(portalException);
 				}
 			}
-
-			Object value = values.get(objectField.getName());
 
 			if (value != null) {
 				sortedValues.put(objectField.getName(), (Serializable)value);
