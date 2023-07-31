@@ -149,6 +149,16 @@ public class BaseNotificationTypeTest {
 		PermissionThreadLocal.setPermissionChecker(
 			PermissionCheckerFactoryUtil.create(user2));
 		PrincipalThreadLocal.setName(user2.getUserId());
+
+		user3 = _userLocalService.addUser(
+			user1.getUserId(), user1.getCompanyId(), true, null, null, true,
+			null, RandomTestUtil.randomString() + "@liferay.com",
+			user1.getLocale(), RandomTestUtil.randomString(),
+			RandomTestUtil.randomString(), RandomTestUtil.randomString(),
+			prefixListType.getListTypeId(), suffixListType.getListTypeId(),
+			true, Month.FEBRUARY.getValue(), 7, 1988, null,
+			UserConstants.TYPE_REGULAR, null, null,
+			new long[] {role.getRoleId()}, null, true, null);
 	}
 
 	@Before
@@ -412,6 +422,7 @@ public class BaseNotificationTypeTest {
 	protected static Role role;
 	protected static User user1;
 	protected static User user2;
+	protected static User user3;
 
 	@DeleteAfterTestRun
 	protected NotificationQueueEntry notificationQueueEntry;
