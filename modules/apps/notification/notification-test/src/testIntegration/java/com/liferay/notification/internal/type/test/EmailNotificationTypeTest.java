@@ -19,11 +19,9 @@ import com.liferay.object.constants.ObjectDefinitionConstants;
 import com.liferay.object.rest.dto.v1_0.ObjectEntry;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.test.rule.AggregateTestRule;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
-import com.liferay.portal.kernel.test.util.UserTestUtil;
 import com.liferay.portal.kernel.util.HashMapBuilder;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
@@ -66,18 +64,8 @@ public class EmailNotificationTypeTest extends BaseNotificationTypeTest {
 			notificationQueueEntryLocalService.
 				getNotificationQueueEntriesCount());
 
-		User user1 = UserTestUtil.addUser();
-
-		User user2 = UserTestUtil.addUser();
-
-		_addObjectAction(
-			_addNotificationTemplate(
-				StringPool.TRUE, user1.getEmailAddress(),
-				user2.getEmailAddress()));
-		_addObjectAction(
-			_addNotificationTemplate(
-				StringPool.FALSE, user1.getEmailAddress(),
-				user2.getEmailAddress()));
+		_addObjectAction(_addNotificationTemplate(StringPool.TRUE));
+		_addObjectAction(_addNotificationTemplate(StringPool.FALSE));
 
 		ObjectEntry objectEntry = objectEntryManager.addObjectEntry(
 			dtoConverterContext, parentObjectDefinition,
@@ -114,6 +102,7 @@ public class EmailNotificationTypeTest extends BaseNotificationTypeTest {
 
 		_assetNotificationQueueEntry(true, notificationQueueEntries.get(0));
 		_assetNotificationQueueEntry(true, notificationQueueEntries.get(1));
+		//_assetNotificationQueueEntry(true, notificationQueueEntries.get(2));
 		_assetNotificationQueueEntry(false, notificationQueueEntries.get(2));
 
 		for (NotificationQueueEntry notificationQueueEntry :
@@ -125,8 +114,7 @@ public class EmailNotificationTypeTest extends BaseNotificationTypeTest {
 	}
 
 	private NotificationTemplate _addNotificationTemplate(
-			String singleRecipient, String user1EmailAddress,
-			String user2EmailAddress)
+			String singleRecipient)
 		throws Exception {
 
 		return notificationTemplateLocalService.addNotificationTemplate(
@@ -153,8 +141,9 @@ public class EmailNotificationTypeTest extends BaseNotificationTypeTest {
 						Collections.singletonMap(
 							LocaleUtil.US,
 							StringBundler.concat(
-								"[%CURRENT_USER_EMAIL_ADDRESS%], ",
-								user1EmailAddress, user2EmailAddress)))),
+								"[%CURRENT_USER_EMAIL_ADDRESS%],",
+								user1.getEmailAddress(), StringPool.COMMA,
+								user3.getEmailAddress())))),
 				ListUtil.toString(getTermNames(), StringPool.BLANK),
 				NotificationConstants.TYPE_EMAIL));
 	}
@@ -204,7 +193,10 @@ public class EmailNotificationTypeTest extends BaseNotificationTypeTest {
 			expectedSingleRecipient,
 			notificationRecipientSettingsMap.get("singleRecipient"));
 		Assert.assertEquals(
-			user2.getEmailAddress() + ",user1@liferay.com,user2@liferay.com",
+			StringBundler.concat(
+				user2.getEmailAddress(), StringPool.COMMA,
+				user1.getEmailAddress(), StringPool.COMMA,
+				user3.getEmailAddress()),
 			notificationRecipientSettingsMap.get("to"));
 	}
 
