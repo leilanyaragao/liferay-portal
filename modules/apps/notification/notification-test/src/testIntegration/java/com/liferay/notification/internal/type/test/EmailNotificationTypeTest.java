@@ -28,6 +28,7 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.UnicodePropertiesBuilder;
 import com.liferay.portal.test.mail.MailMessage;
 import com.liferay.portal.test.mail.MailServiceTestUtil;
+import com.liferay.portal.test.rule.FeatureFlags;
 import com.liferay.portal.test.rule.LiferayIntegrationTestRule;
 import com.liferay.portal.test.rule.SynchronousMailTestRule;
 import com.liferay.portal.vulcan.util.LocalizedMapUtil;
@@ -48,6 +49,7 @@ import org.junit.runner.RunWith;
 /**
  * @author Feliphe Marinho
  */
+@FeatureFlags("LPS-187854")
 @RunWith(Arquillian.class)
 public class EmailNotificationTypeTest extends BaseNotificationTypeTest {
 
@@ -100,10 +102,16 @@ public class EmailNotificationTypeTest extends BaseNotificationTypeTest {
 			notificationQueueEntries.toString(), 3,
 			notificationQueueEntries.size());
 
-		_assetNotificationQueueEntry(true, notificationQueueEntries.get(0));
-		_assetNotificationQueueEntry(true, notificationQueueEntries.get(1));
-		//_assetNotificationQueueEntry(true, notificationQueueEntries.get(2));
-		_assetNotificationQueueEntry(false, notificationQueueEntries.get(2));
+		_assetNotificationQueueEntry(
+			true, user1.getEmailAddress(), notificationQueueEntries.get(0));
+		_assetNotificationQueueEntry(
+			true, user3.getEmailAddress(), notificationQueueEntries.get(1));
+		_assetNotificationQueueEntry(
+			false,
+			StringBundler.concat(
+				user1.getEmailAddress(), StringPool.COMMA,
+				user3.getEmailAddress()),
+			notificationQueueEntries.get(2));
 
 		for (NotificationQueueEntry notificationQueueEntry :
 				notificationQueueEntries) {
@@ -167,7 +175,7 @@ public class EmailNotificationTypeTest extends BaseNotificationTypeTest {
 	}
 
 	private void _assertNotificationRecipientSettings(
-		boolean expectedSingleRecipient,
+		boolean expectedSingleRecipient, String expectedToRecipient,
 		NotificationQueueEntry notificationQueueEntry) {
 
 		NotificationRecipient notificationRecipient =
@@ -193,26 +201,26 @@ public class EmailNotificationTypeTest extends BaseNotificationTypeTest {
 			expectedSingleRecipient,
 			notificationRecipientSettingsMap.get("singleRecipient"));
 		Assert.assertEquals(
-			StringBundler.concat(
-				user2.getEmailAddress(), StringPool.COMMA,
-				user1.getEmailAddress(), StringPool.COMMA,
-				user3.getEmailAddress()),
-			notificationRecipientSettingsMap.get("to"));
+			expectedToRecipient, notificationRecipientSettingsMap.get("to"));
 	}
 
 	private void _assetNotificationQueueEntry(
-			boolean expectedSingleRecipient,
+			boolean expectedSingleRecipient, String expectedToRecipient,
 			NotificationQueueEntry notificationQueueEntry)
 		throws Exception {
 
 		_assertNotificationRecipientSettings(
-			expectedSingleRecipient, notificationQueueEntry);
+			expectedSingleRecipient, expectedToRecipient,
+			notificationQueueEntry);
 
 		MailMessage mailMessage = MailServiceTestUtil.getLastMailMessage();
 
 		Assert.assertEquals(
-			String.valueOf(new InternetAddress(user2.getEmailAddress())),
-			mailMessage.getFirstHeaderValue("To"));
+			mailMessage.getFirstHeaderValue("To"),
+			StringBundler.concat(
+				new InternetAddress(user1.getEmailAddress()), StringPool.COMMA,
+				StringPool.SPACE,
+				new InternetAddress(user3.getEmailAddress())));
 
 		assertTermValues(
 			getTermValues(),
