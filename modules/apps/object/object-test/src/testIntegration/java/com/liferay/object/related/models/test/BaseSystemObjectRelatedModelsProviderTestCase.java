@@ -129,7 +129,7 @@ public abstract class BaseSystemObjectRelatedModelsProviderTestCase {
 
 		// Object relationship deletion type cascade
 
-		ObjectRelationshipTestUtil.updateObjectRelationship(
+		ObjectRelationshipTestUtil.updateObjectRelationship(_objectRelationship.getExternalReferenceCode(),
 			_objectRelationship.getObjectRelationshipId(),
 			ObjectRelationshipConstants.DELETION_TYPE_CASCADE,
 			_objectRelationship.getLabelMap());
@@ -141,7 +141,7 @@ public abstract class BaseSystemObjectRelatedModelsProviderTestCase {
 
 		// Object relationship deletion type disassociate
 
-		ObjectRelationshipTestUtil.updateObjectRelationship(
+		ObjectRelationshipTestUtil.updateObjectRelationship(_objectRelationship.getExternalReferenceCode(),
 			_objectRelationship.getObjectRelationshipId(),
 			ObjectRelationshipConstants.DELETION_TYPE_DISASSOCIATE,
 			_objectRelationship.getLabelMap());
@@ -170,7 +170,7 @@ public abstract class BaseSystemObjectRelatedModelsProviderTestCase {
 
 		// Object relationship deletion type prevent
 
-		ObjectRelationshipTestUtil.updateObjectRelationship(
+		ObjectRelationshipTestUtil.updateObjectRelationship(_objectRelationship.getExternalReferenceCode(),
 			_objectRelationship.getObjectRelationshipId(),
 			ObjectRelationshipConstants.DELETION_TYPE_PREVENT,
 			_objectRelationship.getLabelMap());
@@ -249,7 +249,7 @@ public abstract class BaseSystemObjectRelatedModelsProviderTestCase {
 
 		// Object relationship deletion type cascade
 
-		ObjectRelationshipTestUtil.updateObjectRelationship(
+		ObjectRelationshipTestUtil.updateObjectRelationship(_objectRelationship.getExternalReferenceCode(),
 			_objectRelationship.getObjectRelationshipId(),
 			ObjectRelationshipConstants.DELETION_TYPE_CASCADE,
 			_objectRelationship.getLabelMap());
@@ -272,7 +272,7 @@ public abstract class BaseSystemObjectRelatedModelsProviderTestCase {
 
 		// Object relationship deletion type disassociate
 
-		ObjectRelationshipTestUtil.updateObjectRelationship(
+		ObjectRelationshipTestUtil.updateObjectRelationship(_objectRelationship.getExternalReferenceCode(),
 			_objectRelationship.getObjectRelationshipId(),
 			ObjectRelationshipConstants.DELETION_TYPE_DISASSOCIATE,
 			_objectRelationship.getLabelMap());
@@ -301,7 +301,7 @@ public abstract class BaseSystemObjectRelatedModelsProviderTestCase {
 
 		// Object relationship deletion type prevent
 
-		ObjectRelationshipTestUtil.updateObjectRelationship(
+		ObjectRelationshipTestUtil.updateObjectRelationship(_objectRelationship.getExternalReferenceCode(),
 			_objectRelationship.getObjectRelationshipId(),
 			ObjectRelationshipConstants.DELETION_TYPE_PREVENT,
 			_objectRelationship.getLabelMap());
@@ -399,7 +399,7 @@ public abstract class BaseSystemObjectRelatedModelsProviderTestCase {
 		throws Exception {
 
 		_objectRelationship =
-			_objectRelationshipLocalService.addObjectRelationship(
+			_objectRelationshipLocalService.addObjectRelationship(null,
 				TestPropsValues.getUserId(),
 				objectDefinition1.getObjectDefinitionId(),
 				objectDefinition2.getObjectDefinitionId(), 0, deletionType,

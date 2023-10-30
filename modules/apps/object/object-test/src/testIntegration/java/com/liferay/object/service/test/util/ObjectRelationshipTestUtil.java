@@ -26,7 +26,7 @@ public class ObjectRelationshipTestUtil {
 			ObjectDefinition objectDefinition2)
 		throws PortalException {
 
-		return objectRelationshipLocalService.addObjectRelationship(
+		return objectRelationshipLocalService.addObjectRelationship(null,
 			TestPropsValues.getUserId(),
 			objectDefinition1.getObjectDefinitionId(),
 			objectDefinition2.getObjectDefinitionId(), 0,
@@ -42,7 +42,7 @@ public class ObjectRelationshipTestUtil {
 			ObjectDefinition objectDefinition2, String deletionType)
 		throws PortalException {
 
-		return objectRelationshipLocalService.addObjectRelationship(
+		return objectRelationshipLocalService.addObjectRelationship(null,
 			TestPropsValues.getUserId(),
 			objectDefinition1.getObjectDefinitionId(),
 			objectDefinition2.getObjectDefinitionId(), 0, deletionType,
