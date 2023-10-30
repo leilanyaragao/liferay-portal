@@ -74,8 +74,8 @@ public class GetObjectRelationshipEdgeCandidatesMVCResourceCommandTest {
 				"AAAA", _objectDefinitionLocalService);
 
 		ObjectRelationship objectRelationshipAAA_AAAA =
-			_objectRelationshipLocalService.addObjectRelationship(null,
-				TestPropsValues.getUserId(),
+			_objectRelationshipLocalService.addObjectRelationship(
+				null, TestPropsValues.getUserId(),
 				objectDefinitionAAA.getObjectDefinitionId(),
 				objectDefinitionAAAA.getObjectDefinitionId(), 0,
 				ObjectRelationshipConstants.DELETION_TYPE_CASCADE,
@@ -154,8 +154,8 @@ public class GetObjectRelationshipEdgeCandidatesMVCResourceCommandTest {
 		// Object definition, hierarchical structure, root
 
 		ObjectRelationship objectRelationshipA_AAAA =
-			_objectRelationshipLocalService.addObjectRelationship(null,
-				TestPropsValues.getUserId(),
+			_objectRelationshipLocalService.addObjectRelationship(
+				null, TestPropsValues.getUserId(),
 				objectDefinitionA.getObjectDefinitionId(),
 				objectDefinitionAAAA.getObjectDefinitionId(), 0,
 				ObjectRelationshipConstants.DELETION_TYPE_CASCADE,
@@ -192,8 +192,8 @@ public class GetObjectRelationshipEdgeCandidatesMVCResourceCommandTest {
 				"BBB", _objectDefinitionLocalService);
 
 		ObjectRelationship objectRelationshipBBB_AAAA =
-			_objectRelationshipLocalService.addObjectRelationship(null,
-				TestPropsValues.getUserId(),
+			_objectRelationshipLocalService.addObjectRelationship(
+				null, TestPropsValues.getUserId(),
 				objectDefinitionBBB.getObjectDefinitionId(),
 				objectDefinitionAAAA.getObjectDefinitionId(), 0,
 				ObjectRelationshipConstants.DELETION_TYPE_CASCADE,
@@ -267,8 +267,8 @@ public class GetObjectRelationshipEdgeCandidatesMVCResourceCommandTest {
 				_objectDefinitionLocalService);
 
 		ObjectRelationship objectRelationship2 =
-			_objectRelationshipLocalService.addObjectRelationship(null,
-				TestPropsValues.getUserId(),
+			_objectRelationshipLocalService.addObjectRelationship(
+				null, TestPropsValues.getUserId(),
 				objectDefinition1.getObjectDefinitionId(),
 				objectDefinition2.getObjectDefinitionId(), 0,
 				ObjectRelationshipConstants.DELETION_TYPE_CASCADE,

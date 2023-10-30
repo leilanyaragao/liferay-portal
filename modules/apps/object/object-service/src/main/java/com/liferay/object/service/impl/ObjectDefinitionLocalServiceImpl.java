@@ -400,7 +400,8 @@ public class ObjectDefinitionLocalServiceImpl
 				continue;
 			}
 
-			_objectRelationshipLocalService.updateObjectRelationship(objectRelationship.getExternalReferenceCode(),
+			_objectRelationshipLocalService.updateObjectRelationship(
+				objectRelationship.getExternalReferenceCode(),
 				objectRelationship.getObjectRelationshipId(),
 				objectRelationship.getParameterObjectFieldId(),
 				ObjectRelationshipConstants.DELETION_TYPE_CASCADE, true,
@@ -1019,7 +1020,8 @@ public class ObjectDefinitionLocalServiceImpl
 				_objectRelationshipLocalService.getObjectRelationship(
 					edge.getObjectRelationshipId());
 
-			_objectRelationshipLocalService.updateObjectRelationship(objectRelationship.getExternalReferenceCode(),
+			_objectRelationshipLocalService.updateObjectRelationship(
+				objectRelationship.getExternalReferenceCode(),
 				objectRelationship.getObjectRelationshipId(),
 				objectRelationship.getParameterObjectFieldId(),
 				objectRelationship.getDeletionType(), false,
