@@ -752,7 +752,7 @@ public class DefaultObjectEntryManagerImplTest
 		// Aggregation field without filters (many to many self relationship)
 
 		ObjectRelationship objectRelationship =
-			_objectRelationshipLocalService.addObjectRelationship(
+			_objectRelationshipLocalService.addObjectRelationship(null,
 				adminUser.getUserId(),
 				_objectDefinition1.getObjectDefinitionId(),
 				_objectDefinition1.getObjectDefinitionId(), 0,
