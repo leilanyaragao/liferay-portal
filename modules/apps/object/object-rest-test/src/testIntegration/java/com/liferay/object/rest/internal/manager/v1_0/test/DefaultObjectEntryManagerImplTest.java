@@ -765,7 +765,7 @@ public class DefaultObjectEntryManagerImplTest
 
 		ObjectRelationship objectRelationship =
 			_objectRelationshipLocalService.addObjectRelationship(
-				adminUser.getUserId(),
+				null, adminUser.getUserId(),
 				_objectDefinition1.getObjectDefinitionId(),
 				_objectDefinition1.getObjectDefinitionId(), 0,
 				ObjectRelationshipConstants.DELETION_TYPE_CASCADE,
@@ -2239,7 +2239,7 @@ public class DefaultObjectEntryManagerImplTest
 
 		ObjectRelationship objectRelationship3 =
 			_objectRelationshipLocalService.addObjectRelationship(
-				adminUser.getUserId(),
+				null, adminUser.getUserId(),
 				_objectDefinition3.getObjectDefinitionId(),
 				childObjectDefinition.getObjectDefinitionId(), 0,
 				ObjectRelationshipConstants.DELETION_TYPE_CASCADE,
