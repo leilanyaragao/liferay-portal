@@ -403,7 +403,7 @@ components:
                 edge:
                     type: boolean
                 externalReferenceCode:
-                        type: string
+                    type: string
                 id:
                     format: int64
                     readOnly: true
