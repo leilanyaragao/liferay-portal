@@ -26,6 +26,7 @@ import com.liferay.object.exception.ObjectValidationRuleEngineException;
 import com.liferay.object.model.ObjectDefinition;
 import com.liferay.object.service.ObjectDefinitionLocalService;
 import com.liferay.object.service.ObjectValidationRuleLocalService;
+import com.liferay.object.validation.rule.ObjectValidationRuleResult;
 import com.liferay.petra.string.StringBundler;
 import com.liferay.petra.string.StringPool;
 import com.liferay.portal.configuration.test.util.CompanyConfigurationTemporarySwapper;
@@ -199,13 +200,25 @@ public class AccountEntryLocalServiceTest {
 			Assert.fail();
 		}
 		catch (ModelListenerException modelListenerException) {
-			String message = modelListenerException.getMessage();
+			ObjectValidationRuleEngineException
+				objectValidationRuleEngineException =
+					(ObjectValidationRuleEngineException)
+						modelListenerException.getCause();
 
-			Assert.assertTrue(message.contains("This name is invalid."));
+			ObjectValidationRuleResult objectValidationRuleResult =
+				objectValidationRuleEngineException.
+					getObjectValidationRuleResults(
+					).get(
+						0
+					);
+
+			String errorMessage = objectValidationRuleResult.getErrorMessage();
+
+			Assert.assertTrue(errorMessage.contains("This name is invalid."));
 
 			Assert.assertTrue(
 				modelListenerException.getCause() instanceof
-					ObjectValidationRuleEngineException.InvalidFields);
+					ObjectValidationRuleEngineException);
 		}
 
 		try {
@@ -215,13 +228,25 @@ public class AccountEntryLocalServiceTest {
 			Assert.fail();
 		}
 		catch (ModelListenerException modelListenerException) {
-			String message = modelListenerException.getMessage();
+			ObjectValidationRuleEngineException
+				objectValidationRuleEngineException =
+					(ObjectValidationRuleEngineException)
+						modelListenerException.getCause();
 
-			Assert.assertTrue(message.contains("This name is invalid."));
+			ObjectValidationRuleResult objectValidationRuleResult =
+				objectValidationRuleEngineException.
+					getObjectValidationRuleResults(
+					).get(
+						0
+					);
+
+			String errorMessage = objectValidationRuleResult.getErrorMessage();
+
+			Assert.assertTrue(errorMessage.contains("This name is invalid."));
 
 			Assert.assertTrue(
 				modelListenerException.getCause() instanceof
-					ObjectValidationRuleEngineException.InvalidFields);
+					ObjectValidationRuleEngineException);
 		}
 	}
 
