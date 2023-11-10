@@ -581,6 +581,38 @@ public abstract class BaseWorkflowTaskResourceTestCase {
 		int totalCount = GetterUtil.getInteger(
 			workflowTaskPage.getTotalCount());
 
+		Page<WorkflowTask> page1 =
+			workflowTaskResource.
+				getWorkflowInstanceWorkflowTasksAssignedToUserPage(
+					workflowInstanceId, null, null,
+					Pagination.of(1, totalCount + 2));
+
+		List<WorkflowTask> workflowTasks1 =
+			(List<WorkflowTask>)page1.getItems();
+
+		Assert.assertEquals(
+			workflowTasks1.toString(), totalCount, workflowTasks1.size());
+
+		Page<WorkflowTask> page2 =
+			workflowTaskResource.
+				getWorkflowInstanceWorkflowTasksAssignedToUserPage(
+					workflowInstanceId, null, null,
+					Pagination.of(2, totalCount + 2));
+
+		Assert.assertEquals(totalCount, page2.getTotalCount());
+
+		List<WorkflowTask> workflowTasks2 =
+			(List<WorkflowTask>)page2.getItems();
+
+		Assert.assertEquals(
+			workflowTasks2.toString(), 0, workflowTasks2.size());
+
+		Page<WorkflowTask> page3 =
+			workflowTaskResource.
+				getWorkflowInstanceWorkflowTasksAssignedToUserPage(
+					workflowInstanceId, null, null,
+					Pagination.of(1, (int)totalCount + 3));
+
 		WorkflowTask workflowTask1 =
 			testGetWorkflowInstanceWorkflowTasksAssignedToUserPage_addWorkflowTask(
 				workflowInstanceId, randomWorkflowTask());
@@ -592,38 +624,6 @@ public abstract class BaseWorkflowTaskResourceTestCase {
 		WorkflowTask workflowTask3 =
 			testGetWorkflowInstanceWorkflowTasksAssignedToUserPage_addWorkflowTask(
 				workflowInstanceId, randomWorkflowTask());
-
-		Page<WorkflowTask> page1 =
-			workflowTaskResource.
-				getWorkflowInstanceWorkflowTasksAssignedToUserPage(
-					workflowInstanceId, null, null,
-					Pagination.of(1, totalCount + 2));
-
-		List<WorkflowTask> workflowTasks1 =
-			(List<WorkflowTask>)page1.getItems();
-
-		Assert.assertEquals(
-			workflowTasks1.toString(), totalCount + 2, workflowTasks1.size());
-
-		Page<WorkflowTask> page2 =
-			workflowTaskResource.
-				getWorkflowInstanceWorkflowTasksAssignedToUserPage(
-					workflowInstanceId, null, null,
-					Pagination.of(2, totalCount + 2));
-
-		Assert.assertEquals(totalCount + 3, page2.getTotalCount());
-
-		List<WorkflowTask> workflowTasks2 =
-			(List<WorkflowTask>)page2.getItems();
-
-		Assert.assertEquals(
-			workflowTasks2.toString(), 1, workflowTasks2.size());
-
-		Page<WorkflowTask> page3 =
-			workflowTaskResource.
-				getWorkflowInstanceWorkflowTasksAssignedToUserPage(
-					workflowInstanceId, null, null,
-					Pagination.of(1, (int)totalCount + 3));
 
 		assertContains(workflowTask1, (List<WorkflowTask>)page3.getItems());
 		assertContains(workflowTask2, (List<WorkflowTask>)page3.getItems());
