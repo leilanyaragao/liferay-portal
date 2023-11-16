@@ -822,15 +822,11 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 				long userId = GetterUtil.getLong(PrincipalThreadLocal.getName());
 
 				if (userId > 0) {
-					<#assign companyId = 0 />
-
 					<#if entity.hasEntityColumn("companyId")>
 						long companyId = ${entity.variableName}.getCompanyId();
 					<#else>
 						long companyId = 0;
 					</#if>
-
-					<#assign groupId = 0 />
 
 					<#if entity.hasEntityColumn("groupId")>
 						long groupId = ${entity.variableName}.getGroupId();
@@ -922,8 +918,6 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 			long userId = GetterUtil.getLong(PrincipalThreadLocal.getName());
 
 			if (userId > 0) {
-				<#assign companyId = 0 />
-
 				<#if entity.hasEntityColumn("companyId")>
 					long companyId = ${entity.variableName}.getCompanyId();
 				<#else>
