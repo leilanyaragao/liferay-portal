@@ -838,14 +838,14 @@ public class ${entity.name}PersistenceImpl extends BasePersistenceImpl<${entity.
 						long groupId = 0;
 					</#if>
 
-					long classPK = 0;
+					long ${entity.PKVariableName} = 0;
 
 					if (!isNew) {
-						classPK = ${entity.variableName}.getPrimaryKey();
+						${entity.PKVariableName} = ${entity.variableName}.getPrimaryKey();
 					}
 
 					try {
-						${entity.variableName}.setExternalReferenceCode(SanitizerUtil.sanitize(companyId, groupId, userId, ${apiPackagePath}.model.${entity.name}.class.getName(), classPK, ContentTypes.TEXT_HTML, Sanitizer.MODE_ALL, ${entity.variableName}.getExternalReferenceCode(), null));
+						${entity.variableName}.setExternalReferenceCode(SanitizerUtil.sanitize(companyId, groupId, userId, ${apiPackagePath}.model.${entity.name}.class.getName(), ${entity.PKVariableName}, ContentTypes.TEXT_HTML, Sanitizer.MODE_ALL, ${entity.variableName}.getExternalReferenceCode(), null));
 					}
 					catch (SanitizerException sanitizerException) {
 						throw new SystemException(sanitizerException);
